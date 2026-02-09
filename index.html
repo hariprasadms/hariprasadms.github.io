@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Automation Expertise</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --electric-cyan: #00fff5;
+            --dark-bg: #0a0e14;
+            --darker-bg: #050709;
+            --code-green: #00ff41;
+            --warning-orange: #ff6b35;
+            --grid-color: rgba(0, 255, 245, 0.1);
+            --text-primary: #e6e8eb;
+            --text-secondary: #8b92a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--darker-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated grid background */
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Glowing cursor trail effect */
+        .cursor-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 255, 245, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+            transition: transform 0.2s ease;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        header {
+            padding: 4rem 0 3rem;
+            position: relative;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, rgba(0, 255, 245, 0.1) 0%, rgba(0, 255, 65, 0.1) 100%);
+            border: 3px solid var(--electric-cyan);
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 0 20px rgba(0, 255, 245, 0.3);
+        }
+
+        .profile-photo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 245, 0.3), transparent);
+            animation: photoShimmer 3s infinite;
+        }
+
+        @keyframes photoShimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--electric-cyan);
+            font-size: 0.75rem;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .photo-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.5;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--code-green);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            line-height: 0.95;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--electric-cyan) 0%, var(--code-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease;
+            letter-spacing: -0.03em;
+        }
+
+        .subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s backwards;
+        }
+
+        .hero-description {
+            max-width: 700px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.4s backwards;
+        }
+
+        /* Metric Cards */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, rgba(0, 255, 245, 0.05) 0%, rgba(0, 255, 65, 0.05) 100%);
+            border: 1px solid var(--grid-color);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease backwards;
+        }
+
+        .metric-card:nth-child(1) { animation-delay: 0.5s; }
+        .metric-card:nth-child(2) { animation-delay: 0.6s; }
+        .metric-card:nth-child(3) { animation-delay: 0.7s; }
+        .metric-card:nth-child(4) { animation-delay: 0.8s; }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--electric-cyan), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .metric-card:hover::before {
+            left: 100%;
+        }
+
+        .metric-card:hover {
+            border-color: var(--electric-cyan);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 255, 245, 0.2);
+        }
+
+        .metric-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--electric-cyan);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Expertise Section */
+        .section {
+            margin: 5rem 0;
+            animation: fadeInUp 1s ease 0.9s backwards;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .section-number {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            color: var(--electric-cyan);
+            font-weight: 700;
+        }
+
+        h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .expertise-card {
+            background: rgba(10, 14, 20, 0.6);
+            border: 1px solid rgba(0, 255, 245, 0.2);
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .expertise-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--code-green);
+            transition: width 0.3s ease;
+        }
+
+        .expertise-card:hover::after {
+            width: 100%;
+        }
+
+        .expertise-card:hover {
+            border-color: var(--code-green);
+            background: rgba(0, 255, 65, 0.05);
+        }
+
+        .expertise-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--electric-cyan);
+        }
+
+        .expertise-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            background: rgba(0, 255, 245, 0.1);
+            border: 1px solid rgba(0, 255, 245, 0.3);
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
+            color: var(--electric-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.2s ease;
+        }
+
+        .tech-tag:hover {
+            background: var(--electric-cyan);
+            color: var(--darker-bg);
+        }
+
+        /* Skills Matrix */
+        .skills-matrix {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .skill-item {
+            background: rgba(10, 14, 20, 0.4);
+            border-left: 3px solid var(--electric-cyan);
+            padding: 1.5rem;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .skill-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .skill-level {
+            font-size: 0.85rem;
+            color: var(--code-green);
+            font-weight: 600;
+        }
+
+        .skill-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(0, 255, 245, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--electric-cyan), var(--code-green));
+            transition: width 1.5s ease;
+            position: relative;
+        }
+
+        .skill-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Projects Showcase */
+        .project-card {
+            background: linear-gradient(135deg, rgba(0, 255, 245, 0.03) 0%, rgba(0, 255, 65, 0.03) 100%);
+            border: 1px solid rgba(0, 255, 245, 0.2);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 245, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card:hover {
+            border-color: var(--electric-cyan);
+            transform: translateX(10px);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-meta {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .impact-metric {
+            color: var(--code-green);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Footer CTA */
+        .cta-section {
+            margin: 6rem 0 3rem;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(0, 255, 245, 0.05) 0%, rgba(0, 255, 65, 0.05) 100%);
+            border: 1px solid var(--grid-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--electric-cyan), transparent);
+            animation: scanline 3s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .cta-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--electric-cyan) 0%, var(--code-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: 2px solid var(--electric-cyan);
+            background: transparent;
+            color: var(--electric-cyan);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--electric-cyan);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            left: 0;
+        }
+
+        .btn:hover {
+            color: var(--darker-bg);
+        }
+
+        .btn-secondary {
+            border-color: var(--code-green);
+            color: var(--code-green);
+        }
+
+        .btn-secondary::before {
+            background: var(--code-green);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .profile-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .profile-photo {
+                margin-bottom: 1rem;
+            }
+
+            .expertise-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .project-card {
+                padding: 1.5rem;
+            }
+
+            .project-header {
+                flex-direction: column;
+            }
+
+            .project-meta {
+                text-align: left;
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+    <div class="cursor-glow" id="cursorGlow"></div>
+    
+    <div class="container">
+        <header>
+            <div class="profile-section">
+                <div class="profile-photo">
+                    <img src="https://avatars.githubusercontent.com/u/17435678?v=4" alt="Hari Prasad" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div class="status-bar">
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span><b>LEAD SDET</b></span>
+                    </div>
+                    <span style="color: var(--electric-cyan);">|</span>
+                    <div class="status-indicator">
+                        <span><b>AUTOMATION TEST LEAD</b></span>
+                    </div>
+                    <span style="color: var(--electric-cyan);">|</span>
+                    <div class="status-indicator">
+                        <span><b>TEST ARCHITECT</b></span>
+                    </div>
+                    <span style="color: var(--electric-cyan);">|</span>
+                    <div class="status-indicator">
+                        <span><b>JAVA</b></span>
+                    </div>
+                    <span style="color: var(--electric-cyan);">|</span>
+                    <div class="status-indicator">
+                        <span><b>JAVASCRIPT</b></span>
+                    </div>
+                    <span style="color: var(--electric-cyan);">|</span>
+                    <div class="status-indicator">
+                        <span><b>TYPESCRIPT</b></span>
+                    </div>
+                    <span style="color: var(--electric-cyan);">|</span>
+                    <div class="status-indicator">
+                        <span><b>PLAYWRIGHT</b></span>
+                    </div>
+                    <span style="color: var(--electric-cyan);">|</span>
+                    <div class="status-indicator">
+                        <span><b>KATALON STUDIO</b></span>
+                    </div>
+                    <span style="color: var(--electric-cyan);">|</span>
+                    <div class="status-indicator">
+                        <span><b>CYPRESS</b></span>
+                    </div>
+                    <span style="color: var(--electric-cyan);">|</span>
+                    <div class="status-indicator">
+                        <span><b>SELENIUM</b></span>
+                    </div>
+                    <span style="color: var(--electric-cyan);">|</span>
+                    <div class="status-indicator">
+                        <span><b>AZURE CLOUD</b></span>
+                    </div>
+                    <span style="color: var(--electric-cyan);">|</span>
+                    <div class="status-indicator">
+                        <span><b>FLUTTER</b></span>
+                    </div>
+                </div>
+            </div>
+            
+            <h1>TEST<br>AUTOMATION<br>ARCHITECT</h1>
+            <p class="subtitle">SDET Experts Pvt Ltd | Engineering Quality at Scale</p>
+            <p class="hero-description">
+                Independent Test Automation Consultant providing specialized expertise through SDET Experts Pvt Ltd. 
+                Delivering robust, scalable test automation frameworks that accelerate delivery cycles while maintaining 
+                exceptional quality standards. Expert in creating intelligent testing solutions that integrate seamlessly 
+                into modern CI/CD pipelines for enterprises worldwide.
+            </p>
+        </header>
+
+        <div class="metrics">
+            <div class="metric-card">
+                <div class="metric-value">10,000+</div>
+                <div class="metric-label">Tests Automated</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">85%</div>
+                <div class="metric-label">Faster Releases</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">99.7%</div>
+                <div class="metric-label">Test Reliability</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">24/7</div>
+                <div class="metric-label">Continuous Testing</div>
+            </div>
+        </div>
+
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">01</span>
+                <h2>Core Expertise</h2>
+            </div>
+            
+            <div class="expertise-grid">
+                <div class="expertise-card">
+                    <div class="expertise-icon">🤖</div>
+                    <h3>Framework Architecture</h3>
+                    <p class="expertise-description">
+                        Designing and implementing scalable test automation frameworks from scratch using industry best practices, 
+                        design patterns, and modular architecture for maximum maintainability.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Selenium</span>
+                        <span class="tech-tag">Playwright</span>
+                        <span class="tech-tag">Cypress</span>
+                        <span class="tech-tag">TestNG</span>
+                        <span class="tech-tag">JUnit</span>
+                    </div>
+                </div>
+
+                <div class="expertise-card">
+                    <div class="expertise-icon">⚡</div>
+                    <h3>CI/CD Integration</h3>
+                    <p class="expertise-description">
+                        Seamless integration of automated tests into continuous integration and deployment pipelines, 
+                        enabling shift-left testing and rapid feedback loops.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Jenkins</span>
+                        <span class="tech-tag">GitHub Actions</span>
+                        <span class="tech-tag">GitLab CI</span>
+                        <span class="tech-tag">Azure DevOps</span>
+                    </div>
+                </div>
+
+                <div class="expertise-card">
+                    <div class="expertise-icon">🔍</div>
+                    <h3>API Testing</h3>
+                    <p class="expertise-description">
+                        Comprehensive API test automation with contract testing, performance validation, 
+                        and security testing to ensure backend reliability and integrity.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">RestAssured</span>
+                        <span class="tech-tag">Postman</span>
+                        <span class="tech-tag">Pact</span>
+                        <span class="tech-tag">JMeter</span>
+                    </div>
+                </div>
+
+                <div class="expertise-card">
+                    <div class="expertise-icon">📊</div>
+                    <h3>Performance Testing</h3>
+                    <p class="expertise-description">
+                        Load, stress, and scalability testing to identify bottlenecks and ensure applications 
+                        perform optimally under varying conditions and peak loads.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">K6</span>
+                        <span class="tech-tag">Gatling</span>
+                        <span class="tech-tag">Locust</span>
+                        <span class="tech-tag">Artillery</span>
+                    </div>
+                </div>
+
+                <div class="expertise-card">
+                    <div class="expertise-icon">📱</div>
+                    <h3>Mobile Testing</h3>
+                    <p class="expertise-description">
+                        Native and cross-platform mobile app testing automation for iOS and Android, 
+                        covering functional, UI, and integration testing scenarios.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Appium</span>
+                        <span class="tech-tag">Detox</span>
+                        <span class="tech-tag">Espresso</span>
+                        <span class="tech-tag">XCUITest</span>
+                    </div>
+                </div>
+
+                <div class="expertise-card">
+                    <div class="expertise-icon">🔐</div>
+                    <h3>Security Testing</h3>
+                    <p class="expertise-description">
+                        Automated security testing integration including SAST, DAST, and dependency scanning 
+                        to identify vulnerabilities early in the development lifecycle.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">OWASP ZAP</span>
+                        <span class="tech-tag">Snyk</span>
+                        <span class="tech-tag">SonarQube</span>
+                        <span class="tech-tag">Burp Suite</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">02</span>
+                <h2>Technical Proficiency</h2>
+            </div>
+            
+            <div class="skills-matrix">
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Test Automation & Frameworks</span>
+                        <span class="skill-level">EXPERT</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 95%"></div>
+                    </div>
+                </div>
+
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">CI/CD & DevOps Pipeline Integration</span>
+                        <span class="skill-level">EXPERT</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 92%"></div>
+                    </div>
+                </div>
+
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Programming (Java, Python, JavaScript, TypeScript)</span>
+                        <span class="skill-level">ADVANCED</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 90%"></div>
+                    </div>
+                </div>
+
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Cloud Platforms & Containerization</span>
+                        <span class="skill-level">ADVANCED</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 87%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">03</span>
+                <h2>Certifications</h2>
+            </div>
+            
+            <div class="expertise-grid">
+                <div class="expertise-card">
+                    <div class="expertise-icon">🏆</div>
+                    <h3>Katalon Practitioner Level Certification</h3>
+                    <p class="expertise-description">
+                        Certified by Katalon for demonstrating proficiency in test automation using Katalon Studio, 
+                        including web, API, and mobile testing automation best practices.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Katalon Studio</span>
+                        <span class="tech-tag">Web Testing</span>
+                        <span class="tech-tag">API Testing</span>
+                        <span class="tech-tag">Mobile Testing</span>
+                    </div>
+                </div>
+
+                <div class="expertise-card">
+                    <div class="expertise-icon">🎯</div>
+                    <h3>Playwright Automation Test Framework Certification</h3>
+                    <p class="expertise-description">
+                        Certified in modern web automation using Playwright framework, covering advanced testing techniques, 
+                        cross-browser testing, and end-to-end test automation strategies.
+                    </p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Playwright</span>
+                        <span class="tech-tag">TypeScript</span>
+                        <span class="tech-tag">Cross-Browser</span>
+                        <span class="tech-tag">E2E Testing</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">04</span>
+                <h2>Impact Highlights</h2>
+            </div>
+            
+            <div class="project-card">
+                <div class="project-header">
+                    <div>
+                        <h3 class="project-title">E-Commerce Platform Test Automation</h3>
+                        <p style="color: var(--text-secondary);">Client Engagement - Enterprise Retail Solution</p>
+                    </div>
+                    <div class="project-meta">
+                        <div class="impact-metric">↓ 70% Testing Time</div>
+                        <div>Q3 2024 - Q4 2024</div>
+                    </div>
+                </div>
+                <p class="expertise-description">
+                    Provided consultancy through SDET Experts Pvt Ltd to architect and implement comprehensive test automation 
+                    framework covering 5,000+ test cases across web, mobile, and API layers. Integrated with Jenkins for continuous 
+                    testing, achieving 95% test coverage and reducing manual testing effort by 70%. Implemented parallel execution 
+                    reducing suite runtime from 8 hours to 45 minutes.
+                </p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Selenium WebDriver</span>
+                    <span class="tech-tag">Appium</span>
+                    <span class="tech-tag">RestAssured</span>
+                    <span class="tech-tag">Jenkins</span>
+                    <span class="tech-tag">Docker</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div>
+                        <h3 class="project-title">Microservices API Testing Framework</h3>
+                        <p style="color: var(--text-secondary);">Client Engagement - Financial Services Platform</p>
+                    </div>
+                    <div class="project-meta">
+                        <div class="impact-metric">99.5% Reliability</div>
+                        <div>Q1 2024 - Q2 2024</div>
+                    </div>
+                </div>
+                <p class="expertise-description">
+                    Engaged by financial services client through SDET Experts Pvt Ltd to design contract-based testing framework 
+                    for 50+ microservices using Pact and RestAssured. Implemented automated API testing in CI/CD pipeline with 
+                    comprehensive assertion libraries and data-driven testing capabilities. Achieved 99.5% test reliability with 
+                    zero false positives.
+                </p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Pact</span>
+                    <span class="tech-tag">RestAssured</span>
+                    <span class="tech-tag">GitHub Actions</span>
+                    <span class="tech-tag">Kubernetes</span>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div>
+                        <h3 class="project-title">Performance Testing Infrastructure</h3>
+                        <p style="color: var(--text-secondary);">Client Engagement - SaaS Application Platform</p>
+                    </div>
+                    <div class="project-meta">
+                        <div class="impact-metric">10K+ Concurrent Users</div>
+                        <div>Q4 2023 - Q1 2024</div>
+                    </div>
+                </div>
+                <p class="expertise-description">
+                    Consulted for SaaS client via SDET Experts Pvt Ltd to build scalable performance testing framework using K6 
+                    and Grafana for real-time monitoring. Conducted load, stress, and spike testing simulating 10,000+ concurrent 
+                    users. Identified and resolved critical performance bottlenecks, improving response times by 60%.
+                </p>
+                <div class="tech-tags">
+                    <span class="tech-tag">K6</span>
+                    <span class="tech-tag">Grafana</span>
+                    <span class="tech-tag">InfluxDB</span>
+                    <span class="tech-tag">AWS</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">05</span>
+                <h2>Code Snippets & Projects</h2>
+            </div>
+            
+            <div class="project-card" style="background: linear-gradient(135deg, rgba(0, 255, 65, 0.05) 0%, rgba(0, 255, 245, 0.05) 100%);">
+                <div class="project-header">
+                    <div>
+                        <h3 class="project-title">GitHub Portfolio</h3>
+                        <p style="color: var(--text-secondary);">Open Source Contributions & Test Automation Frameworks</p>
+                    </div>
+                    <div class="project-meta">
+                        <div class="impact-metric">🚀 Active</div>
+                    </div>
+                </div>
+                <p class="expertise-description">
+                    Explore my collection of test automation frameworks, reusable code snippets, and open-source contributions. 
+                    Featuring production-ready automation solutions using Playwright, Selenium, Cypress, and Katalon Studio. 
+                    Each repository includes comprehensive documentation, best practices, and real-world implementation examples.
+                </p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Playwright</span>
+                    <span class="tech-tag">Selenium</span>
+                    <span class="tech-tag">Cypress</span>
+                    <span class="tech-tag">Katalon</span>
+                    <span class="tech-tag">TypeScript</span>
+                    <span class="tech-tag">Java</span>
+                </div>
+                <div style="margin-top: 1.5rem;">
+                    <a href="https://github.com/hariprasadms" target="_blank" rel="noopener noreferrer" class="btn" style="text-decoration: none; display: inline-block;">
+                        VIEW GITHUB PROFILE
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <h2 class="cta-title">Ready to Transform Your Testing Strategy?</h2>
+            <p class="subtitle">Let's discuss how SDET Experts Pvt Ltd can elevate your quality automation</p>
+            <div class="cta-buttons">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                    <a href="sample-cv.pdf" download="Test_Automation_Expert_CV.pdf" class="btn" style="text-decoration: none; display: inline-block;">DOWNLOAD MY CV</a>
+                    <p style="color: var(--text-secondary); font-size: 0.75rem; margin: 0;">Last updated: February 09, 2026</p>
+                </div>
+                <button class="btn btn-secondary">VISIT MY LINKEDIN PROFILE</button>
+            </div>
+        </section>
+    </div>
+
+    <footer style="background: var(--darker-bg); border-top: 1px solid var(--grid-color); padding: 3rem 0; margin-top: 4rem;">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem;">
+                <div>
+                    <h3 style="font-family: 'Syne', sans-serif; font-size: 1.5rem; color: var(--electric-cyan); margin-bottom: 0.5rem;">HARI PRASAD</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Test Automation Architect</p>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem;"><b style="color: var(--code-green);">SDET Experts Pvt Ltd</b> | Independent Consultant</p>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;">London, United Kingdom</p>
+                </div>
+                
+                <div style="display: flex; gap: 2rem; align-items: center;">
+                    <div>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Connect With Me</p>
+                        <div style="display: flex; gap: 1.5rem;">
+                            <a href="https://www.linkedin.com/in/hariprasadms/" target="_blank" rel="noopener noreferrer" 
+                               style="display: flex; align-items: center; gap: 0.5rem; color: var(--electric-cyan); text-decoration: none; font-size: 0.9rem; transition: all 0.3s ease;"
+                               onmouseover="this.style.color='var(--code-green)'; this.style.transform='translateX(5px)'"
+                               onmouseout="this.style.color='var(--electric-cyan)'; this.style.transform='translateX(0)'">
+                                <svg style="width: 24px; height: 24px; fill: currentColor;" viewBox="0 0 24 24">
+                                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                </svg>
+                                <span style="font-weight: 600;">LINKEDIN</span>
+                            </a>
+                            
+                            <a href="https://github.com/hariprasadms" target="_blank" rel="noopener noreferrer"
+                               style="display: flex; align-items: center; gap: 0.5rem; color: var(--electric-cyan); text-decoration: none; font-size: 0.9rem; transition: all 0.3s ease;"
+                               onmouseover="this.style.color='var(--code-green)'; this.style.transform='translateX(5px)'"
+                               onmouseout="this.style.color='var(--electric-cyan)'; this.style.transform='translateX(0)'">
+                                <svg style="width: 24px; height: 24px; fill: currentColor;" viewBox="0 0 24 24">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                </svg>
+                                <span style="font-weight: 600;">GITHUB</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--grid-color); text-align: center;">
+                <p style="color: var(--text-secondary); font-size: 0.85rem;">
+                    © 2026 SDET Experts Pvt Ltd. All rights reserved. | Hari Prasad - Test Automation Consultant | 16 Years of Experience
+                </p>
+                <p style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 0.5rem;">
+                    Delivering quality automation solutions through expert consultancy
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Cursor glow effect
+        const cursorGlow = document.getElementById('cursorGlow');
+        let mouseX = 0, mouseY = 0;
+        let glowX = 0, glowY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateGlow() {
+            glowX += (mouseX - glowX) * 0.1;
+            glowY += (mouseY - glowY) * 0.1;
+            
+            cursorGlow.style.transform = `translate(${glowX - 200}px, ${glowY - 200}px)`;
+            requestAnimationFrame(animateGlow);
+        }
+
+        animateGlow();
+
+        // Skill bar animation on scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const fills = entry.target.querySelectorAll('.skill-fill');
+                    fills.forEach(fill => {
+                        const width = fill.style.width;
+                        fill.style.width = '0%';
+                        setTimeout(() => {
+                            fill.style.width = width;
+                        }, 100);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        const skillsMatrix = document.querySelector('.skills-matrix');
+        if (skillsMatrix) {
+            observer.observe(skillsMatrix);
+        }
+
+        // Add click handlers for CTA buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                console.log('Button clicked:', this.textContent);
+                // Add your actual functionality here
+            });
+        });
+    </script>
+</body>
+</html>
