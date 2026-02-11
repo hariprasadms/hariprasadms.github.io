@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+    <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --electric-cyan: #00fff5;
+            --dark-bg: #0a0e14;
+            --darker-bg: #050709;
+            --code-green: #00ff41;
+            --warning-orange: #ff6b35;
+            --grid-color: rgba(0, 255, 245, 0.1);
+            --text-primary: #e6e8eb;
+            --text-secondary: #8b92a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--darker-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding-top: 70px;
+        }
+
+        /* Grid background */
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Navigation */
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 14, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 245, 0.2);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--electric-cyan);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--electric-cyan);
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Blog specific styles */
+        .blog-header {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+            border-bottom: 2px solid var(--electric-cyan);
+        }
+
+        .blog-header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            color: var(--electric-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .blog-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Post preview */
+        .post-preview {
+            background: rgba(10, 14, 20, 0.6);
+            border: 1px solid rgba(0, 255, 245, 0.2);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .post-preview:hover {
+            border-color: var(--electric-cyan);
+            transform: translateX(5px);
+        }
+
+        .post-preview h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .post-preview h2 a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .post-preview h2 a:hover {
+            color: var(--electric-cyan);
+        }
+
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .post-excerpt {
+            color: var(--text-primary);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .post-tags {
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: rgba(0, 255, 245, 0.1);
+            border: 1px solid rgba(0, 255, 245, 0.3);
+            padding: 0.3rem 0.6rem;
+            font-size: 0.75rem;
+            color: var(--electric-cyan);
+            margin-right: 0.5rem;
+            display: inline-block;
+        }
+
+        .read-more {
+            color: var(--electric-cyan);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+
+        /* Single post styles */
+        .post-header {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid rgba(0, 255, 245, 0.2);
+        }
+
+        .post-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            color: var(--electric-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .post-content {
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        .post-content h1, 
+        .post-content h2, 
+        .post-content h3 {
+            font-family: 'Syne', sans-serif;
+            color: var(--electric-cyan);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .post-content h1 { font-size: 2rem; }
+        .post-content h2 { font-size: 1.6rem; }
+        .post-content h3 { font-size: 1.3rem; }
+
+        .post-content p {
+            margin-bottom: 1rem;
+        }
+
+        .post-content ul, 
+        .post-content ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .post-content code {
+            background: rgba(0, 255, 245, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            color: var(--electric-cyan);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .post-content pre {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 255, 245, 0.2);
+            padding: 1rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .post-content a {
+            color: var(--electric-cyan);
+            text-decoration: none;
+        }
+
+        .post-content a:hover {
+            text-decoration: underline;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--electric-cyan);
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .blog-header h1 {
+                font-size: 2rem;
+            }
+
+            .post-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+    
+    <nav class="nav-menu">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">HARI PRASAD</a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="/#contact" class="nav-link">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {{ content }}
+    </div>
+</body>
+</html>
