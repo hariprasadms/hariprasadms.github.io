@@ -15,11 +15,19 @@ author:
 
 # Build settings
 markdown: kramdown
-theme: minima
+highlighter: rouge
+
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
+
+# Kramdown settings
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
 
 # Permalinks
 permalink: /blog/:year/:month/:day/:title/
@@ -30,10 +38,6 @@ collections:
     output: true
     permalink: /blog/:year/:month/:day/:title/
 
-# Pagination
-paginate: 10
-paginate_path: "/blog/page:num/"
-
 # Exclude from processing
 exclude:
   - README.md
@@ -41,10 +45,10 @@ exclude:
   - Gemfile.lock
   - node_modules
   - vendor
-
-# Include
-include:
-  - _pages
+  - DEPLOYMENT_GUIDE.md
+  - JEKYLL_BLOG_SETUP_GUIDE.md
+  - LOGO_UPDATE_GUIDE.md
+  - QUICK_DEPLOY.md
 
 # Defaults
 defaults:
@@ -53,7 +57,6 @@ defaults:
       type: "posts"
     values:
       layout: "post"
-      comments: true
   - scope:
       path: ""
     values:
@@ -70,5 +73,3 @@ social:
     - https://www.linkedin.com/in/hariprasadms/
     - https://github.com/hariprasadms
 
-# Analytics (optional - add your Google Analytics ID)
-# google_analytics: UA-XXXXXXXXX-X
