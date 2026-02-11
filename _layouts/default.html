@@ -6,6 +6,12 @@
     <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
     <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
     
+    <script>
+        (function() {
+            var theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+            if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
@@ -20,6 +26,31 @@
             --grid-color: rgba(0, 255, 245, 0.1);
             --text-primary: #e6e8eb;
             --text-secondary: #8b92a0;
+            --nav-bg: rgba(10, 14, 20, 0.95);
+            --card-bg: rgba(10, 14, 20, 0.6);
+            --border-accent: rgba(0, 255, 245, 0.2);
+            --code-block-bg: rgba(0, 0, 0, 0.5);
+            --inline-code-bg: rgba(0, 255, 245, 0.1);
+            --tag-bg: rgba(0, 255, 245, 0.1);
+            --tag-border: rgba(0, 255, 245, 0.3);
+        }
+
+        [data-theme="light"] {
+            --electric-cyan: #0891b2;
+            --dark-bg: #f1f5f9;
+            --darker-bg: #ffffff;
+            --code-green: #059669;
+            --warning-orange: #ea580c;
+            --grid-color: rgba(8, 145, 178, 0.07);
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --card-bg: rgba(241, 245, 249, 0.8);
+            --border-accent: rgba(8, 145, 178, 0.25);
+            --code-block-bg: rgba(241, 245, 249, 0.9);
+            --inline-code-bg: rgba(8, 145, 178, 0.1);
+            --tag-bg: rgba(8, 145, 178, 0.08);
+            --tag-border: rgba(8, 145, 178, 0.3);
         }
 
         * {
@@ -57,9 +88,9 @@
             top: 0;
             left: 0;
             right: 0;
-            background: rgba(10, 14, 20, 0.95);
+            background: var(--nav-bg);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 255, 245, 0.2);
+            border-bottom: 1px solid var(--border-accent);
             z-index: 1000;
             padding: 1rem 2rem;
         }
@@ -126,10 +157,30 @@
             font-size: 1.1rem;
         }
 
+        /* Theme toggle */
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border-accent);
+            color: var(--electric-cyan);
+            cursor: pointer;
+            padding: 0.4rem 0.6rem;
+            font-size: 1.1rem;
+            line-height: 1;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            background: var(--electric-cyan);
+            color: var(--darker-bg);
+        }
+
         /* Post preview */
         .post-preview {
-            background: rgba(10, 14, 20, 0.6);
-            border: 1px solid rgba(0, 255, 245, 0.2);
+            background: var(--card-bg);
+            border: 1px solid var(--border-accent);
             padding: 2rem;
             margin-bottom: 2rem;
             transition: all 0.3s ease;
@@ -138,6 +189,7 @@
         .post-preview:hover {
             border-color: var(--electric-cyan);
             transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
         .post-preview h2 {
@@ -173,8 +225,8 @@
         }
 
         .tag {
-            background: rgba(0, 255, 245, 0.1);
-            border: 1px solid rgba(0, 255, 245, 0.3);
+            background: var(--tag-bg);
+            border: 1px solid var(--tag-border);
             padding: 0.3rem 0.6rem;
             font-size: 0.75rem;
             color: var(--electric-cyan);
@@ -196,7 +248,7 @@
         .post-header {
             margin-bottom: 2rem;
             padding-bottom: 2rem;
-            border-bottom: 2px solid rgba(0, 255, 245, 0.2);
+            border-bottom: 2px solid var(--border-accent);
         }
 
         .post-title {
@@ -235,7 +287,7 @@
         }
 
         .post-content code {
-            background: rgba(0, 255, 245, 0.1);
+            background: var(--inline-code-bg);
             padding: 0.2rem 0.4rem;
             border-radius: 3px;
             color: var(--electric-cyan);
@@ -243,8 +295,8 @@
         }
 
         .post-content pre {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(0, 255, 245, 0.2);
+            background: var(--code-block-bg);
+            border: 1px solid var(--border-accent);
             padding: 1rem;
             overflow-x: auto;
             margin-bottom: 1rem;
@@ -297,6 +349,9 @@
                 <a href="/" class="nav-link">Home</a>
                 <a href="/blog/" class="nav-link">Blog</a>
                 <a href="/#contact" class="nav-link">Contact</a>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light theme" title="Toggle theme">
+                    <span class="theme-icon">☀️</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -304,5 +359,43 @@
     <div class="container">
         {{ content }}
     </div>
+
+    <script>
+        (function() {
+            var toggle = document.getElementById('themeToggle');
+            var icon = toggle.querySelector('.theme-icon');
+
+            function getPreferredTheme() {
+                var stored = localStorage.getItem('theme');
+                if (stored) return stored;
+                return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+            }
+
+            function applyTheme(theme) {
+                if (theme === 'light') {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    icon.textContent = '\u{1F319}';
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                    icon.textContent = '\u{2600}\u{FE0F}';
+                }
+            }
+
+            applyTheme(getPreferredTheme());
+
+            toggle.addEventListener('click', function() {
+                var current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+                var next = current === 'light' ? 'dark' : 'light';
+                localStorage.setItem('theme', next);
+                applyTheme(next);
+            });
+
+            window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function(e) {
+                if (!localStorage.getItem('theme')) {
+                    applyTheme(e.matches ? 'light' : 'dark');
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
