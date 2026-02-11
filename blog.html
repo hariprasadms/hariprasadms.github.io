@@ -1,0 +1,132 @@
+---
+layout: default
+title: Blog
+permalink: /blog/
+---
+
+<div class="blog-header">
+  <h1>Test Automation Insights</h1>
+  <p>Practical guides, best practices, and real-world experiences from 16 years of test automation.</p>
+</div>
+
+<div class="blog-posts">
+  {% for post in site.posts %}
+    <article class="blog-post-preview">
+      <h2>
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      </h2>
+      
+      <div class="post-meta">
+        <span class="post-date">{{ post.date | date: "%B %d, %Y" }}</span>
+        {% if post.author %}
+          <span class="post-author">by {{ post.author }}</span>
+        {% endif %}
+      </div>
+      
+      <div class="post-excerpt">
+        {{ post.excerpt }}
+      </div>
+      
+      <div class="post-tags">
+        {% for tag in post.tags %}
+          <span class="tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+      
+      <a href="{{ post.url | relative_url }}" class="read-more">Read More →</a>
+    </article>
+  {% endfor %}
+</div>
+
+<style>
+  .blog-header {
+    text-align: center;
+    padding: 3rem 0;
+    margin-bottom: 3rem;
+    border-bottom: 2px solid #00fff5;
+  }
+
+  .blog-header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 3rem;
+    color: #00fff5;
+    margin-bottom: 1rem;
+  }
+
+  .blog-posts {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .blog-post-preview {
+    background: rgba(10, 14, 20, 0.6);
+    border: 1px solid rgba(0, 255, 245, 0.2);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+  }
+
+  .blog-post-preview:hover {
+    border-color: #00fff5;
+    transform: translateX(5px);
+  }
+
+  .blog-post-preview h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .blog-post-preview h2 a {
+    color: #e6e8eb;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .blog-post-preview h2 a:hover {
+    color: #00fff5;
+  }
+
+  .post-meta {
+    color: #8b92a0;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .post-date, .post-author {
+    margin-right: 1rem;
+  }
+
+  .post-excerpt {
+    color: #e6e8eb;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .post-tags {
+    margin-bottom: 1rem;
+  }
+
+  .tag {
+    background: rgba(0, 255, 245, 0.1);
+    border: 1px solid rgba(0, 255, 245, 0.3);
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+    color: #00fff5;
+    margin-right: 0.5rem;
+    display: inline-block;
+    margin-bottom: 0.3rem;
+  }
+
+  .read-more {
+    color: #00fff5;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.3s ease;
+    display: inline-block;
+  }
+
+  .read-more:hover {
+    transform: translateX(5px);
+  }
+</style>
