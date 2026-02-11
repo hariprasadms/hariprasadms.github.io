@@ -31,6 +31,109 @@
             color: var(--text-primary);
             overflow-x: hidden;
             line-height: 1.6;
+            padding-top: 70px;
+        }
+
+        /* Navigation Menu */
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 14, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 245, 0.2);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--electric-cyan);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--electric-cyan);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--electric-cyan);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--electric-cyan);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--electric-cyan);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                flex-direction: column;
+                background: rgba(10, 14, 20, 0.98);
+                width: 100%;
+                padding: 2rem;
+                gap: 1.5rem;
+                transition: left 0.3s ease;
+                border-bottom: 1px solid rgba(0, 255, 245, 0.2);
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
         }
 
         /* Animated grid background */
@@ -664,6 +767,126 @@
                 text-align: left;
                 margin-top: 1rem;
             }
+
+            .code-tabs {
+                flex-wrap: wrap;
+            }
+
+            .code-tab {
+                font-size: 0.75rem;
+                padding: 0.6rem 0.8rem;
+            }
+        }
+
+        /* Code Viewer Styles */
+        .code-viewer {
+            background: rgba(10, 14, 20, 0.6);
+            border: 1px solid rgba(0, 255, 245, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .code-tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(0, 255, 245, 0.2);
+            overflow-x: auto;
+        }
+
+        .code-tab {
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+        }
+
+        .code-tab:hover {
+            color: var(--electric-cyan);
+            background: rgba(0, 255, 245, 0.05);
+        }
+
+        .code-tab.active {
+            color: var(--electric-cyan);
+            border-bottom-color: var(--electric-cyan);
+            background: rgba(0, 255, 245, 0.1);
+        }
+
+        .code-content {
+            position: relative;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .code-snippet {
+            display: none;
+        }
+
+        .code-snippet.active {
+            display: block;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(0, 255, 245, 0.1);
+        }
+
+        .code-filename {
+            color: var(--electric-cyan);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .code-language {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .code-snippet pre {
+            margin: 0;
+            padding: 1.5rem;
+            background: transparent;
+            overflow-x: auto;
+        }
+
+        .code-snippet code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        /* Code Syntax Highlighting (Basic) */
+        .code-snippet code {
+            color: #e6e8eb;
+        }
+
+        /* Custom scrollbar for code viewer */
+        .code-content::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .code-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .code-content::-webkit-scrollbar-thumb {
+            background: var(--electric-cyan);
+            border-radius: 4px;
+        }
+
+        .code-content::-webkit-scrollbar-thumb:hover {
+            background: var(--code-green);
         }
     </style>
 </head>
@@ -671,7 +894,28 @@
     <div class="grid-background"></div>
     <div class="cursor-glow" id="cursorGlow"></div>
     
-    <div class="container">
+    <!-- Navigation Menu -->
+    <nav class="nav-menu">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">
+                <span>HARI PRASAD</span>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#expertise" class="nav-link">Expertise</a>
+                <a href="#skills" class="nav-link">Skills</a>
+                <a href="#certifications" class="nav-link">Certifications</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#code" class="nav-link">Code</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                ☰
+            </button>
+        </div>
+    </nav>
+    
+    <div class="container" id="home">
         <header>
             <div class="profile-section">
                 <div class="profile-photo">
@@ -765,7 +1009,7 @@
             </div>
         </div>
 
-        <section class="section">
+        <section class="section" id="expertise">
             <div class="section-header">
                 <span class="section-number">01</span>
                 <h2>Core Expertise</h2>
@@ -865,7 +1109,7 @@
             </div>
         </section>
 
-        <section class="section">
+        <section class="section" id="skills">
             <div class="section-header">
                 <span class="section-number">02</span>
                 <h2>Technical Proficiency</h2>
@@ -914,7 +1158,7 @@
             </div>
         </section>
 
-        <section class="section">
+        <section class="section" id="certifications">
             <div class="section-header">
                 <span class="section-number">03</span>
                 <h2>Certifications</h2>
@@ -953,7 +1197,7 @@
             </div>
         </section>
 
-        <section class="section">
+        <section class="section" id="projects">
             <div class="section-header">
                 <span class="section-number">04</span>
                 <h2>Impact Highlights</h2>
@@ -1072,7 +1316,240 @@
             </div>
         </section>
 
-        <section class="cta-section">
+        <section class="section" id="code">
+            <div class="section-header">
+                <span class="section-number">05</span>
+                <h2>Live Code Snippets</h2>
+            </div>
+
+            <div class="code-viewer">
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-snippet="playwright">Playwright Test</button>
+                        <button class="code-tab" data-snippet="selenium">Selenium Java</button>
+                        <button class="code-tab" data-snippet="cypress">Cypress E2E</button>
+                        <button class="code-tab" data-snippet="api">API Testing</button>
+                    </div>
+
+                    <div class="code-content">
+                        <div class="code-snippet active" id="playwright">
+                            <div class="code-header">
+                                <span class="code-filename">login.spec.ts</span>
+                                <span class="code-language">TypeScript • Playwright</span>
+                            </div>
+                            <pre><code>import { test, expect } from '@playwright/test';
+
+test.describe('User Authentication', () => {
+  test('should login successfully with valid credentials', async ({ page }) => {
+    // Navigate to login page
+    await page.goto('https://example.com/login');
+    
+    // Fill login form
+    await page.fill('[data-test="username"]', '<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="700415030405031502301508111d001c155e131f1d">[email&#160;protected]</a>');
+    await page.fill('[data-test="password"]', 'SecurePass123!');
+    
+    // Click login button
+    await page.click('[data-test="login-button"]');
+    
+    // Verify successful login
+    await expect(page).toHaveURL(/.*dashboard/);
+    await expect(page.locator('[data-test="user-menu"]')).toBeVisible();
+    
+    // Verify user greeting
+    const greeting = await page.locator('.user-greeting').textContent();
+    expect(greeting).toContain('Welcome');
+  });
+
+  test('should show error with invalid credentials', async ({ page }) => {
+    await page.goto('https://example.com/login');
+    
+    await page.fill('[data-test="username"]', '<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3c55524a5d5055587c59445d514c5059125f5351">[email&#160;protected]</a>');
+    await page.fill('[data-test="password"]', 'wrongpassword');
+    await page.click('[data-test="login-button"]');
+    
+    // Verify error message
+    const errorMsg = page.locator('[data-test="error-message"]');
+    await expect(errorMsg).toBeVisible();
+    await expect(errorMsg).toHaveText('Invalid credentials');
+  });
+});</code></pre>
+                        </div>
+
+                        <div class="code-snippet" id="selenium">
+                            <div class="code-header">
+                                <span class="code-filename">LoginTest.java</span>
+                                <span class="code-language">Java • Selenium WebDriver</span>
+                            </div>
+                            <pre><code>import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.By;
+import org.testng.annotations.*;
+import org.testng.Assert;
+
+public class LoginTest {
+    private WebDriver driver;
+    
+    @BeforeMethod
+    public void setup() {
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+    }
+    
+    @Test
+    public void testSuccessfulLogin() {
+        driver.get("https://example.com/login");
+        
+        driver.findElement(By.id("username"))
+              .sendKeys("<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="116574626564627463517469707c617d743f727e7c">[email&#160;protected]</a>");
+        driver.findElement(By.id("password"))
+              .sendKeys("SecurePass123!");
+        driver.findElement(By.cssSelector("button[type='submit']"))
+              .click();
+        
+        // Wait and verify redirect
+        String currentUrl = driver.getCurrentUrl();
+        Assert.assertTrue(currentUrl.contains("dashboard"),
+            "Should redirect to dashboard");
+        
+        // Verify user menu is displayed
+        boolean isUserMenuPresent = driver
+            .findElement(By.className("user-menu"))
+            .isDisplayed();
+        Assert.assertTrue(isUserMenuPresent,
+            "User menu should be visible");
+    }
+    
+    @AfterMethod
+    public void teardown() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+}</code></pre>
+                        </div>
+
+                        <div class="code-snippet" id="cypress">
+                            <div class="code-header">
+                                <span class="code-filename">login.cy.js</span>
+                                <span class="code-language">JavaScript • Cypress</span>
+                            </div>
+                            <pre><code>describe('User Login Flow', () => {
+  beforeEach(() => {
+    cy.visit('/login');
+  });
+
+  it('should login with valid credentials', () => {
+    cy.get('[data-cy=email-input]')
+      .type('<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2e5b5d4b5c6e4b564f435e424b004d4143">[email&#160;protected]</a>');
+    cy.get('[data-cy=password-input]')
+      .type('SecurePass123!');
+    cy.get('[data-cy=login-button]')
+      .click();
+
+    // Verify successful login
+    cy.url().should('include', '/dashboard');
+    cy.get('[data-cy=user-avatar]')
+      .should('be.visible');
+    cy.get('.welcome-message')
+      .should('contain', 'Welcome back');
+  });
+
+  it('should handle invalid credentials', () => {
+    cy.get('[data-cy=email-input]')
+      .type('<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e38a8d95828f8a87a3869b828e938f86cd808c8e">[email&#160;protected]</a>');
+    cy.get('[data-cy=password-input]')
+      .type('wrongpassword');
+    cy.get('[data-cy=login-button]')
+      .click();
+
+    // Verify error handling
+    cy.get('.error-alert')
+      .should('be.visible')
+      .and('contain', 'Invalid email or password');
+    cy.url().should('include', '/login');
+  });
+
+  it('should validate required fields', () => {
+    cy.get('[data-cy=login-button]')
+      .click();
+
+    cy.get('#email-error')
+      .should('contain', 'Email is required');
+    cy.get('#password-error')
+      .should('contain', 'Password is required');
+  });
+});</code></pre>
+                        </div>
+
+                        <div class="code-snippet" id="api">
+                            <div class="code-header">
+                                <span class="code-filename">ApiTests.java</span>
+                                <span class="code-language">Java • REST Assured</span>
+                            </div>
+                            <pre><code>import io.restassured.RestAssured;
+import io.restassured.response.Response;
+import org.testng.annotations.Test;
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
+
+public class ApiTests {
+    
+    @Test
+    public void testGetUserById() {
+        given()
+            .baseUri("https://api.example.com")
+            .header("Authorization", "Bearer " + getToken())
+            .pathParam("userId", 123)
+        .when()
+            .get("/users/{userId}")
+        .then()
+            .statusCode(200)
+            .body("id", equalTo(123))
+            .body("email", notNullValue())
+            .body("status", equalTo("active"));
+    }
+    
+    @Test
+    public void testCreateUser() {
+        String requestBody = """
+            {
+                "name": "John Doe",
+                "email": "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3e54515650105a515b7e5b465f534e525b105d5153">[email&#160;protected]</a>",
+                "role": "user"
+            }
+            """;
+        
+        Response response = given()
+            .baseUri("https://api.example.com")
+            .header("Content-Type", "application/json")
+            .body(requestBody)
+        .when()
+            .post("/users")
+        .then()
+            .statusCode(201)
+            .body("name", equalTo("John Doe"))
+            .body("id", notNullValue())
+            .extract().response();
+        
+        int userId = response.path("id");
+        System.out.println("Created user ID: " + userId);
+    }
+    
+    private String getToken() {
+        return "your-auth-token-here";
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+            <div style="margin-top: 2rem; text-align: center;">
+                <a href="https://github.com/hariprasadms" target="_blank" rel="noopener noreferrer" class="btn" style="text-decoration: none; display: inline-block;">
+                    VIEW ALL REPOSITORIES ON GITHUB
+                </a>
+            </div>
+        </section>
+
+        <section class="cta-section" id="contact">
             <h2 class="cta-title">Ready to Transform Your Testing Strategy?</h2>
             <p class="subtitle">Let's discuss how SDET Experts Pvt Ltd can elevate your quality automation</p>
             <div class="cta-buttons">
@@ -1134,7 +1611,7 @@
         </div>
     </footer>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // Cursor glow effect
         const cursorGlow = document.getElementById('cursorGlow');
         let mouseX = 0, mouseY = 0;
@@ -1212,6 +1689,88 @@
 
         // Set the date when page loads
         setCVUpdateDate();
+
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+                this.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+            });
+        }
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                navLinks.classList.remove('active');
+                if (mobileMenuToggle) {
+                    mobileMenuToggle.textContent = '☰';
+                }
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 80;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Highlight active nav link on scroll
+        window.addEventListener('scroll', function() {
+            let current = '';
+            const sections = document.querySelectorAll('section[id]');
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Code snippet tab switching - FIXED
+        const codeTabs = document.querySelectorAll('.code-tab');
+        const codeSnippets = document.querySelectorAll('.code-snippet');
+
+        if (codeTabs.length > 0 && codeSnippets.length > 0) {
+            codeTabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const snippetId = this.getAttribute('data-snippet');
+                    
+                    // Remove active class from all tabs and snippets
+                    codeTabs.forEach(t => t.classList.remove('active'));
+                    codeSnippets.forEach(s => s.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding snippet
+                    this.classList.add('active');
+                    const targetSnippet = document.getElementById(snippetId);
+                    if (targetSnippet) {
+                        targetSnippet.classList.add('active');
+                    }
+                });
+            });
+        }
     </script>
 </body>
 </html>
