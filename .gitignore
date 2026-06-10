@@ -1,0 +1,13 @@
+# Jekyll build output & cache
+_site/
+.jekyll-cache/
+.jekyll-metadata
+
+# Local Jekyll gems (installed for local preview)
+.jekyll-gems/
+
+# Playwright / preview artifacts
+.playwright-mcp/
+
+# OS files
+.DS_Store
