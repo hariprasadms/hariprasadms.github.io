@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Automation Expertise</title>
+    <title>Hari Prasad — AI Test Automation Architect</title>
     <script>
         (function() {
             var theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
@@ -360,6 +360,21 @@
             50% { opacity: 0.3; }
         }
 
+        .hero-eyebrow {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(0.7rem, 1.3vw, 0.85rem);
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--electric-cyan);
+            padding: 0.4rem 0.9rem;
+            border: 1px solid var(--border-accent);
+            border-radius: 999px;
+            background: var(--tag-bg);
+            margin-bottom: 1.25rem;
+            animation: fadeInUp 1s ease;
+        }
+
         h1 {
             font-family: 'Syne', sans-serif;
             font-size: clamp(3rem, 8vw, 6rem);
@@ -370,8 +385,13 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: fadeInUp 1s ease;
+            animation: fadeInUp 1s ease 0.1s backwards;
             letter-spacing: -0.03em;
+        }
+
+        h1 .h1-ai {
+            -webkit-text-fill-color: var(--electric-cyan);
+            position: relative;
         }
 
         .subtitle {
@@ -1134,13 +1154,14 @@
                 </div>
             </div>
             
-            <h1>TEST<br>AUTOMATION<br>ARCHITECT</h1>
-            <p class="subtitle">SDET Experts Pvt Ltd | Engineering Quality at Scale</p>
+            <span class="hero-eyebrow">Independent Consultant · SDET Experts Pvt Ltd</span>
+            <h1><span class="h1-ai">AI</span> TEST<br>AUTOMATION<br>ARCHITECT</h1>
+            <p class="subtitle">Engineering quality at scale with AI-augmented test automation</p>
             <p class="hero-description">
-                Independent Test Automation Consultant providing specialized expertise through SDET Experts Pvt Ltd. 
-                Delivering robust, scalable test automation frameworks that accelerate delivery cycles while maintaining 
-                exceptional quality standards. Expert in creating intelligent testing solutions that integrate seamlessly 
-                into modern CI/CD pipelines for enterprises worldwide.
+                I help enterprises ship faster without trading away quality — architecting robust, scalable
+                automation frameworks and bringing AI into modern CI/CD pipelines. Through SDET Experts Pvt Ltd,
+                I turn complex quality challenges into intelligent, self-sustaining testing that delivers
+                confidence at every release.
             </p>
         </header>
 
@@ -1836,7 +1857,7 @@ public class ApiTests {
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem;">
                 <div>
                     <h3 style="font-family: 'Syne', sans-serif; font-size: 1.5rem; color: var(--electric-cyan); margin-bottom: 0.5rem;">HARI PRASAD</h3>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Test Automation Architect</p>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">AI Test Automation Architect</p>
                     <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem;"><b style="color: var(--code-green);">SDET Experts Pvt Ltd</b> | Independent Consultant</p>
                     <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem;">London, United Kingdom</p>
                 </div>
