@@ -334,17 +334,55 @@
 
         .status-bar {
             display: flex;
-            gap: 1.5rem;
+            gap: 0.6rem;
             align-items: center;
             flex-wrap: wrap;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
+            max-width: 640px;
         }
 
         .status-indicator {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.45rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            background: var(--tag-bg);
+            border: 1px solid var(--tag-border);
+            border-radius: 999px;
+            padding: 0.4rem 0.85rem;
+            transition: all 0.25s ease;
+            cursor: default;
+        }
+
+        .status-indicator:hover {
+            color: var(--electric-cyan);
+            border-color: var(--electric-cyan);
+            transform: translateY(-2px);
+        }
+
+        /* Headline role pills */
+        .status-indicator.role {
+            color: var(--electric-cyan);
+            background: var(--inline-code-bg);
+            border-color: var(--border-accent);
+            font-weight: 700;
+        }
+
+        /* Featured AI pill (Claude AI) */
+        .status-indicator.featured {
+            color: var(--electric-cyan);
+            border-color: var(--electric-cyan);
+            background: var(--inline-code-bg);
+            font-weight: 700;
+            box-shadow: 0 0 12px -2px var(--electric-cyan);
+        }
+
+        .status-indicator.featured:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 16px 0 var(--electric-cyan);
         }
 
         .status-dot {
@@ -1103,54 +1141,21 @@
                     </div>
                 </div>
                 <div class="status-bar">
-                    <div class="status-indicator">
-                        <div class="status-dot"></div>
-                        <span><b>LEAD SDET</b></span>
-                    </div>
-                    <span style="color: var(--electric-cyan);">|</span>
-                    <div class="status-indicator">
-                        <span><b>AUTOMATION TEST LEAD</b></span>
-                    </div>
-                    <span style="color: var(--electric-cyan);">|</span>
-                    <div class="status-indicator">
-                        <span><b>TEST ARCHITECT</b></span>
-                    </div>
-                    <span style="color: var(--electric-cyan);">|</span>
-                    <div class="status-indicator">
-                        <span><b>JAVA</b></span>
-                    </div>
-                    <span style="color: var(--electric-cyan);">|</span>
-                    <div class="status-indicator">
-                        <span><b>JAVASCRIPT</b></span>
-                    </div>
-                    <span style="color: var(--electric-cyan);">|</span>
-                    <div class="status-indicator">
-                        <span><b>TYPESCRIPT</b></span>
-                    </div>
-                    <span style="color: var(--electric-cyan);">|</span>
-                    <div class="status-indicator">
-                        <span><b>PLAYWRIGHT</b></span>
-                    </div>
-                    <span style="color: var(--electric-cyan);">|</span>
-                    <div class="status-indicator">
-                        <span><b>KATALON STUDIO</b></span>
-                    </div>
-                    <span style="color: var(--electric-cyan);">|</span>
-                    <div class="status-indicator">
-                        <span><b>CYPRESS</b></span>
-                    </div>
-                    <span style="color: var(--electric-cyan);">|</span>
-                    <div class="status-indicator">
-                        <span><b>SELENIUM</b></span>
-                    </div>
-                    <span style="color: var(--electric-cyan);">|</span>
-                    <div class="status-indicator">
-                        <span><b>AZURE CLOUD</b></span>
-                    </div>
-                    <span style="color: var(--electric-cyan);">|</span>
-                    <div class="status-indicator">
-                        <span><b>FLUTTER</b></span>
-                    </div>
+                    <div class="status-indicator role"><span class="status-dot"></span>LEAD SDET</div>
+                    <div class="status-indicator role">AUTOMATION TEST LEAD</div>
+                    <div class="status-indicator role">TEST ARCHITECT</div>
+                    <div class="status-indicator featured">✦ CLAUDE AI</div>
+                    <div class="status-indicator">AI-AUGMENTED TESTING</div>
+                    <div class="status-indicator">PROMPT ENGINEERING</div>
+                    <div class="status-indicator">JAVA</div>
+                    <div class="status-indicator">JAVASCRIPT</div>
+                    <div class="status-indicator">TYPESCRIPT</div>
+                    <div class="status-indicator">PLAYWRIGHT</div>
+                    <div class="status-indicator">KATALON STUDIO</div>
+                    <div class="status-indicator">CYPRESS</div>
+                    <div class="status-indicator">SELENIUM</div>
+                    <div class="status-indicator">AZURE CLOUD</div>
+                    <div class="status-indicator">FLUTTER</div>
                 </div>
             </div>
             
