@@ -56,7 +56,7 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <style>
         :root {
@@ -102,12 +102,21 @@
         }
 
         body {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--darker-bg);
             color: var(--text-primary);
             overflow-x: hidden;
-            line-height: 1.6;
+            line-height: 1.65;
             padding-top: 70px;
+        }
+
+        /* Reserve monospace for code + technical labels/chips */
+        .nav-link,
+        .tech-tag,
+        .code-filename,
+        .code-language,
+        .impact-metric {
+            font-family: 'JetBrains Mono', monospace;
         }
 
         /* Theme toggle */
@@ -1244,8 +1253,8 @@
                     <div class="expertise-icon">🤖</div>
                     <h3>Framework Architecture</h3>
                     <p class="expertise-description">
-                        Designing and implementing scalable test automation frameworks from scratch using industry best practices, 
-                        design patterns, and modular architecture for maximum maintainability.
+                        Scalable, maintainable automation frameworks built from scratch with proven design patterns
+                        and modular architecture.
                     </p>
                     <div class="tech-tags">
                         <span class="tech-tag">Selenium</span>
@@ -1260,8 +1269,8 @@
                     <div class="expertise-icon">⚡</div>
                     <h3>CI/CD Integration</h3>
                     <p class="expertise-description">
-                        Seamless integration of automated tests into continuous integration and deployment pipelines, 
-                        enabling shift-left testing and rapid feedback loops.
+                        Automated tests wired into CI/CD pipelines for shift-left testing and fast feedback on
+                        every commit.
                     </p>
                     <div class="tech-tags">
                         <span class="tech-tag">Jenkins</span>
@@ -1275,8 +1284,8 @@
                     <div class="expertise-icon">🔍</div>
                     <h3>API Testing</h3>
                     <p class="expertise-description">
-                        Comprehensive API test automation with contract testing, performance validation, 
-                        and security testing to ensure backend reliability and integrity.
+                        End-to-end API automation — contract, performance, and security checks that keep
+                        back ends reliable.
                     </p>
                     <div class="tech-tags">
                         <span class="tech-tag">RestAssured</span>
@@ -1290,8 +1299,8 @@
                     <div class="expertise-icon">📊</div>
                     <h3>Performance Testing</h3>
                     <p class="expertise-description">
-                        Load, stress, and scalability testing to identify bottlenecks and ensure applications 
-                        perform optimally under varying conditions and peak loads.
+                        Load, stress, and scalability testing that surfaces bottlenecks and proves performance
+                        under peak demand.
                     </p>
                     <div class="tech-tags">
                         <span class="tech-tag">K6</span>
@@ -1305,8 +1314,8 @@
                     <div class="expertise-icon">📱</div>
                     <h3>Mobile Testing</h3>
                     <p class="expertise-description">
-                        Native and cross-platform mobile app testing automation for iOS and Android, 
-                        covering functional, UI, and integration testing scenarios.
+                        Native and cross-platform iOS/Android automation across functional, UI, and integration
+                        scenarios.
                     </p>
                     <div class="tech-tags">
                         <span class="tech-tag">Appium</span>
@@ -1320,8 +1329,8 @@
                     <div class="expertise-icon">🔐</div>
                     <h3>Security Testing</h3>
                     <p class="expertise-description">
-                        Automated security testing integration including SAST, DAST, and dependency scanning 
-                        to identify vulnerabilities early in the development lifecycle.
+                        SAST, DAST, and dependency scanning baked into the pipeline to catch vulnerabilities
+                        early.
                     </p>
                     <div class="tech-tags">
                         <span class="tech-tag">OWASP ZAP</span>
@@ -1439,10 +1448,9 @@
                     </div>
                 </div>
                 <p class="expertise-description">
-                    Provided consultancy through SDET Experts Pvt Ltd to architect and implement comprehensive test automation 
-                    framework covering 5,000+ test cases across web, mobile, and API layers. Integrated with Jenkins for continuous 
-                    testing, achieving 95% test coverage and reducing manual testing effort by 70%. Implemented parallel execution 
-                    reducing suite runtime from 8 hours to 45 minutes.
+                    Architected a 5,000+ test framework across web, mobile, and API layers with Jenkins-driven
+                    continuous testing. Hit 95% coverage, cut manual effort by 70%, and shrank suite runtime
+                    from 8 hours to 45 minutes through parallel execution.
                 </p>
                 <div class="tech-tags">
                     <span class="tech-tag">Selenium WebDriver</span>
@@ -1465,10 +1473,9 @@
                     </div>
                 </div>
                 <p class="expertise-description">
-                    Engaged by financial services client through SDET Experts Pvt Ltd to design contract-based testing framework 
-                    for 50+ microservices using Pact and RestAssured. Implemented automated API testing in CI/CD pipeline with 
-                    comprehensive assertion libraries and data-driven testing capabilities. Achieved 99.5% test reliability with 
-                    zero false positives.
+                    Designed contract-based testing for 50+ microservices using Pact and RestAssured, with
+                    data-driven API tests running in the CI/CD pipeline. Reached 99.5% reliability with zero
+                    false positives.
                 </p>
                 <div class="tech-tags">
                     <span class="tech-tag">Pact</span>
@@ -1490,9 +1497,9 @@
                     </div>
                 </div>
                 <p class="expertise-description">
-                    Consulted for SaaS client via SDET Experts Pvt Ltd to build scalable performance testing framework using K6 
-                    and Grafana for real-time monitoring. Conducted load, stress, and spike testing simulating 10,000+ concurrent 
-                    users. Identified and resolved critical performance bottlenecks, improving response times by 60%.
+                    Built a scalable performance suite with K6 and Grafana, running load, stress, and spike
+                    tests at 10,000+ concurrent users. Resolved critical bottlenecks to improve response times
+                    by 60%.
                 </p>
                 <div class="tech-tags">
                     <span class="tech-tag">K6</span>
@@ -1611,9 +1618,8 @@
                     </div>
                 </div>
                 <p class="expertise-description">
-                    Explore my collection of test automation frameworks, reusable code snippets, and open-source contributions. 
-                    Featuring production-ready automation solutions using Playwright, Selenium, Cypress, and Katalon Studio. 
-                    Each repository includes comprehensive documentation, best practices, and real-world implementation examples.
+                    Production-ready automation frameworks and reusable snippets in Playwright, Selenium, Cypress,
+                    and Katalon — each documented with best practices and real-world examples.
                 </p>
                 <div class="tech-tags">
                     <span class="tech-tag">Playwright</span>
