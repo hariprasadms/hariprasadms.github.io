@@ -307,6 +307,183 @@
             padding: 0;
         }
 
+        /* === Blog code blocks: modern polish + Rouge syntax highlighting === */
+        .post-content .highlighter-rouge {
+            position: relative;
+            margin: 1.75rem 0;
+            border: 1px solid var(--border-accent);
+            border-radius: 10px;
+            background: var(--code-block-bg);
+            overflow: hidden;
+            box-shadow: 0 8px 24px -16px rgba(0, 0, 0, 0.5);
+        }
+
+        .post-content .code-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.65rem 1rem;
+            background: rgba(127, 127, 127, 0.06);
+            border-bottom: 1px solid var(--border-accent);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .post-content .code-bar .dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .post-content .code-bar .dots i {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            display: block;
+        }
+
+        .post-content .code-bar .dots i:nth-child(1) { background: #ff5f56; }
+        .post-content .code-bar .dots i:nth-child(2) { background: #ffbd2e; }
+        .post-content .code-bar .dots i:nth-child(3) { background: #27c93f; }
+
+        .post-content .code-bar .lang {
+            margin-left: 0.3rem;
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .post-content .code-bar .copy-btn {
+            margin-left: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            background: var(--tag-bg);
+            border: 1px solid var(--border-accent);
+            border-radius: 6px;
+            padding: 0.3rem 0.65rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .post-content .code-bar .copy-btn:hover {
+            color: var(--electric-cyan);
+            border-color: var(--electric-cyan);
+        }
+
+        .post-content .code-bar .copy-btn.copied {
+            color: var(--code-green);
+            border-color: var(--code-green);
+        }
+
+        .post-content .highlighter-rouge .highlight {
+            margin: 0;
+            background: transparent;
+            border: none;
+        }
+
+        .post-content .highlighter-rouge pre.highlight {
+            margin: 0;
+            padding: 1.25rem;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            overflow-x: auto;
+        }
+
+        .post-content .highlighter-rouge code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        .post-content .highlighter-rouge pre.highlight::-webkit-scrollbar {
+            height: 8px;
+        }
+        .post-content .highlighter-rouge pre.highlight::-webkit-scrollbar-thumb {
+            background: var(--electric-cyan);
+            border-radius: 4px;
+        }
+        .post-content .highlighter-rouge pre.highlight::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        /* Rouge tokens (theme-aware via CSS variables) */
+        .post-content .highlight .c,
+        .post-content .highlight .c1,
+        .post-content .highlight .cm,
+        .post-content .highlight .cs,
+        .post-content .highlight .cd {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        .post-content .highlight .k,
+        .post-content .highlight .kn,
+        .post-content .highlight .kd,
+        .post-content .highlight .kp,
+        .post-content .highlight .kr,
+        .post-content .highlight .kv,
+        .post-content .highlight .kt,
+        .post-content .highlight .nt,
+        .post-content .highlight .ow {
+            color: var(--electric-cyan);
+        }
+        .post-content .highlight .s,
+        .post-content .highlight .s1,
+        .post-content .highlight .s2,
+        .post-content .highlight .sb,
+        .post-content .highlight .sc,
+        .post-content .highlight .sd,
+        .post-content .highlight .se,
+        .post-content .highlight .sh,
+        .post-content .highlight .si,
+        .post-content .highlight .sx,
+        .post-content .highlight .sr,
+        .post-content .highlight .ss,
+        .post-content .highlight .dl {
+            color: var(--code-green);
+        }
+        .post-content .highlight .nf,
+        .post-content .highlight .nc,
+        .post-content .highlight .nd,
+        .post-content .highlight .nb,
+        .post-content .highlight .bp {
+            color: var(--warning-orange);
+        }
+        .post-content .highlight .m,
+        .post-content .highlight .mi,
+        .post-content .highlight .mf,
+        .post-content .highlight .mh,
+        .post-content .highlight .mo,
+        .post-content .highlight .il,
+        .post-content .highlight .kc,
+        .post-content .highlight .no,
+        .post-content .highlight .nl {
+            color: var(--warning-orange);
+        }
+        .post-content .highlight .na,
+        .post-content .highlight .nv,
+        .post-content .highlight .vi,
+        .post-content .highlight .vg,
+        .post-content .highlight .vc,
+        .post-content .highlight .nn,
+        .post-content .highlight .ni {
+            color: var(--text-primary);
+        }
+        .post-content .highlight .o,
+        .post-content .highlight .p {
+            color: var(--text-secondary);
+        }
+        .post-content .highlight .gi { color: var(--code-green); }
+        .post-content .highlight .gd { color: #ff6b6b; }
+        .post-content .highlight .err {
+            color: inherit;
+            background: none;
+        }
+
         .post-content a {
             color: var(--electric-cyan);
             text-decoration: none;

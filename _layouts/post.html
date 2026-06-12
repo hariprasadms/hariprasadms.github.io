@@ -53,3 +53,44 @@ layout: default
         color: var(--darker-bg);
     }
 </style>
+
+<script>
+    // Enhance blog code blocks: window dots, language label, copy button
+    (function () {
+        var langNames = {
+            js: 'JavaScript', javascript: 'JavaScript', ts: 'TypeScript', typescript: 'TypeScript',
+            java: 'Java', xml: 'XML', html: 'HTML', json: 'JSON', bash: 'Bash', shell: 'Shell',
+            sh: 'Shell', console: 'Shell', yaml: 'YAML', yml: 'YAML', py: 'Python', python: 'Python',
+            sql: 'SQL', groovy: 'Groovy', kotlin: 'Kotlin', kt: 'Kotlin', css: 'CSS',
+            ruby: 'Ruby', go: 'Go', csharp: 'C#', cs: 'C#', plaintext: 'Text'
+        };
+        document.querySelectorAll('.post-content .highlighter-rouge').forEach(function (block) {
+            if (block.querySelector('.code-bar')) return;
+            var m = block.className.match(/language-([\w#+-]+)/);
+            var lang = '';
+            if (m) {
+                var key = m[1].toLowerCase();
+                lang = langNames[key] || (m[1].charAt(0).toUpperCase() + m[1].slice(1));
+            }
+            var bar = document.createElement('div');
+            bar.className = 'code-bar';
+            bar.innerHTML = '<span class="dots"><i></i><i></i><i></i></span>' +
+                (lang ? '<span class="lang">' + lang + '</span>' : '') +
+                '<button class="copy-btn" type="button" aria-label="Copy code">Copy</button>';
+            block.insertBefore(bar, block.firstChild);
+            bar.querySelector('.copy-btn').addEventListener('click', function () {
+                var code = block.querySelector('code');
+                if (!code) return;
+                var btn = this;
+                navigator.clipboard.writeText(code.innerText).then(function () {
+                    btn.textContent = 'Copied!';
+                    btn.classList.add('copied');
+                    setTimeout(function () {
+                        btn.textContent = 'Copy';
+                        btn.classList.remove('copied');
+                    }, 1500);
+                });
+            });
+        });
+    })();
+</script>
