@@ -43,9 +43,8 @@ layout: none
     --slab:'Zilla Slab', 'Spectral', serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:auto}  /* instant: page-turns jump to top; resume restores exact position */
   @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto}
     *,*::before,*::after{animation:none!important;transition:none!important}
   }
   body{
@@ -77,7 +76,13 @@ layout: none
     border-right:1px solid rgba(233,237,244,.08);
     z-index:40; transition:transform .3s ease;
   }
-  .nav-top{ padding:1.3rem 1.4rem 1.1rem; border-bottom:1px solid rgba(233,237,244,.08); }
+  .nav-top{ position:relative; padding:1.3rem 1.4rem 1.1rem; border-bottom:1px solid rgba(233,237,244,.08); }
+  .nav-close{
+    display:none; position:absolute; top:.9rem; right:.9rem;
+    background:none; border:none; color:#8FA3C4; font-size:1.5rem; line-height:1;
+    cursor:pointer; padding:.1rem .4rem; border-radius:6px;
+  }
+  .nav-close:hover{ color:#E9EDF4; background:rgba(255,255,255,.06); }
   .book-back{
     font-family:var(--mono); font-size:.74rem; color:#8FA3C4; text-decoration:none;
     display:inline-flex; gap:.4rem; align-items:center; transition:color .2s ease;
@@ -90,14 +95,22 @@ layout: none
   .book-toc{ overflow-y:auto; padding:.7rem .55rem 2rem; flex:1; }
   .book-toc a{
     display:flex; gap:.65rem; align-items:baseline;
-    font-family:var(--mono); font-size:.8rem; color:#A9B6CC; text-decoration:none;
+    font-family:var(--mono); font-size:.8rem; color:#A9B6CC; cursor:pointer;
     padding:.58rem .8rem; border-radius:7px; line-height:1.35;
-    transition:background .15s ease, color .15s ease; cursor:pointer;
+    text-decoration:underline; text-decoration-color:rgba(169,182,204,.35);
+    text-decoration-thickness:1px; text-underline-offset:3px;
+    transition:background .15s ease, color .15s ease, text-decoration-color .15s ease;
   }
   .book-toc a .n{ color:#6E81A0; min-width:1.5rem; font-size:.72rem; }
-  .book-toc a:hover{ background:rgba(255,255,255,.05); color:#E9EDF4; }
-  .book-toc a.current{ background:rgba(127,214,168,.13); color:#7FD6A8; }
+  .book-toc a:hover{ background:rgba(255,255,255,.05); color:#E9EDF4; text-decoration-color:#7FD6A8; }
+  .book-toc a.current{ background:rgba(127,214,168,.13); color:#7FD6A8; text-decoration-color:#7FD6A8; }
   .book-toc a.current .n{ color:#7FD6A8; }
+  /* bookmark dot on the chapter you last read */
+  .book-toc a.marked::after{
+    content:""; flex:none; align-self:center; margin-left:auto;
+    width:7px; height:7px; border-radius:50%; background:var(--amber);
+    box-shadow:0 0 6px rgba(201,138,45,.7);
+  }
 
   /* mobile menu button + scrim */
   .book-menu-btn{
@@ -147,13 +160,17 @@ layout: none
   .cover-meta .sub{ font-size:1.05rem; color:#B9C4D6; }
   .cover-meta .byline{ margin-top:1.4rem; font-family:var(--mono); font-size:.82rem; color:#8FA3C4; }
   .cover-meta .byline strong{ color:#E9EDF4; font-weight:600; }
+  .cover-actions{ margin-top:1.8rem; display:flex; flex-direction:column; align-items:center; gap:.7rem; }
   .cover-cta{
-    margin-top:1.8rem; display:inline-flex; align-items:center; gap:.5rem;
+    display:inline-flex; align-items:center; gap:.5rem;
     background:#fff; color:var(--night); text-decoration:none;
     font-family:var(--mono); font-size:.85rem; padding:.85rem 1.5rem; border-radius:8px;
-    border:none; cursor:pointer; transition:transform .2s ease;
+    border:none; cursor:pointer; transition:transform .2s ease, filter .2s ease;
   }
   .cover-cta:hover{ transform:translateY(-2px); }
+  .cover-resume{ background:var(--pass); color:#fff; }
+  .cover-resume:hover{ filter:brightness(1.1); }
+  .cover-resume[hidden]{ display:none; }
 
   /* ---------- chapter title block ---------- */
   .chapter-break{ padding:3.6rem 0 .5rem; }
@@ -199,6 +216,7 @@ layout: none
     .book-nav{ width:min(86vw, 320px); transform:translateX(-100%); }
     .book-nav.open{ transform:none; }
     .book-menu-btn{ display:block; }
+    .nav-close{ display:block; }
     .book-reader{ margin-left:0; padding-top:3.4rem; }
     .reading{ padding:0 1.2rem 6.5rem; }
     .pg{ padding:.6rem 1rem; }
@@ -414,6 +432,7 @@ layout: none
 
 <aside class="book-nav" id="bookNav" aria-label="Chapters">
   <div class="nav-top">
+    <button class="nav-close" id="navClose" aria-label="Close chapters">&times;</button>
     <a class="book-back" href="/">&larr; Back to portfolio</a>
     <div class="book-title">From <span class="bugs">Bugs</span> to <span class="brill">Brilliance</span></div>
     <div class="book-byline">by Hariprasad Srinivas</div>
@@ -454,7 +473,10 @@ layout: none
         <img src="/story/cover.jpg" width="1024" height="1536" alt="From Bugs to Brilliance — a software engineer's journey to become a QA leader with the power of AI, by Hariprasad.">
       </figure>
       <div class="cover-meta">
-        <button class="cover-cta" id="startReading">Start reading <span>&rarr;</span></button>
+        <div class="cover-actions">
+          <button class="cover-cta cover-resume" id="resumeBtn" hidden>Continue &middot; <span class="r-ttl"></span> <span>&rarr;</span></button>
+          <button class="cover-cta" id="startReading">Start reading <span>&rarr;</span></button>
+        </div>
       </div>
     </div>
   </section>
@@ -1555,6 +1577,18 @@ layout: none
   };
   function num(id){ var i = order.indexOf(id); return i >= 1 ? ('0' + i).slice(-2) : ''; }
 
+  // ----- bookmark: remember where the reader left off -----
+  var STORE = 'fbtb:last';
+  function readSaved(){ try{ return JSON.parse(localStorage.getItem(STORE) || 'null'); }catch(e){ return null; } }
+  function markSaved(){
+    var s = readSaved();
+    toc.forEach(function(l){ l.classList.toggle('marked', !!s && l.getAttribute('data-go') === s.id); });
+  }
+  function save(id, y){
+    if(id && id !== 'cover'){ try{ localStorage.setItem(STORE, JSON.stringify({ id:id, y:Math.round(y || 0) })); }catch(e){} }
+    markSaved();
+  }
+
   var bar = document.getElementById('progress');
   var toc = Array.prototype.slice.call(document.querySelectorAll('.book-toc a'));
   var nav = document.getElementById('bookNav');
@@ -1567,8 +1601,8 @@ layout: none
     var a = document.querySelector('.chapter.active');
     return a ? order.indexOf(a.id) : 0;
   }
-  function closeNav(){ nav.classList.remove('open'); if(scrim) scrim.style.display='none'; }
-  function openNav(){ nav.classList.add('open'); if(scrim) scrim.style.display='block'; }
+  function closeNav(){ nav.classList.remove('open'); if(scrim) scrim.style.display='none'; if(menuBtn) menuBtn.style.display=''; }
+  function openNav(){ nav.classList.add('open'); if(scrim) scrim.style.display='block'; if(menuBtn) menuBtn.style.display='none'; }
 
   function setPager(i){
     var p = i > 0 ? order[i-1] : null;
@@ -1579,15 +1613,17 @@ layout: none
     else pgNext.hidden=true;
   }
 
-  function show(id, push){
+  function show(id, push, y){
     if(order.indexOf(id) === -1) id = 'cover';
     document.querySelectorAll('.chapter').forEach(function(c){ c.classList.toggle('active', c.id === id); });
     toc.forEach(function(l){ l.classList.toggle('current', l.getAttribute('data-go') === id); });
     setPager(order.indexOf(id));
     window.scrollTo(0, 0);
+    if(y){ var _y = y; requestAnimationFrame(function(){ requestAnimationFrame(function(){ window.scrollTo(0, _y); }); }); }
     if(push !== false){ try{ history.pushState({id:id}, '', '#' + id); }catch(e){} }
     closeNav();
     updateBar();
+    save(id, y || 0);
   }
   function go(delta){
     var i = indexOfActive() + delta;
@@ -1618,8 +1654,16 @@ layout: none
     else if(e.key === 'ArrowLeft'){ go(-1); }
   });
 
-  // progress bar follows scroll within the current chapter
-  addEventListener('scroll', updateBar, {passive:true});
+  // progress bar follows scroll; also remember scroll position (throttled)
+  var saveTimer = null;
+  addEventListener('scroll', function(){
+    updateBar();
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){
+      var a = document.querySelector('.chapter.active');
+      if(a) save(a.id, window.scrollY || document.documentElement.scrollTop || 0);
+    }, 300);
+  }, {passive:true});
 
   // scroll past the edges to turn the page — ONE turn per gesture (no skipping)
   var acc = 0, gestureUsed = false, wt = null;
@@ -1647,13 +1691,33 @@ layout: none
   // mobile drawer
   if(menuBtn) menuBtn.addEventListener('click', openNav);
   if(scrim) scrim.addEventListener('click', closeNav);
+  var navClose = document.getElementById('navClose');
+  if(navClose) navClose.addEventListener('click', closeNav);
 
   // browser back/forward between chapters
   addEventListener('popstate', function(){ show((location.hash || '#cover').slice(1), false); });
 
-  // start at the chapter in the URL, or the cover
-  var start = (location.hash || '#cover').slice(1);
-  show(order.indexOf(start) !== -1 ? start : 'cover', false);
+  // resume button on the cover
+  var resumeBtn = document.getElementById('resumeBtn');
+  if(resumeBtn) resumeBtn.addEventListener('click', function(e){
+    e.preventDefault();
+    var s = readSaved();
+    if(s && order.indexOf(s.id) !== -1) show(s.id, true, s.y);
+  });
+
+  // start: a deep link (#chN) wins; otherwise the cover, offering "Continue" if we have a bookmark
+  var saved = readSaved();
+  var hash = (location.hash || '').slice(1);
+  if(order.indexOf(hash) !== -1){
+    show(hash, false, (saved && saved.id === hash) ? saved.y : 0);
+  } else {
+    show('cover', false);
+    if(saved && order.indexOf(saved.id) !== -1 && resumeBtn){
+      resumeBtn.querySelector('.r-ttl').textContent = (num(saved.id) ? num(saved.id) + '  ' : '') + TITLES[saved.id];
+      resumeBtn.hidden = false;
+    }
+  }
+  markSaved();
 })();
 </script>
 
