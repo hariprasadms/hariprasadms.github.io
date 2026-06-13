@@ -782,6 +782,76 @@
             font-size: 1.1rem;
         }
 
+        /* ---------- Books shelf ---------- */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1.5rem;
+        }
+        .book-card {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            text-decoration: none;
+            color: inherit;
+            background: var(--card-bg);
+            border: 1px solid var(--border-accent);
+            border-radius: 14px;
+            padding: 1.6rem;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .book-card:hover {
+            border-color: var(--electric-cyan);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 44px rgba(0, 0, 0, 0.28);
+        }
+        .book-cover {
+            flex: none;
+            width: 116px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.4);
+            transition: transform 0.35s ease;
+        }
+        .book-cover img { width: 100%; height: auto; display: block; }
+        .book-card:hover .book-cover { transform: rotate(-2deg) scale(1.04); }
+        .book-info { min-width: 0; }
+        .book-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+            color: var(--electric-cyan);
+        }
+        .book-title {
+            font-family: 'Syne', sans-serif; font-weight: 700;
+            font-size: 1.45rem; color: var(--text-primary);
+            margin: 0.4rem 0 0.45rem;
+        }
+        .book-tagline { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.55; margin-bottom: 0.9rem; }
+        .book-cta {
+            display: inline-block; margin-top: 1rem;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.04em;
+            color: var(--electric-cyan);
+        }
+        .book-card:hover .book-cta { text-decoration: underline; text-underline-offset: 3px; }
+        /* placeholder for upcoming titles */
+        .book-soon {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; gap: 0.5rem;
+            border: 1px dashed var(--tag-border); border-radius: 14px;
+            padding: 2rem; color: var(--text-secondary); min-height: 180px;
+        }
+        .book-soon .bs-icon { font-size: 1.6rem; }
+        .book-soon .bs-label {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;
+            letter-spacing: 0.1em; text-transform: uppercase;
+        }
+        @media (max-width: 600px) {
+            .books-grid { grid-template-columns: 1fr; }
+            .book-card { gap: 1.1rem; padding: 1.2rem; }
+            .book-cover { width: 92px; }
+            .book-title { font-size: 1.25rem; }
+        }
+
         /* Footer CTA */
         .cta-section {
             margin: 6rem 0 3rem;
@@ -1169,7 +1239,7 @@
                 <a href="#projects" class="nav-link">Projects</a>
                 <a href="#tools" class="nav-link">Tools</a>
                 <a href="/blog/" class="nav-link">Blog</a>
-                <a href="/story/from-bugs-to-brilliance/" class="nav-link">Story</a>
+                <a href="#books" class="nav-link">Books</a>
                 <a href="#contact" class="nav-link">Contact</a>
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light theme" title="Toggle theme">
                     <span class="theme-icon">☀️</span>
@@ -1600,38 +1670,41 @@
             </div>
         </section>
 
-        <section class="section" id="story">
+        <section class="section" id="books">
             <div class="section-header">
                 <span class="section-number">06</span>
-                <h2>Featured Writing</h2>
+                <h2>Books</h2>
             </div>
+            <p class="expertise-description" style="margin-bottom: 2rem;">
+                Story-driven books that teach software testing and quality engineering — written to be read,
+                not just referenced.
+            </p>
 
-            <div class="project-card" style="background: linear-gradient(135deg, rgba(0, 255, 245, 0.05) 0%, rgba(0, 255, 65, 0.05) 100%);">
-                <div class="project-header">
-                    <div>
-                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--electric-cyan); margin-bottom: 0.5rem;">✦ Storybook · 10 chapters live</p>
-                        <h3 class="project-title">From Bugs to Brilliance</h3>
-                        <p style="color: var(--text-secondary);">A story-driven book about software testing in the age of AI</p>
+            <div class="books-grid">
+                <a class="book-card" href="/story/from-bugs-to-brilliance/">
+                    <div class="book-cover">
+                        <img src="/story/cover.jpg" alt="From Bugs to Brilliance book cover" loading="lazy">
                     </div>
-                    <div class="project-meta">
-                        <div class="impact-metric">📖 Full book</div>
+                    <div class="book-info">
+                        <span class="book-badge">✦ Live · 10 Chapters</span>
+                        <h3 class="book-title">From Bugs to Brilliance</h3>
+                        <p class="book-tagline">
+                            A software engineer's journey to become a QA leader with the power of AI —
+                            testing from first principles to the age of AI, told as a story.
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Storytelling</span>
+                            <span class="tech-tag">Testing</span>
+                            <span class="tech-tag">AI &amp; Quality</span>
+                        </div>
+                        <span class="book-cta">Read the book →</span>
                     </div>
-                </div>
-                <p class="expertise-description">
-                    Follow Arun — a new engineer who thinks testers just click buttons — from a 2 AM production
-                    outage to teaching a whole company how humans and AI build quality together. Ten chapters
-                    covering testing from first principles to AI: boundaries, APIs, automation,
-                    CI/CD, performance, security, and the curiosity no machine can replace.
-                </p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Storytelling</span>
-                    <span class="tech-tag">Testing Mindset</span>
-                    <span class="tech-tag">AI &amp; Quality</span>
-                </div>
-                <div style="margin-top: 1.5rem;">
-                    <a href="/story/from-bugs-to-brilliance/" class="btn" style="text-decoration: none; display: inline-block;">
-                        READ THE BOOK →
-                    </a>
+                </a>
+
+                <div class="book-soon">
+                    <span class="bs-icon">✍️</span>
+                    <span class="bs-label">More titles in the works</span>
+                    <span style="font-size: 0.85rem;">New books on testing &amp; AI quality — coming soon.</span>
                 </div>
             </div>
         </section>
