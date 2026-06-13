@@ -8,20 +8,20 @@ layout: none
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>From Bugs to Brilliance — A Story of Software Testing</title>
-<meta name="description" content="A story-driven book that teaches software testing in plain English — from first principles to the age of AI. Follow Arun from breaking production to mastering quality.">
+<meta name="description" content="A story-driven book that teaches software testing from first principles to the age of AI. Follow Arun from breaking production to mastering quality.">
 <link rel="canonical" href="https://hariprasadms.github.io/story/from-bugs-to-brilliance/">
 <link rel="icon" type="image/svg+xml" href="/company-logo.svg">
 <link rel="alternate icon" href="/company-logo.jpg">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Hari Prasad">
 <meta property="og:title" content="From Bugs to Brilliance — A Story of Software Testing">
-<meta property="og:description" content="A story-driven book that teaches software testing in plain English, from first principles to the age of AI.">
+<meta property="og:description" content="A story-driven book that teaches software testing from first principles to the age of AI.">
 <meta property="og:url" content="https://hariprasadms.github.io/story/from-bugs-to-brilliance/">
-<meta property="og:image" content="https://hariprasadms.github.io/company-logo.jpg">
+<meta property="og:image" content="https://hariprasadms.github.io/story/cover.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="From Bugs to Brilliance — A Story of Software Testing">
-<meta name="twitter:description" content="A story-driven book that teaches software testing in plain English, from first principles to the age of AI.">
-<meta name="twitter:image" content="https://hariprasadms.github.io/company-logo.jpg">
+<meta name="twitter:description" content="A story-driven book that teaches software testing from first principles to the age of AI.">
+<meta name="twitter:image" content="https://hariprasadms.github.io/story/cover.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -64,113 +64,99 @@ layout: none
     z-index:50;
   }
 
-  /* ---------- bridge back to the portfolio ---------- */
-  .sitebar{
-    background:var(--night);
-    border-bottom:1px solid rgba(233,237,244,.08);
-    padding:.75rem 1.5rem;
-  }
-  .sitebar-inner{
-    max-width:680px;margin:0 auto;
-    display:flex;align-items:center;justify-content:space-between;gap:1rem;
-    font-family:var(--mono);font-size:.78rem;
-  }
-  .sitebar a{
-    color:#8FA3C4;text-decoration:none;
-    display:inline-flex;align-items:center;gap:.45rem;
-    transition:color .2s ease;
-  }
-  .sitebar a:hover{color:#E9EDF4}
-  .sitebar .brand{
-    color:#CBD5E4;letter-spacing:.1em;text-transform:uppercase;font-size:.72rem;
-  }
+  /* ===================================================================
+     WEB-BOOK LAYOUT — left chapter menu + one-chapter-per-page reader
+     =================================================================== */
+  :root{ --nav-w: 300px; }
 
-  /* ---------- hero: the book cover ---------- */
-  .hero{
-    background:var(--night);
-    color:#E9EDF4;
-    padding:5rem 1.5rem 4rem;
-    position:relative;
-    overflow:hidden;
+  /* ---------- left sidebar: chapter menu ---------- */
+  .book-nav{
+    position:fixed; top:0; left:0; bottom:0; width:var(--nav-w);
+    background:var(--night); color:#E9EDF4;
+    display:flex; flex-direction:column;
+    border-right:1px solid rgba(233,237,244,.08);
+    z-index:40; transition:transform .3s ease;
   }
-  .hero::after{
-    content:"";
-    position:absolute;inset:0;
-    background:
-      radial-gradient(ellipse 60% 40% at 80% 10%, rgba(95,140,220,.14), transparent 60%),
-      radial-gradient(ellipse 50% 35% at 10% 90%, rgba(194,69,58,.10), transparent 60%);
-    pointer-events:none;
+  .nav-top{ padding:1.3rem 1.4rem 1.1rem; border-bottom:1px solid rgba(233,237,244,.08); }
+  .book-back{
+    font-family:var(--mono); font-size:.74rem; color:#8FA3C4; text-decoration:none;
+    display:inline-flex; gap:.4rem; align-items:center; transition:color .2s ease;
   }
-  .hero-inner{max-width:680px;margin:0 auto;position:relative;z-index:1}
-  .hero .kicker{
-    font-family:var(--mono);
-    font-size:.78rem;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:#8FA3C4;
-    display:flex;align-items:center;gap:.6rem;
-    margin-bottom:1.6rem;
-  }
-  .hero .kicker::before{
-    content:"";width:8px;height:8px;border-radius:50%;
-    background:var(--pass);
-    box-shadow:0 0 10px rgba(31,138,91,.8);
-  }
-  .hero h1{
-    font-family:var(--slab);
-    font-weight:700;
-    font-size:clamp(2.6rem, 7vw, 4.2rem);
-    line-height:1.05;
-    letter-spacing:-.01em;
-    margin-bottom:1.1rem;
-  }
-  .hero h1 .bugs{color:#E0848A}
-  .hero h1 .brill{color:#7FD6A8}
-  .hero .sub{
-    font-size:1.15rem;
-    color:#B9C4D6;
-    max-width:34rem;
-    font-weight:300;
-  }
-  .hero .byline{
-    margin-top:2rem;
-    font-family:var(--mono);
-    font-size:.85rem;
-    color:#8FA3C4;
-  }
-  .hero .byline strong{color:#E9EDF4;font-weight:600}
+  .book-back:hover{ color:#E9EDF4; }
+  .book-title{ font-family:var(--slab); font-weight:700; font-size:1.18rem; margin-top:.7rem; line-height:1.2; }
+  .book-title .bugs{ color:#E0848A; } .book-title .brill{ color:#7FD6A8; }
+  .book-byline{ font-family:var(--mono); font-size:.68rem; color:#6E81A0; margin-top:.35rem; letter-spacing:.02em; }
 
-  /* ---------- table of contents ---------- */
-  .toc{
-    margin-top:2.6rem;
-    border-top:1px solid rgba(233,237,244,.12);
-    padding-top:1.4rem;
+  .book-toc{ overflow-y:auto; padding:.7rem .55rem 2rem; flex:1; }
+  .book-toc a{
+    display:flex; gap:.65rem; align-items:baseline;
+    font-family:var(--mono); font-size:.8rem; color:#A9B6CC; text-decoration:none;
+    padding:.58rem .8rem; border-radius:7px; line-height:1.35;
+    transition:background .15s ease, color .15s ease; cursor:pointer;
   }
-  .toc-label{
-    font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;
-    text-transform:uppercase;color:#6E81A0;margin-bottom:.6rem;display:block;
-  }
-  .toc a{
-    display:flex;gap:1rem;align-items:baseline;
-    font-family:var(--mono);font-size:.86rem;color:#B9C4D6;text-decoration:none;
-    padding:.5rem .2rem;border-bottom:1px solid rgba(233,237,244,.06);
-    transition:color .2s ease;
-  }
-  .toc a:last-child{border-bottom:none}
-  .toc a:hover{color:#7FD6A8}
-  .toc a .n{color:#6E81A0;min-width:1.8rem}
+  .book-toc a .n{ color:#6E81A0; min-width:1.5rem; font-size:.72rem; }
+  .book-toc a:hover{ background:rgba(255,255,255,.05); color:#E9EDF4; }
+  .book-toc a.current{ background:rgba(127,214,168,.13); color:#7FD6A8; }
+  .book-toc a.current .n{ color:#7FD6A8; }
 
-  /* ---------- reading column ---------- */
-  main{max-width:680px;margin:0 auto;padding:0 1.5rem 5rem}
-
-  /* ---------- chapter divider ---------- */
-  .chapter-break{
-    margin:4.5rem 0 .5rem;
-    padding:2.4rem 0 0;
-    border-top:1px solid var(--line);
-    scroll-margin-top:1rem;
+  /* mobile menu button + scrim */
+  .book-menu-btn{
+    display:none; position:fixed; top:.7rem; left:.7rem; z-index:46;
+    background:var(--night); color:#E9EDF4; border:1px solid rgba(233,237,244,.22);
+    border-radius:8px; padding:.5rem .85rem; font-family:var(--mono); font-size:.76rem; cursor:pointer;
   }
-  .chapter-break:first-of-type{margin-top:3rem}
+  .nav-scrim{ display:none; position:fixed; inset:0; background:rgba(8,12,20,.55); z-index:39; }
+
+  /* ---------- reader: one chapter shown at a time ---------- */
+  .book-reader{ margin-left:var(--nav-w); min-height:100vh; }
+  .chapter{ display:none; }
+  .chapter.active{ display:block; animation:pagein .45s ease; }
+  @keyframes pagein{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:none;} }
+  @media (prefers-reduced-motion: reduce){ .chapter.active{ animation:none; } }
+  .reading{ max-width:680px; margin:0 auto; padding:0 1.5rem 6rem; }
+
+  /* ---------- cover page (cover art + title) ---------- */
+  .cover-hero{
+    background:var(--night); color:#E9EDF4;
+    min-height:calc(100vh - 3.4rem);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:3rem 1.5rem 5rem;
+  }
+  .cover-figure{
+    position:relative; margin:0; width:min(420px, 82vw);
+    border-radius:14px; overflow:hidden;
+    box-shadow:0 30px 70px rgba(0,0,0,.55);
+    border:1px solid rgba(233,237,244,.12);
+  }
+  .cover-figure img{ display:block; width:100%; height:auto; }
+  .cover-figure .cap{
+    position:absolute; top:0; left:0; right:0;
+    padding:1.5rem 1.3rem 2.6rem;
+    background:linear-gradient(180deg, rgba(16,24,38,.92) 0%, rgba(16,24,38,.55) 55%, transparent 100%);
+  }
+  .cover-figure .kicker{
+    font-family:var(--mono); font-size:.58rem; letter-spacing:.14em; text-transform:uppercase;
+    color:#9DB0CE; margin-bottom:.55rem;
+  }
+  .cover-figure h1{
+    font-family:var(--slab); font-weight:700; line-height:1.02;
+    font-size:clamp(1.7rem, 5.4vw, 2.4rem); letter-spacing:-.01em;
+  }
+  .cover-figure h1 .bugs{ color:#E0848A; } .cover-figure h1 .brill{ color:#7FD6A8; }
+  .cover-meta{ max-width:34rem; margin-top:2.2rem; }
+  .cover-meta .sub{ font-size:1.05rem; color:#B9C4D6; }
+  .cover-meta .byline{ margin-top:1.4rem; font-family:var(--mono); font-size:.82rem; color:#8FA3C4; }
+  .cover-meta .byline strong{ color:#E9EDF4; font-weight:600; }
+  .cover-cta{
+    margin-top:1.8rem; display:inline-flex; align-items:center; gap:.5rem;
+    background:#fff; color:var(--night); text-decoration:none;
+    font-family:var(--mono); font-size:.85rem; padding:.85rem 1.5rem; border-radius:8px;
+    border:none; cursor:pointer; transition:transform .2s ease;
+  }
+  .cover-cta:hover{ transform:translateY(-2px); }
+
+  /* ---------- chapter title block ---------- */
+  .chapter-break{ padding:3.6rem 0 .5rem; }
   .cb-num{
     font-family:var(--mono);font-size:.74rem;letter-spacing:.18em;
     text-transform:uppercase;color:var(--pass);
@@ -181,6 +167,47 @@ layout: none
     margin:.5rem 0 .5rem;color:var(--ink);
   }
   .cb-sub{font-style:italic;color:var(--ink-soft);font-size:1.02rem}
+
+  /* ---------- bottom pager: previews the prev / next chapter ---------- */
+  .pager{
+    position:fixed; bottom:0; left:var(--nav-w); right:0; z-index:38;
+    display:flex; gap:1px; background:var(--line); border-top:1px solid var(--line);
+  }
+  .pg{
+    flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:.15rem;
+    padding:.7rem 1.3rem; background:var(--paper); border:none; cursor:pointer;
+    text-align:left; transition:background .15s ease, filter .15s ease;
+  }
+  .pg-next{ align-items:flex-end; text-align:right; background:var(--night); }
+  .pg-prev:hover{ background:#fff; }
+  .pg-next:hover{ filter:brightness(1.18); }
+  .pg-dir{
+    font-family:var(--mono); font-size:.66rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--ink-soft);
+  }
+  .pg-next .pg-dir{ color:#7FD6A8; }
+  .pg-ttl{
+    font-family:var(--slab); font-weight:600; font-size:.95rem; color:var(--ink);
+    max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .pg-next .pg-ttl{ color:#fff; }
+  .pg[hidden]{ display:none; }
+
+  /* ---------- responsive: collapse menu to a drawer ---------- */
+  @media (max-width: 880px){
+    :root{ --nav-w:0px; }
+    .book-nav{ width:min(86vw, 320px); transform:translateX(-100%); }
+    .book-nav.open{ transform:none; }
+    .book-menu-btn{ display:block; }
+    .book-reader{ margin-left:0; padding-top:3.4rem; }
+    .reading{ padding:0 1.2rem 6.5rem; }
+    .pg{ padding:.6rem 1rem; }
+    .pg-ttl{ font-size:.84rem; }
+    .pg-dir{ font-size:.62rem; }
+  }
+  @media (max-width: 380px){
+    .pg-ttl{ display:none; }   /* keep just Prev / Next on very narrow screens */
+  }
 
   .page{
     padding:2.6rem 0 0;
@@ -370,12 +397,7 @@ layout: none
   }
   footer a{color:var(--pass);text-decoration:none}
 
-  /* gentle reveal */
-  .page,.chapter-break{opacity:0;transform:translateY(14px);transition:opacity .6s ease, transform .6s ease}
-  .page.in,.chapter-break.in{opacity:1;transform:none}
-  @media (prefers-reduced-motion: reduce){
-    .page,.chapter-break{opacity:1;transform:none}
-  }
+  /* pages are visible immediately; the active chapter fades in as a whole */
 
   @media (max-width:520px){
     body{font-size:1.05rem}
@@ -388,40 +410,59 @@ layout: none
 
 <div id="progress" aria-hidden="true"></div>
 
-<nav class="sitebar">
-  <div class="sitebar-inner">
-    <a class="home" href="/">&larr; Back to portfolio</a>
-    <a class="brand" href="/">Hariprasad Srinivas</a>
+<button class="book-menu-btn" id="menuBtn" aria-label="Open chapters">&#9776; Chapters</button>
+
+<aside class="book-nav" id="bookNav" aria-label="Chapters">
+  <div class="nav-top">
+    <a class="book-back" href="/">&larr; Back to portfolio</a>
+    <div class="book-title">From <span class="bugs">Bugs</span> to <span class="brill">Brilliance</span></div>
+    <div class="book-byline">by Hariprasad Srinivas</div>
   </div>
+  <nav class="book-toc">
+    <a data-go="cover"><span class="n">&#9670;</span> Cover</a>
+    <a data-go="ch1"><span class="n">01</span> The Day Everything Changed</a>
+    <a data-go="ch2"><span class="n">02</span> The Invisible Layer</a>
+    <a data-go="ch3"><span class="n">03</span> The Nine-Day Test</a>
+    <a data-go="ch4"><span class="n">04</span> The Tests That Cried Wolf</a>
+    <a data-go="ch5"><span class="n">05</span> Every Commit, Every Time</a>
+    <a data-go="ch6"><span class="n">06</span> When &ldquo;It Works&rdquo; Isn&rsquo;t Enough</a>
+    <a data-go="ch7"><span class="n">07</span> The Machine That Never Sleeps</a>
+    <a data-go="ch8"><span class="n">08</span> Director, Not Passenger</a>
+    <a data-go="ch9"><span class="n">09</span> The Weight of the Whiteboard</a>
+    <a data-go="ch10"><span class="n">10</span> The Question Only a Human Could Ask</a>
+  </nav>
+</aside>
+<div class="nav-scrim" id="navScrim"></div>
+
+<nav class="pager" aria-label="Chapter navigation">
+  <button class="pg pg-prev" id="pgPrev">
+    <span class="pg-dir">&#8249; Previous</span>
+    <span class="pg-ttl" id="pgPrevT"></span>
+  </button>
+  <button class="pg pg-next" id="pgNext">
+    <span class="pg-dir">Next &#8250;</span>
+    <span class="pg-ttl" id="pgNextT"></span>
+  </button>
 </nav>
 
-<header class="hero">
-  <div class="hero-inner">
-    <div class="kicker">A story about software testing in the age of AI</div>
-    <h1>From <span class="bugs">Bugs</span> to <span class="brill">Brilliance</span></h1>
-    <p class="sub">One engineer joins a software company sure that testers just click buttons. One production outage later, he begins a journey that teaches him — and his whole team — what quality really means. A story that explains software testing from the very first idea to the age of AI, in plain English.</p>
-    <p class="byline">by <strong>Hariprasad Srinivas</strong> · SDET Experts · promptqa.dev</p>
+<main class="book-reader" id="reader">
 
-    <nav class="toc" aria-label="Chapters">
-      <span class="toc-label">The Book · 10 Chapters</span>
-      <a href="#ch1"><span class="n">01</span> The Day Everything Changed</a>
-      <a href="#ch2"><span class="n">02</span> The Invisible Layer</a>
-      <a href="#ch3"><span class="n">03</span> The Nine-Day Test</a>
-      <a href="#ch4"><span class="n">04</span> The Tests That Cried Wolf</a>
-      <a href="#ch5"><span class="n">05</span> Every Commit, Every Time</a>
-      <a href="#ch6"><span class="n">06</span> When &ldquo;It Works&rdquo; Isn&rsquo;t Enough</a>
-      <a href="#ch7"><span class="n">07</span> The Machine That Never Sleeps</a>
-      <a href="#ch8"><span class="n">08</span> Director, Not Passenger</a>
-      <a href="#ch9"><span class="n">09</span> The Weight of the Whiteboard</a>
-      <a href="#ch10"><span class="n">10</span> The Question Only a Human Could Ask</a>
-    </nav>
-  </div>
-</header>
-
-<main>
+  <!-- ===================== COVER ===================== -->
+  <section class="chapter active" id="cover">
+    <div class="cover-hero">
+      <figure class="cover-figure">
+        <img src="/story/cover.jpg" width="1024" height="1536" alt="From Bugs to Brilliance — a software engineer's journey to become a QA leader with the power of AI, by Hariprasad.">
+      </figure>
+      <div class="cover-meta">
+        <button class="cover-cta" id="startReading">Start reading <span>&rarr;</span></button>
+      </div>
+    </div>
+  </section>
 
   <!-- ===================== CHAPTER 1 ===================== -->
-  <div class="chapter-break" id="ch1">
+  <section class="chapter" id="ch1">
+    <div class="reading">
+    <div class="chapter-break">
     <span class="cb-num">Chapter 01</span>
     <h2 class="cb-title">The Day Everything Changed</h2>
     <p class="cb-sub">Where Arun learns that "it works on my machine" is not the same as "it works."</p>
@@ -548,8 +589,13 @@ layout: none
     </div>
   </section>
 
+    </div>
+  </section>
+
   <!-- ===================== CHAPTER 2 ===================== -->
-  <div class="chapter-break" id="ch2">
+  <section class="chapter" id="ch2">
+    <div class="reading">
+    <div class="chapter-break">
     <span class="cb-num">Chapter 02</span>
     <h2 class="cb-title">The Invisible Layer</h2>
     <p class="cb-sub">Where Arun learns that the worst bugs are the ones no screen will ever show you.</p>
@@ -665,8 +711,13 @@ layout: none
     </div>
   </section>
 
+    </div>
+  </section>
+
   <!-- ===================== CHAPTER 3 ===================== -->
-  <div class="chapter-break" id="ch3">
+  <section class="chapter" id="ch3">
+    <div class="reading">
+    <div class="chapter-break">
     <span class="cb-num">Chapter 03</span>
     <h2 class="cb-title">The Nine-Day Test</h2>
     <p class="cb-sub">Where Arun meets a job so slow and dull that a machine had to be the answer.</p>
@@ -774,8 +825,13 @@ layout: none
     </div>
   </section>
 
+    </div>
+  </section>
+
   <!-- ===================== CHAPTER 4 ===================== -->
-  <div class="chapter-break" id="ch4">
+  <section class="chapter" id="ch4">
+    <div class="reading">
+    <div class="chapter-break">
     <span class="cb-num">Chapter 04</span>
     <h2 class="cb-title">The Tests That Cried Wolf</h2>
     <p class="cb-sub">Where Arun learns that more tests are not better tests — and trust is the only thing that counts.</p>
@@ -871,8 +927,13 @@ layout: none
     </div>
   </section>
 
+    </div>
+  </section>
+
   <!-- ===================== CHAPTER 5 ===================== -->
-  <div class="chapter-break" id="ch5">
+  <section class="chapter" id="ch5">
+    <div class="reading">
+    <div class="chapter-break">
     <span class="cb-num">Chapter 05</span>
     <h2 class="cb-title">Every Commit, Every Time</h2>
     <p class="cb-sub">Where the tests stop waiting for a human to remember them.</p>
@@ -962,8 +1023,13 @@ layout: none
     </div>
   </section>
 
+    </div>
+  </section>
+
   <!-- ===================== CHAPTER 6 ===================== -->
-  <div class="chapter-break" id="ch6">
+  <section class="chapter" id="ch6">
+    <div class="reading">
+    <div class="chapter-break">
     <span class="cb-num">Chapter 06</span>
     <h2 class="cb-title">When "It Works" Isn't Enough</h2>
     <p class="cb-sub">Where Arun learns that a feature can pass every test and still fail every customer.</p>
@@ -1058,8 +1124,13 @@ layout: none
     </div>
   </section>
 
+    </div>
+  </section>
+
   <!-- ===================== CHAPTER 7 ===================== -->
-  <div class="chapter-break" id="ch7">
+  <section class="chapter" id="ch7">
+    <div class="reading">
+    <div class="chapter-break">
     <span class="cb-num">Chapter 07</span>
     <h2 class="cb-title">The Machine That Never Sleeps</h2>
     <p class="cb-sub">Where Arun trusts the machine the way he once trusted his own laptop — and pays for it again.</p>
@@ -1157,8 +1228,13 @@ layout: none
     </div>
   </section>
 
+    </div>
+  </section>
+
   <!-- ===================== CHAPTER 8 ===================== -->
-  <div class="chapter-break" id="ch8">
+  <section class="chapter" id="ch8">
+    <div class="reading">
+    <div class="chapter-break">
     <span class="cb-num">Chapter 08</span>
     <h2 class="cb-title">Director, Not Passenger</h2>
     <p class="cb-sub">Where Arun stops letting the machine drive, and learns to direct it instead.</p>
@@ -1250,8 +1326,13 @@ layout: none
     </div>
   </section>
 
+    </div>
+  </section>
+
   <!-- ===================== CHAPTER 9 ===================== -->
-  <div class="chapter-break" id="ch9">
+  <section class="chapter" id="ch9">
+    <div class="reading">
+    <div class="chapter-break">
     <span class="cb-num">Chapter 09</span>
     <h2 class="cb-title">The Weight of the Whiteboard</h2>
     <p class="cb-sub">Where Arun learns that leading quality is about people and judgement — not counting tests.</p>
@@ -1260,7 +1341,7 @@ layout: none
   <section class="page">
     <div class="page-marker">Page 1 · Meera leaves</div>
     <p class="drop">It came on an ordinary Tuesday. Meera had taken a role at another company — a bigger stage, a harder problem. She was the best teacher Arun had ever had, and she was leaving.</p>
-    <p>"You'll be fine," she said. "You stopped needing me a while ago." Then Priya pulled Arun aside. "You're taking the senior quality role. And you're getting a new graduate to look after. Her name is Diya."</p>
+    <p>"You'll be fine," she said. "You stopped needing me a while ago." Then Priya pulled Arun aside. "You're taking the senior quality role. And you're getting a new graduate to look after. Her name is Anika."</p>
   </section>
 
   <section class="page">
@@ -1312,8 +1393,8 @@ layout: none
 
   <section class="page">
     <div class="page-marker">Page 7 · Teaching by question</div>
-    <p>And then there was Diya. She was sharp, fast, and certain she already knew everything — exactly like a young man who once pitied the testing team.</p>
-    <p>Arun caught himself about to lecture her. Instead, he remembered Meera, and asked a question instead. "Your login test passes. Good. Now — what happens at fifty-one characters?" Diya frowned, tried it, and went pale. He didn't give her the answer. He gave her the habit.</p>
+    <p>And then there was Anika. She was sharp, fast, and certain she already knew everything — exactly like a young man who once pitied the testing team.</p>
+    <p>Arun caught himself about to lecture her. Instead, he remembered Meera, and asked a question instead. "Your login test passes. Good. Now — what happens at fifty-one characters?" Anika frowned, tried it, and went pale. He didn't give her the answer. He gave her the habit.</p>
   </section>
 
   <section class="page">
@@ -1349,8 +1430,13 @@ layout: none
     </div>
   </section>
 
+    </div>
+  </section>
+
   <!-- ===================== CHAPTER 10 ===================== -->
-  <div class="chapter-break" id="ch10">
+  <section class="chapter" id="ch10">
+    <div class="reading">
+    <div class="chapter-break">
     <span class="cb-num">Chapter 10</span>
     <h2 class="cb-title">The Question Only a Human Could Ask</h2>
     <p class="cb-sub">Where the story comes full circle, and the oldest skill turns out to be the newest one.</p>
@@ -1358,7 +1444,7 @@ layout: none
 
   <section class="page">
     <div class="page-marker">Page 1 · A familiar pity</div>
-    <p class="drop">Two years on, Diya was no longer a nervous graduate. She was quick and confident — maybe a little too confident. One morning she said something that stopped Arun cold.</p>
+    <p class="drop">Two years on, Anika was no longer a nervous graduate. She was quick and confident — maybe a little too confident. One morning she said something that stopped Arun cold.</p>
     <p>"Honestly, the AI does the testing now. It writes everything, the pipeline runs everything, it's all green. I'm not sure why we still need a quality team at all."</p>
     <p>Arun smiled. He had heard that voice before. It was his own, on his first day, pitying the people who "just click buttons."</p>
   </section>
@@ -1372,7 +1458,7 @@ layout: none
       <span class="ln">AI test review …… <span class="ok2">PASS</span></span>
       <span class="ln">performance · security · a11y … <span class="ok2">PASS</span></span>
     </div>
-    <p>"Ship it," Diya said. "There's literally nothing left to check."</p>
+    <p>"Ship it," Anika said. "There's literally nothing left to check."</p>
   </section>
 
   <section class="page">
@@ -1383,8 +1469,8 @@ layout: none
 
   <section class="page">
     <div class="page-marker">Page 4 · The question</div>
-    <p>"Diya," he said slowly. "What happens if a customer pays with a discount code <em>and</em> a gift card, for the last item in the sale, at the exact moment the sale ends at midnight?"</p>
-    <p>Diya opened her mouth, then closed it. "I… the AI didn't write that test. Each part passed separately." It was every lesson of the book in one sentence — boundaries, race conditions, integration, the edge where two truths meet. The machine had tested the rooms. Nobody had tested the doorway between them.</p>
+    <p>"Anika," he said slowly. "What happens if a customer pays with a discount code <em>and</em> a gift card, for the last item in the sale, at the exact moment the sale ends at midnight?"</p>
+    <p>Anika opened her mouth, then closed it. "I… the AI didn't write that test. Each part passed separately." It was every lesson of the book in one sentence — boundaries, race conditions, integration, the edge where two truths meet. The machine had tested the rooms. Nobody had tested the doorway between them.</p>
   </section>
 
   <section class="page">
@@ -1401,7 +1487,7 @@ layout: none
 
   <section class="page">
     <div class="page-marker">Page 6 · Four words</div>
-    <p>Diya stared at the screen, shaken. "Every single test was green."</p>
+    <p>Anika stared at the screen, shaken. "Every single test was green."</p>
     <p>"Green is not the same as safe," Arun said — the line that had once cost him a feature. "The machine can run a million tests. It can only run the ones we think to ask for. It answers questions. It can't ask them."</p>
     <p>He walked to the whiteboard and wrote four words he'd first seen on his own first day.</p>
     <h2>"Quality is everyone's responsibility."</h2>
@@ -1410,7 +1496,7 @@ layout: none
   <section class="page">
     <div class="page-marker">Page 7 · The habit passes on</div>
     <p>"The AI is the best junior you will ever have," he told her. "It never sleeps. It never complains. It will do the work of a hundred testers. But it will never stand here, on release day, with a bad feeling it can't explain, and ask the one question nobody wrote down. That part is yours. It will always be yours."</p>
-    <p>Diya looked at the bug, then at the four words, then at the parking-meter look on her mentor's face. Something shifted behind her eyes. That afternoon, unprompted, she filled a page of her notebook with "what if" questions.</p>
+    <p>Anika looked at the bug, then at the four words, then at the parking-meter look on her mentor's face. Something shifted behind her eyes. That afternoon, unprompted, she filled a page of her notebook with "what if" questions.</p>
   </section>
 
   <section class="page">
@@ -1422,7 +1508,7 @@ layout: none
   <section class="page">
     <div class="page-marker">Page 9 · Rain on the glass</div>
     <p>Rain tapped against the glass walls of TechNova — the same rain, the same glass, a different man watching it. Across the floor, a brand-new engineer walked in on their first day, badge still shiny, and glanced at the quality team with a small, unmistakable flicker of pity.</p>
-    <p>Arun caught Diya's eye. They both smiled. They knew exactly what that new engineer was thinking. And they knew that, sooner or later, one production outage would change everything — the way it always does.</p>
+    <p>Arun caught Anika's eye. They both smiled. They knew exactly what that new engineer was thinking. And they knew that, sooner or later, one production outage would change everything — the way it always does.</p>
   </section>
 
   <section class="page">
@@ -1449,26 +1535,126 @@ layout: none
     <h3>From Bugs to Brilliance</h3>
     <p>Arun's journey — from "testers just click buttons" to the engineer who teaches a company how humans and AI build quality together. The tools will keep changing. The curiosity won't.</p>
   </div>
+    </div>
+  </section>
+
+  <footer>
+    From Bugs to Brilliance · © 2026 Hariprasad Srinivas · <a href="https://qatools.dev">qatools.dev</a> · <a href="https://promptqa.dev">promptqa.dev</a>
+  </footer>
 </main>
 
-<footer>
-  From Bugs to Brilliance · © 2026 Hariprasad Srinivas · <a href="https://qatools.dev">qatools.dev</a> · <a href="https://promptqa.dev">promptqa.dev</a>
-</footer>
-
 <script>
-  // reading progress = "test run" progress
-  const bar = document.getElementById('progress');
-  addEventListener('scroll', () => {
-    const h = document.documentElement;
-    const p = h.scrollTop / (h.scrollHeight - h.clientHeight);
-    bar.style.width = (p * 100) + '%';
+(function(){
+  var order = ['cover','ch1','ch2','ch3','ch4','ch5','ch6','ch7','ch8','ch9','ch10'];
+  var TITLES = {
+    cover:'Cover',
+    ch1:'The Day Everything Changed', ch2:'The Invisible Layer', ch3:'The Nine-Day Test',
+    ch4:'The Tests That Cried Wolf', ch5:'Every Commit, Every Time', ch6:'When “It Works” Isn’t Enough',
+    ch7:'The Machine That Never Sleeps', ch8:'Director, Not Passenger', ch9:'The Weight of the Whiteboard',
+    ch10:'The Question Only a Human Could Ask'
+  };
+  function num(id){ var i = order.indexOf(id); return i >= 1 ? ('0' + i).slice(-2) : ''; }
+
+  var bar = document.getElementById('progress');
+  var toc = Array.prototype.slice.call(document.querySelectorAll('.book-toc a'));
+  var nav = document.getElementById('bookNav');
+  var menuBtn = document.getElementById('menuBtn');
+  var scrim = document.getElementById('navScrim');
+  var pgPrev = document.getElementById('pgPrev'), pgNext = document.getElementById('pgNext');
+  var pgPrevT = document.getElementById('pgPrevT'), pgNextT = document.getElementById('pgNextT');
+
+  function indexOfActive(){
+    var a = document.querySelector('.chapter.active');
+    return a ? order.indexOf(a.id) : 0;
+  }
+  function closeNav(){ nav.classList.remove('open'); if(scrim) scrim.style.display='none'; }
+  function openNav(){ nav.classList.add('open'); if(scrim) scrim.style.display='block'; }
+
+  function setPager(i){
+    var p = i > 0 ? order[i-1] : null;
+    var n = i < order.length-1 ? order[i+1] : null;
+    if(p){ pgPrev.hidden=false; pgPrevT.textContent=(num(p)?num(p)+'  ':'')+TITLES[p]; pgPrev.setAttribute('aria-label','Previous: '+TITLES[p]); }
+    else pgPrev.hidden=true;
+    if(n){ pgNext.hidden=false; pgNextT.textContent=(num(n)?num(n)+'  ':'')+TITLES[n]; pgNext.setAttribute('aria-label','Next: '+TITLES[n]); }
+    else pgNext.hidden=true;
+  }
+
+  function show(id, push){
+    if(order.indexOf(id) === -1) id = 'cover';
+    document.querySelectorAll('.chapter').forEach(function(c){ c.classList.toggle('active', c.id === id); });
+    toc.forEach(function(l){ l.classList.toggle('current', l.getAttribute('data-go') === id); });
+    setPager(order.indexOf(id));
+    window.scrollTo(0, 0);
+    if(push !== false){ try{ history.pushState({id:id}, '', '#' + id); }catch(e){} }
+    closeNav();
+    updateBar();
+  }
+  function go(delta){
+    var i = indexOfActive() + delta;
+    if(i >= 0 && i < order.length) show(order[i]);
+  }
+  function updateBar(){
+    var h = document.documentElement;
+    var denom = h.scrollHeight - h.clientHeight;
+    var p = denom > 0 ? h.scrollTop / denom : 0;
+    bar.style.width = Math.max(0, Math.min(1, p)) * 100 + '%';
+  }
+
+  // sidebar menu
+  toc.forEach(function(l){ l.addEventListener('click', function(e){ e.preventDefault(); show(l.getAttribute('data-go')); }); });
+  // bottom pager
+  if(pgPrev) pgPrev.addEventListener('click', function(){ go(-1); });
+  if(pgNext) pgNext.addEventListener('click', function(){ go(1); });
+  // cover CTA
+  var cta = document.getElementById('startReading');
+  if(cta) cta.addEventListener('click', function(e){ e.preventDefault(); show('ch1'); });
+  // "next chapter" teasers are clickable
+  document.querySelectorAll('.next').forEach(function(n){ n.style.cursor='pointer'; n.addEventListener('click', function(){ go(1); }); });
+
+  // keyboard: left / right turn pages
+  addEventListener('keydown', function(e){
+    if(e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    if(e.key === 'ArrowRight'){ go(1); }
+    else if(e.key === 'ArrowLeft'){ go(-1); }
+  });
+
+  // progress bar follows scroll within the current chapter
+  addEventListener('scroll', updateBar, {passive:true});
+
+  // scroll past the edges to turn the page — ONE turn per gesture (no skipping)
+  var acc = 0, gestureUsed = false, wt = null;
+  function atBottom(){ var h=document.documentElement; return (h.scrollTop + h.clientHeight) >= (h.scrollHeight - 2); }
+  function atTop(){ return (document.documentElement.scrollTop || 0) <= 0; }
+  addEventListener('wheel', function(e){
+    clearTimeout(wt); wt = setTimeout(function(){ gestureUsed = false; acc = 0; }, 200); // re-arm only after the scroll stops
+    if(gestureUsed) return;
+    if(e.deltaY > 0 && atBottom()){ acc += e.deltaY; if(acc > 140){ gestureUsed = true; acc = 0; go(1); } }
+    else if(e.deltaY < 0 && atTop()){ acc += e.deltaY; if(acc < -140){ gestureUsed = true; acc = 0; go(-1); } }
+    else { acc = 0; }
   }, {passive:true});
 
-  // gentle reveals
-  const io = new IntersectionObserver(es => {
-    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, {threshold:.08});
-  document.querySelectorAll('.page, .chapter-break').forEach(s => io.observe(s));
+  // touch: ONE turn per swipe
+  var ty = null, swiped = false;
+  addEventListener('touchstart', function(e){ ty = e.touches[0].clientY; swiped = false; }, {passive:true});
+  addEventListener('touchmove', function(e){
+    if(ty === null || swiped) return;
+    var dy = ty - e.touches[0].clientY; // positive = scrolling down
+    if(dy > 90 && atBottom()){ swiped = true; go(1); }
+    else if(dy < -90 && atTop()){ swiped = true; go(-1); }
+  }, {passive:true});
+  addEventListener('touchend', function(){ ty = null; }, {passive:true});
+
+  // mobile drawer
+  if(menuBtn) menuBtn.addEventListener('click', openNav);
+  if(scrim) scrim.addEventListener('click', closeNav);
+
+  // browser back/forward between chapters
+  addEventListener('popstate', function(){ show((location.hash || '#cover').slice(1), false); });
+
+  // start at the chapter in the URL, or the cover
+  var start = (location.hash || '#cover').slice(1);
+  show(order.indexOf(start) !== -1 ? start : 'cover', false);
+})();
 </script>
 
 </body>
