@@ -115,6 +115,7 @@
             font-weight: 800;
             color: var(--electric-cyan);
             text-decoration: none;
+            white-space: nowrap;
         }
 
         .nav-links {
@@ -508,17 +509,37 @@
         }
 
         @media (max-width: 768px) {
+            .nav-menu { padding: 0.7rem 1rem; }
+            .nav-logo { font-size: 1rem; }
+            .nav-links { gap: 1rem; }
+            .nav-link { font-size: 0.82rem; }
+
             .container {
                 padding: 1rem;
             }
 
+            .blog-header {
+                padding: 2rem 0;
+                margin-bottom: 2rem;
+            }
             .blog-header h1 {
-                font-size: 2rem;
+                font-size: 1.9rem;
             }
 
             .post-title {
-                font-size: 1.8rem;
+                font-size: 1.7rem;
             }
+            .post-content h1 { font-size: 1.6rem; }
+            .post-content h2 { font-size: 1.35rem; }
+            .post-content h3 { font-size: 1.15rem; }
+        }
+
+        @media (max-width: 410px) {
+            .nav-menu { padding: 0.55rem 0.5rem; }
+            .nav-logo { font-size: 0.8rem; }
+            .nav-links { gap: 0.45rem; }
+            .nav-link { font-size: 0.72rem; }
+            .theme-toggle { padding: 0.15rem 0.3rem; font-size: 0.8rem; }
         }
     </style>
 </head>
