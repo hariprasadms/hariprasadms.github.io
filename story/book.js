@@ -233,6 +233,18 @@
 
   function ttsClearHL(){ for(var i = 0; i < ttsItems.length; i++) ttsItems[i].classList.remove('tts-speaking'); }
   function stopReadAloud(){ if(synth){ try{ synth.cancel(); }catch(e){} } ttsClearHL(); ttsState = 'idle'; ttsIdx = -1; ttsSelEl = null; ttsUI(); }
+  // Stop button: bookmark the line we stopped on, then stop
+  function ttsStopAndBookmark(){
+    var el = (ttsIdx >= 0 && ttsItems[ttsIdx]) ? ttsItems[ttsIdx] : null;
+    var marked = false;
+    if(el && el.tagName === 'P' && el.parentElement && el.parentElement.classList.contains('page')){
+      var id = chapterOf(el), idx = paras(id).indexOf(el);
+      if(idx >= 0){ try{ localStorage.setItem(MARK, JSON.stringify({ id:id, p:idx })); }catch(e){} markSaved(); setupReturn(); marked = true; }
+    }
+    stopReadAloud();
+    if(marked) renderMark();
+    toast(marked ? '🔖 Bookmarked where you stopped' : 'Stopped');
+  }
   function ttsCollect(){
     var a = document.querySelector('.chapter.active'); if(!a) return [];
     var sel = '.cb-title, .cb-sub, .page > p, .page .big-quote, .note, .bcap, .suite .case p, .next h3, .next p';
@@ -348,7 +360,7 @@
     ttsLoadVoices();
     if('onvoiceschanged' in synth) synth.addEventListener('voiceschanged', ttsLoadVoices);
     ttsPlay.addEventListener('click', ttsTogglePlay);
-    ttsStop.addEventListener('click', stopReadAloud);
+    ttsStop.addEventListener('click', ttsStopAndBookmark);
     ttsRateBtn.addEventListener('click', function(){ ttsRateI = (ttsRateI + 1) % TTS_RATES.length; try{ localStorage.setItem('fbtb:rate', ttsRateI); }catch(e){} ttsUI(); if(ttsState === 'playing'){ try{ synth.cancel(); }catch(e){} ttsSpeak(ttsIdx); } });
     ttsVoiceSel.addEventListener('change', function(){ for(var k = 0; k < ttsVoices.length; k++){ if(ttsVoices[k].name === ttsVoiceSel.value){ ttsVoice = ttsVoices[k]; break; } } try{ localStorage.setItem('fbtb:voice', ttsVoiceSel.value); }catch(e){} if(ttsState === 'playing'){ try{ synth.cancel(); }catch(e){} ttsSpeak(ttsIdx); } });
     // remember the last text selection inside the open chapter (survives clicking the Listen button)
