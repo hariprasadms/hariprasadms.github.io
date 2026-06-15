@@ -1,0 +1,456 @@
+:root{
+    --night:#101826;          /* the 2 AM deploy */
+    --night-soft:#1B2536;
+    --paper:#F7F8FA;          /* daylight reading surface */
+    --ink:#1C2430;
+    --ink-soft:#4A5566;
+    --line:#DCE0E6;
+    --pass:#1F8A5B;           /* assertion green */
+    --pass-tint:#E7F4EE;
+    --fail:#C2453A;           /* production red */
+    --fail-tint:#FBEEEC;
+    --amber:#C98A2D;          /* log warning */
+    --mono:'IBM Plex Mono', ui-monospace, monospace;
+    --serif:'Spectral', Georgia, serif;
+    --slab:'Zilla Slab', 'Spectral', serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:auto}  /* instant: page-turns jump to top; resume restores exact position */
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:1.125rem;
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- progress bar = test run progress ---------- */
+  #progress{
+    position:fixed;top:0;left:0;height:3px;width:0%;
+    background:linear-gradient(90deg, var(--fail) 0%, var(--amber) 45%, var(--pass) 100%);
+    z-index:50;
+  }
+
+  /* ===================================================================
+     WEB-BOOK LAYOUT — left chapter menu + one-chapter-per-page reader
+     =================================================================== */
+  :root{ --nav-w: 300px; }
+
+  /* ---------- left sidebar: chapter menu ---------- */
+  .book-nav{
+    position:fixed; top:0; left:0; bottom:0; width:var(--nav-w);
+    background:var(--night); color:#E9EDF4;
+    display:flex; flex-direction:column;
+    border-right:1px solid rgba(233,237,244,.08);
+    z-index:40; transition:transform .3s ease;
+  }
+  .nav-top{ position:relative; padding:1.3rem 1.4rem 1.1rem; border-bottom:1px solid rgba(233,237,244,.08); }
+  .nav-close{
+    display:none; position:absolute; top:.9rem; right:.9rem;
+    background:none; border:none; color:#8FA3C4; font-size:1.5rem; line-height:1;
+    cursor:pointer; padding:.1rem .4rem; border-radius:6px;
+  }
+  .nav-close:hover{ color:#E9EDF4; background:rgba(255,255,255,.06); }
+  .book-back{
+    font-family:var(--mono); font-size:.74rem; color:#8FA3C4; text-decoration:none;
+    display:inline-flex; gap:.4rem; align-items:center; transition:color .2s ease;
+  }
+  .book-back:hover{ color:#E9EDF4; }
+  .book-title{ font-family:var(--slab); font-weight:700; font-size:1.18rem; margin-top:.7rem; line-height:1.2; }
+  .book-title .bugs{ color:#E0848A; } .book-title .brill{ color:#7FD6A8; }
+  .book-byline{ font-family:var(--mono); font-size:.68rem; color:#6E81A0; margin-top:.35rem; letter-spacing:.02em; }
+
+  .book-toc{ overflow-y:auto; padding:.7rem .55rem 2rem; flex:1; }
+  .book-toc a{
+    display:flex; gap:.65rem; align-items:baseline;
+    font-family:var(--mono); font-size:.8rem; color:#A9B6CC; cursor:pointer;
+    padding:.58rem .8rem; border-radius:7px; line-height:1.35;
+    text-decoration:underline; text-decoration-color:rgba(169,182,204,.35);
+    text-decoration-thickness:1px; text-underline-offset:3px;
+    transition:background .15s ease, color .15s ease, text-decoration-color .15s ease;
+  }
+  .book-toc a .n{ color:#6E81A0; min-width:1.5rem; font-size:.72rem; }
+  .book-toc a:hover{ background:rgba(255,255,255,.05); color:#E9EDF4; text-decoration-color:#7FD6A8; }
+  .book-toc a.current{ background:rgba(127,214,168,.13); color:#7FD6A8; text-decoration-color:#7FD6A8; }
+  .book-toc a.current .n{ color:#7FD6A8; }
+  /* bookmark dot on the chapter you last read */
+  .book-toc a.marked::after{
+    content:""; flex:none; align-self:center; margin-left:auto;
+    width:7px; height:7px; border-radius:50%; background:var(--amber);
+    box-shadow:0 0 6px rgba(201,138,45,.7);
+  }
+
+  /* mobile menu button + scrim */
+  .book-menu-btn{
+    display:none; position:fixed; top:.7rem; left:.7rem; z-index:46;
+    background:var(--night); color:#E9EDF4; border:1px solid rgba(233,237,244,.22);
+    border-radius:8px; padding:.5rem .85rem; font-family:var(--mono); font-size:.76rem; cursor:pointer;
+  }
+  .nav-scrim{ display:none; position:fixed; inset:0; background:rgba(8,12,20,.55); z-index:39; }
+
+  /* ---------- reader: one chapter shown at a time ---------- */
+  .book-reader{ margin-left:var(--nav-w); min-height:100vh; }
+  .chapter{ display:none; }
+  .chapter.active{ display:block; animation:pagein .45s ease; }
+  @keyframes pagein{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:none;} }
+  @media (prefers-reduced-motion: reduce){ .chapter.active{ animation:none; } }
+  .reading{ max-width:680px; margin:0 auto; padding:0 1.5rem 6rem; }
+
+  /* ---------- cover page (cover art + title) ---------- */
+  .cover-hero{
+    background:var(--night); color:#E9EDF4;
+    min-height:100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:2.4rem 1.5rem 3rem;
+  }
+  .cover-figure{
+    position:relative; margin:0; width:min(330px, 64vw);
+    border-radius:14px; overflow:hidden;
+    box-shadow:0 30px 70px rgba(0,0,0,.55);
+    border:1px solid rgba(233,237,244,.12);
+  }
+  .cover-figure img{ display:block; width:100%; height:auto; }
+  .cover-figure .cap{
+    position:absolute; top:0; left:0; right:0;
+    padding:1.5rem 1.3rem 2.6rem;
+    background:linear-gradient(180deg, rgba(16,24,38,.92) 0%, rgba(16,24,38,.55) 55%, transparent 100%);
+  }
+  .cover-figure .kicker{
+    font-family:var(--mono); font-size:.58rem; letter-spacing:.14em; text-transform:uppercase;
+    color:#9DB0CE; margin-bottom:.55rem;
+  }
+  .cover-figure h1{
+    font-family:var(--slab); font-weight:700; line-height:1.02;
+    font-size:clamp(1.7rem, 5.4vw, 2.4rem); letter-spacing:-.01em;
+  }
+  .cover-figure h1 .bugs{ color:#E0848A; } .cover-figure h1 .brill{ color:#7FD6A8; }
+  .cover-meta{ max-width:34rem; margin-top:2.2rem; }
+  .cover-meta .sub{ font-size:1.05rem; color:#B9C4D6; }
+  .cover-meta .byline{ margin-top:1.4rem; font-family:var(--mono); font-size:.82rem; color:#8FA3C4; }
+  .cover-meta .byline strong{ color:#E9EDF4; font-weight:600; }
+  .cover-actions{ margin-top:1.8rem; display:flex; flex-direction:column; align-items:center; gap:.7rem; }
+  .cover-cta{
+    display:inline-flex; align-items:center; gap:.5rem;
+    background:#fff; color:var(--night); text-decoration:none;
+    font-family:var(--mono); font-size:.85rem; padding:.85rem 1.5rem; border-radius:8px;
+    border:none; cursor:pointer; transition:transform .2s ease, filter .2s ease;
+  }
+  .cover-cta:hover{ transform:translateY(-2px); }
+  .cover-resume{ background:var(--pass); color:#fff; }
+  .cover-resume:hover{ filter:brightness(1.1); }
+  .cover-resume[hidden]{ display:none; }
+
+  /* ---------- chapter title block ---------- */
+  .chapter-break{ padding:3.6rem 0 .5rem; }
+  .cb-num{
+    font-family:var(--mono);font-size:.74rem;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--pass);
+  }
+  .cb-title{
+    font-family:var(--slab);font-weight:700;
+    font-size:clamp(1.9rem,5.2vw,2.7rem);line-height:1.08;
+    margin:.5rem 0 .5rem;color:var(--ink);
+  }
+  .cb-sub{font-style:italic;color:var(--ink-soft);font-size:1.02rem}
+
+  /* ---------- bottom pager: previews the prev / next chapter ---------- */
+  .pager{
+    position:fixed; bottom:0; left:var(--nav-w); right:0; z-index:38;
+    display:flex; gap:1px; background:var(--line); border-top:1px solid var(--line);
+  }
+  .pg{
+    flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:.15rem;
+    padding:.7rem 1.3rem; background:var(--paper); border:none; cursor:pointer;
+    text-align:left; transition:background .15s ease, filter .15s ease;
+  }
+  .pg-next{ align-items:flex-end; text-align:right; background:var(--night); }
+  .pg-prev:hover{ background:#fff; }
+  .pg-next:hover{ filter:brightness(1.18); }
+  .pg-dir{
+    font-family:var(--mono); font-size:.66rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--ink-soft);
+  }
+  .pg-next .pg-dir{ color:#7FD6A8; }
+  .pg-ttl{
+    font-family:var(--slab); font-weight:600; font-size:.95rem; color:var(--ink);
+    max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .pg-next .pg-ttl{ color:#fff; }
+  .pg[hidden]{ display:none; }
+
+  /* ---------- line bookmark (click / select a line) ---------- */
+  .page > p { cursor: pointer; border-radius: 3px; transition: background .15s ease; }
+  /* hover affordance only where real hover exists (desktop) */
+  @media (hover: hover) and (pointer: fine){
+    .page > p:hover { background: rgba(201,138,45,.07); }
+    .page > p:hover::before{
+      content: "\1F516"; position: absolute; left: -1.7rem; top: .12em;
+      font-size: .82rem; opacity: .5; pointer-events: none;
+    }
+  }
+  .page > p { position: relative; }
+
+  .page > p.bookmarked{
+    box-shadow: inset 3px 0 0 var(--amber);
+    background: rgba(201,138,45,.10);
+    border-radius: 3px;
+  }
+  .page > p.bm-flash{ animation: bmflash 1.6s ease; }
+  @keyframes bmflash{ 0%,18%{ background:rgba(201,138,45,.32); } 100%{ background:rgba(201,138,45,.10); } }
+
+  .bm-toast{
+    position:fixed; left:50%; bottom:5.4rem; transform:translateX(-50%) translateY(8px);
+    background:var(--night); color:#E9EDF4; font-family:var(--mono); font-size:.76rem;
+    padding:.55rem 1rem; border-radius:8px; opacity:0; pointer-events:none; z-index:60;
+    box-shadow:0 8px 24px rgba(0,0,0,.35); transition:opacity .25s ease, transform .25s ease;
+    max-width: 90vw; text-align:center;
+  }
+  .bm-toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* ---------- responsive: collapse menu to a drawer ---------- */
+  @media (max-width: 880px){
+    :root{ --nav-w:0px; }
+    .book-nav{ width:min(86vw, 320px); transform:translateX(-100%); }
+    .book-nav.open{ transform:none; }
+    .book-menu-btn{ display:block; }
+    .nav-close{ display:block; }
+    .book-reader{ margin-left:0; padding-top:3.4rem; }
+    .reading{ padding:0 1.2rem 6.5rem; }
+    .pg{ padding:.6rem 1rem; }
+    .pg-ttl{ font-size:.84rem; }
+    .pg-dir{ font-size:.62rem; }
+  }
+  @media (max-width: 380px){
+    .pg-ttl{ display:none; }   /* keep just Prev / Next on very narrow screens */
+  }
+
+  .page{
+    padding:2.6rem 0 0;
+  }
+  .page-marker{
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    display:flex;align-items:center;gap:.8rem;
+    margin-bottom:1.4rem;
+  }
+  .page-marker::after{
+    content:"";flex:1;height:1px;background:var(--line);
+  }
+  .page h2{
+    font-family:var(--slab);
+    font-weight:600;
+    font-size:1.55rem;
+    line-height:1.25;
+    margin-bottom:1rem;
+  }
+  .page p{margin-bottom:1.15rem}
+  .page p:last-child{margin-bottom:0}
+
+  .drop::first-letter{
+    font-family:var(--slab);
+    font-weight:700;
+    font-size:3.4em;
+    float:left;
+    line-height:.82;
+    padding-right:.12em;
+    color:var(--night);
+  }
+
+  /* dialogue */
+  .say{
+    font-style:italic;
+    color:var(--night);
+  }
+
+  /* margin annotation — like a code comment */
+  .note{
+    border-left:3px solid var(--pass);
+    background:var(--pass-tint);
+    border-radius:0 6px 6px 0;
+    padding:.9rem 1.1rem;
+    font-size:.95rem;
+    margin:1.4rem 0;
+    color:#23503C;
+  }
+  .note .nlabel{
+    font-family:var(--mono);
+    font-size:.7rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--pass);
+    display:block;
+    margin-bottom:.3rem;
+  }
+
+  /* ---------- the incident log / code / diagram (dark mono block) ---------- */
+  .incident{
+    background:var(--night);
+    border-radius:10px;
+    margin:1.8rem 0;
+    padding:1.4rem 1.4rem 1.2rem;
+    font-family:var(--mono);
+    font-size:.84rem;
+    line-height:1.7;
+    color:#C6D0DE;
+    box-shadow:0 10px 30px rgba(16,24,38,.25);
+    overflow-x:auto;
+  }
+  .incident .ln{white-space:pre;display:block}
+  .incident .t{color:#6E81A0}
+  .incident .err{color:#F0908A;font-weight:600}
+  .incident .warn{color:#E5B567}
+  .incident .ok2{color:#7FD6A8;font-weight:600}
+  .incident .key{color:#8FB7E8}
+  .incident .crit{
+    color:#fff;background:var(--fail);
+    padding:0 .4em;border-radius:3px;font-weight:600;
+  }
+
+  /* boundary / comparison diagram */
+  .boundary{
+    margin:1.8rem 0;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:1.5rem 1.2rem 1.2rem;
+    background:#fff;
+  }
+  .boundary .blabel{
+    font-family:var(--mono);
+    font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-soft);margin-bottom:1.1rem;display:block;
+  }
+  .bline{
+    display:flex;align-items:center;gap:2px;
+    font-family:var(--mono);font-size:.8rem;
+  }
+  .bcell{
+    flex:1;text-align:center;padding:.55rem 0;
+    border-radius:5px;font-weight:600;
+  }
+  .bcell.fail{background:var(--fail-tint);color:var(--fail)}
+  .bcell.pass{background:var(--pass-tint);color:var(--pass)}
+  .bcell.mid{background:#F0F2F5;color:var(--ink-soft);font-weight:400}
+  .bcap{
+    margin-top:.7rem;font-size:.85rem;color:var(--ink-soft);
+    font-family:var(--serif);font-style:italic;
+  }
+
+  /* ---------- key lessons as test results ---------- */
+  .suite{
+    margin:2rem 0 0;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:#fff;
+    overflow:hidden;
+  }
+  .suite-head{
+    background:var(--night);
+    color:#E9EDF4;
+    font-family:var(--mono);
+    font-size:.8rem;
+    padding:.8rem 1.2rem;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .suite-head .ok{color:#7FD6A8;font-weight:600}
+  .case{
+    display:flex;gap:.9rem;align-items:flex-start;
+    padding:1rem 1.2rem;
+    border-top:1px solid var(--line);
+    font-size:1rem;
+  }
+  .case:first-of-type{border-top:none}
+  .badge{
+    font-family:var(--mono);
+    font-size:.68rem;font-weight:600;letter-spacing:.08em;
+    color:var(--pass);background:var(--pass-tint);
+    border-radius:4px;padding:.18rem .5rem;
+    margin-top:.2rem;flex-shrink:0;
+  }
+  .case p{margin:0;line-height:1.55}
+
+  /* next chapter teaser */
+  .next{
+    margin-top:3rem;
+    background:linear-gradient(135deg, var(--night) 0%, var(--night-soft) 100%);
+    color:#DDE5EF;
+    border-radius:12px;
+    padding:2rem 1.8rem;
+  }
+  .next .nk{
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;
+    text-transform:uppercase;color:#8FA3C4;margin-bottom:.7rem;display:block;
+  }
+  .next h3{
+    font-family:var(--slab);font-weight:600;font-size:1.5rem;margin-bottom:.6rem;color:#fff;
+  }
+  .next p{font-size:1rem;color:#B9C4D6}
+
+  /* end-of-book card */
+  .theend{
+    margin-top:3rem;text-align:center;
+    border:1px solid var(--line);border-radius:12px;
+    padding:2.6rem 1.8rem;background:#fff;
+  }
+  .theend .tk{
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--pass);display:block;margin-bottom:.8rem;
+  }
+  .theend h3{font-family:var(--slab);font-weight:700;font-size:1.7rem;margin-bottom:.7rem}
+  .theend p{color:var(--ink-soft);font-size:1.02rem;max-width:34rem;margin:0 auto}
+
+  footer{
+    border-top:1px solid var(--line);
+    margin-top:4rem;
+    margin-bottom:4.5rem;   /* clearance so the fixed pager never covers the footer */
+    padding:2rem 1.5rem 3rem;
+    text-align:center;
+    font-family:var(--mono);
+    font-size:.78rem;
+    color:var(--ink-soft);
+  }
+  footer a{color:var(--pass);text-decoration:none}
+
+  /* the cover has its own CTAs — hide the prev/next pager there */
+  body.on-cover .pager{ display:none; }
+  body.on-cover .book-reader{ padding-bottom:0; }
+
+  /* pages are visible immediately; the active chapter fades in as a whole */
+
+  @media (max-width:520px){
+    body{font-size:1.05rem}
+    .bline{font-size:.68rem}
+    .incident{font-size:.74rem}
+  }
+
+  /* ---------- emphasis quote (was an <h2>, now structural <p>) ---------- */
+  .page .big-quote{
+    font-family:var(--slab); font-weight:600; font-size:1.55rem;
+    line-height:1.25; margin:1.4rem 0; color:var(--night);
+  }
+
+  /* ---------- skip link (accessibility) ---------- */
+  .skip-link{
+    position:fixed; top:-60px; left:1rem; z-index:70;
+    background:var(--night); color:#fff; font-family:var(--mono); font-size:.78rem;
+    padding:.55rem .9rem; border-radius:0 0 8px 8px; text-decoration:none;
+    transition:top .2s ease;
+  }
+  .skip-link:focus{ top:0; }
+
+  /* ---------- print / save-as-PDF: the whole book, cleanly ---------- */
+  @media print{
+    .book-nav, .book-menu-btn, .nav-scrim, .pager, .bm-toast, #progress, .skip-link { display:none !important; }
+    .book-reader{ margin:0 !important; }
+    .chapter{ display:block !important; }            /* every chapter, not just the open one */
+    .chapter + .chapter{ page-break-before:always; }
+    .cover-hero{ min-height:auto; }
+    body{ background:#fff; color:#000; }
+    .reading{ max-width:none; }
+  }

@@ -1,0 +1,127 @@
+---
+order: 1
+cid: ch1
+num: "01"
+title: "The Day Everything Changed"
+subtitle: "Where Arun learns that \"it works on my machine\" is not the same as \"it works.\""
+---
+<section class="page">
+    <h3 class="page-marker">Page 1 · First day</h3>
+    <p class="drop">Rain tapped on the glass walls of TechNova Solutions. Arun stood in reception, holding a laptop bag that still smelled new. It was his first day as a software engineer. Six years of study. Eleven rejected job applications. Three rounds of interviews. And now a badge with his photo on it.</p>
+    <p>Through the glass he watched people work. Developers argued at a whiteboard. A manager carried three coffees. In one corner, a few people clicked through screens with quiet focus.</p>
+    <p>"Who are they?" he asked the receptionist.</p>
+    <p>"The testing team."</p>
+    <p>Arun felt a small, private relief. <em>Thank goodness I'm a developer,</em> he thought. <em>Imagine clicking buttons all day.</em> He would remember that thought for a long time.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 2 · Induction</h3>
+    <p>The training session was the usual blur of slides — until a senior manager named Priya picked up a marker and wrote four words on the board:</p>
+    <p class="big-quote">"Quality is everyone's responsibility."</p>
+    <p>Arun raised his hand. "Isn't quality the testing team's job? That's why they exist, right?"</p>
+    <p>Priya didn't smile. "Last year a bank app sent payment alerts to the wrong people. Did any customer ask <em>which team</em> broke it? No. They only knew the app failed them. The name on the app takes the blame. And that name belongs to all of us."</p>
+    <p>Arun wrote the four words in his new notebook, mostly to look keen. Years later, he would write the same four words on a board himself, in front of a hundred engineers.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 3 · The simple task</h3>
+    <p>Three weeks in, Arun got his first real ticket.</p>
+    <div class="incident">
+      <span class="ln"><span class="key">TASK-2214</span>  Increase username limit from 30 to 50 characters.</span>
+      <span class="ln">           Reason: corporate clients use long email logins.</span>
+    </div>
+    <p>He almost laughed. <em>This</em> was the job he fought eleven rejections for? He changed one setting, updated one line of checking on the screen, and tried it on his laptop. A 45-character username worked. His own worked. Code review: approved in nine minutes. The change went live on Friday evening.</p>
+    <p>That night he told his parents the job was going great. He said — and would later wish he hadn't — "Honestly, it's easier than university."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 4 · The war room</h3>
+    <p>At 2:17 AM on Saturday, a screen in a data centre quietly turned red. By Monday, the war room held more people than Arun's whole graduation class.</p>
+    <div class="incident" role="img" aria-label="Production incident log showing login failures">
+      <span class="ln"><span class="t">[Sat 02:16]</span> auth-service  <span class="err">ERROR: username exceeds limit</span></span>
+      <span class="ln"><span class="t">[Sat 02:17]</span> pagerduty     <span class="crit">SEV-1 · LOGIN DOWN</span>  users affected: 41,000+</span>
+      <span class="ln"><span class="t">[Sat 02:30]</span> on-call       a banking client is now demanding answers</span>
+    </div>
+    <p>For an hour, every team explained why it wasn't their fault. Then a calm voice from the back row cut through. A senior tester named Meera asked the simplest question in the room:</p>
+    <p class="say">"The screen blocks long usernames. But corporate clients log in through the <strong>API</strong> — the direct doorway into the system, with no screen in front of it. What does the API do at fifty-one characters?"</p>
+    <p>Nobody knew. Eleven minutes later, everybody did: the API had no length check at all. One missing line had locked 41,000 people out of their bank.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 5 · Coffee with Meera</h3>
+    <p>Arun spent the day waiting to be fired. Instead, at 4 PM, Meera appeared with two coffees. "Walk with me."</p>
+    <p>"I know why this happened," he said, staring at the table. "I wrote bad code."</p>
+    <p>Meera shook her head. "No. Your code did exactly what you told it to do. That's the sad truth about code — it always does." She slid a coffee across. "Here's what really happened. You tested that your change <em>worked</em>. You never tested how it could <em>fail</em>. Those are two different jobs, and only one of them protects customers."</p>
+    <p>"But it worked on my machine—"</p>
+    <p>"It always works on your machine," she said. "Your machine is the kindest user your software will ever meet. Real users are messy. Real attackers send fifty-one characters on purpose."</p>
+    <div class="note">
+      <span class="nlabel">// Margin note</span>
+      Developers prove software works. Testers prove where it breaks. Great engineers learn to do both.
+    </div>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 6 · How testers think</h3>
+    <p>The next morning, Meera drew a line on the whiteboard. "Your username field accepts 1 to 50 characters. You get five tests. Where do you spend them?"</p>
+    <p>Arun wanted to redeem himself. "Twenty-five? Right in the middle?"</p>
+    <p>Meera smiled. "That's where everyone starts. But nothing interesting ever happens in the middle. Bugs live at the <strong>edges</strong>." She marked four points. This is <strong>boundary testing</strong> — checking the values right at the limits, where mistakes hide.</p>
+    <div class="boundary">
+      <span class="blabel">Boundary testing · username field (1–50 characters)</span>
+      <div class="bline">
+        <div class="bcell fail">0</div>
+        <div class="bcell pass">1</div>
+        <div class="bcell mid">2 … 49</div>
+        <div class="bcell pass">50</div>
+        <div class="bcell fail">51</div>
+      </div>
+      <p class="bcap">The middle almost never fails. The edges almost always do.</p>
+    </div>
+    <p>"<strong>Positive testing</strong> proves it works with good input," she said. "<strong>Negative testing</strong> proves it fails safely with bad input. Boundary testing tells you <em>where</em> to look. Three simple ideas. They find more bugs than any tool you can buy."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 7 · Breaking things on purpose</h3>
+    <p>That afternoon, Arun did something he had never done: he tried to <em>break</em> software on purpose. The team had just finished a new sign-up form. Developer-tested. Peer-reviewed. Ready to ship. Arun filled it in like a problem waiting to happen.</p>
+    <p>An email with no "@" symbol? <strong>Accepted.</strong> Bug one. A company name the length of a short story? The page froze, then crashed. Bug two. Date of birth: 30th February — a date that does not exist? The form said "Welcome!" Bug three.</p>
+    <p>One hour. Three bugs. In a feature that had already "passed" testing. It didn't feel like clicking buttons. It felt like being a detective in a building where every door might be unlocked.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 8 · Curiosity becomes a habit</h3>
+    <p>Weeks passed, and curiosity stopped being an exercise and became a reflex. Arun's notebook filled with questions:</p>
+    <div class="incident">
+      <span class="ln">What if the network drops in the middle of a payment?</span>
+      <span class="ln">What if two users grab the same username at the same second?</span>
+      <span class="ln">What if the file they upload is empty? Or huge? Or not a file at all?</span>
+    </div>
+    <p>He began to see software the way Meera did — not as screens, but as promises. Every field was a promise to a stranger. Testing was simply checking whether the promises held when life got messy.</p>
+    <p>Rohan, a senior developer, passed by and smirked. "Careful, Arun. Hang around testers too long and people will think you're one of them." It was meant as a warning. To his own surprise, it didn't sting at all.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 9 · The folder</h3>
+    <p>One Friday evening, Meera dropped a paper folder on his desk. She was old-school like that. "Ready for your next challenge?"</p>
+    <p>Inside was a single printed email. A serious live bug. A customer charged twice for nothing. Words Arun had heard but never really understood: <em>API. Endpoint. JSON. Race condition.</em></p>
+    <p>"I don't know what half of this means," he admitted.</p>
+    <p>"I know," Meera said, already walking away. "That's exactly why it's yours. Monday, I show you the part of the iceberg under the water — the bugs nobody can see, and everybody pays for."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 10 · Key lessons</h3>
+    <div class="suite">
+      <div class="suite-head">
+        <span>chapter-01.lessons.spec</span>
+        <span class="ok">5 passed · 0 failed</span>
+      </div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Quality is everyone's responsibility. The product takes the blame, and the product belongs to the whole team.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Test how software fails, not only that it works. "It works on my machine" means it survived the kindest user it will ever meet.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Bugs live at the edges. Boundary testing checks 0, 1, 50 and 51 — not the safe middle.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Positive testing proves it works; negative testing proves it fails safely.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Curiosity is a tester's superpower. Tools can be learned; never growing out of "what if?" cannot.</p></div>
+    </div>
+    <div class="next">
+      <span class="nk">Next · Chapter 02</span>
+      <h3>The Invisible Layer</h3>
+      <p>Arun goes below the screen — into APIs, JSON and logs — to hunt a bug that charged a customer £4,820 for nothing. The only witness is a log file with a timestamp.</p>
+    </div>
+  </section>

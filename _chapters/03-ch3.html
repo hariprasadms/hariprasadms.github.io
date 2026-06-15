@@ -1,0 +1,108 @@
+---
+order: 3
+cid: ch3
+num: "03"
+title: "The Nine-Day Test"
+subtitle: "Where Arun meets a job so slow and dull that a machine had to be the answer."
+---
+<section class="page">
+    <h3 class="page-marker">Page 1 · The new desk</h3>
+    <p class="drop">Arun got the job. On his first day with the quality team, Meera showed him a thick binder. "Meet the release checklist," she said. Inside were <strong>400 test cases</strong> — 400 separate checks a person had to do by hand before every release.</p>
+    <p>"How long does this take?" he asked.</p>
+    <p>Meera didn't blink. "Nine days. Two testers. Clicking, typing, comparing — by hand."</p>
+    <p>Arun laughed, then realised she wasn't joking.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 2 · The boring half of the job</h3>
+    <p>Most of those 400 checks weren't new. They tested old features that already worked. "Why test things that already work?" Arun asked.</p>
+    <p>"Because new code can break old features without anyone noticing," Meera said. "Re-checking that the old things still work after a change is called <strong>regression testing</strong>. A bug that sneaks back into something that used to work is a <em>regression</em>."</p>
+    <p>"So every release, you re-do all 400?"</p>
+    <p>"Every release. By hand. The same clicks. The same typing. For nine days."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 3 · The math doesn't work</h3>
+    <p>Arun did the sums. The company wanted to release every two weeks. The check took nine days. That left almost no time to fix anything they found.</p>
+    <div class="incident">
+      <span class="ln">release wanted every:   <span class="ok2">14 days</span></span>
+      <span class="ln">manual regression:      <span class="err">9 days</span>  (2 people, by hand)</span>
+      <span class="ln">time left to fix bugs:  <span class="warn">~5 days</span></span>
+    </div>
+    <p>Worse, tired humans make mistakes. By day seven, eyes glaze over. Steps get skipped. Bugs slip through anyway. In the next planning meeting, Priya said the words that started everything: "Why is a human doing any of this?"</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 4 · Let the computer click</h3>
+    <p>Meera pulled up a chair. "A computer never gets bored and never skips a step. We can write instructions that make it click the buttons, type the values, and check the results for us. That's <strong>test automation</strong> — a program that runs the checks instead of a person."</p>
+    <p>She drew two words. "One check is a <strong>test case</strong>. A group of test cases, run together, is a <strong>test suite</strong>. Our 400 checks are one big suite — and right now, a human is the one running it."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 5 · His first automated test</h3>
+    <p>Meera handed him the simplest case: the login check — the very feature he had broken in Chapter 1. Together they wrote it as code: open the page, type a username, type a password, click login, then <strong>check</strong> that the dashboard appears. That check is called an <strong>assertion</strong> — the line that says what "pass" actually means.</p>
+    <div class="incident">
+      <span class="ln">login with a valid user … <span class="ok2">PASS</span></span>
+      <span class="ln">block a 51-char username … <span class="ok2">PASS</span></span>
+      <span class="ln"><span class="t">finished in 3.2 seconds</span></span>
+    </div>
+    <p>Three seconds. The check that once took him an hour by hand now ran while he reached for his coffee. Arun felt something click in his chest. "I want to do that to all 400."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 6 · Smoke first</h3>
+    <p>"Slow down," Meera said. "You don't automate 400 things on day one. Start with a <strong>smoke test</strong> — a small, quick set that checks only the most important things still work. Can users log in? Can they pay? If the smoke test fails, stop; the building is on fire."</p>
+    <p>"And the full 400?"</p>
+    <p>"That's the <strong>full regression suite</strong>. You build it up over time — the important things first, the rare things last."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 7 · Nine days to nine minutes</h3>
+    <p>Over the next two months, Arun automated case after case. The numbers changed his life.</p>
+    <div class="boundary">
+      <span class="blabel">Regression run · before and after</span>
+      <div class="bline">
+        <div class="bcell fail">By hand: 9 days</div>
+        <div class="bcell pass">Automated: 9 minutes</div>
+      </div>
+      <p class="bcap">Same checks. The computer just never got tired.</p>
+    </div>
+    <p>But Meera added a warning he didn't fully hear yet. "Automation isn't free. Every test you write, you also have to <em>maintain</em>. Bad automation can cost you more than no automation at all. Remember that."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 8 · Not out of a job</h3>
+    <p>Rohan, of course, had an opinion. "So testers are writing the code that replaces testers. Clever."</p>
+    <p>Meera didn't rise to it. "No. The computer is brilliant at repeating the same check a thousand times. It is hopeless at asking a question it was never given. Automation does the boring repeats. That frees us to do the thinking — to ask 'what if' about things no one has imagined yet."</p>
+    <div class="note">
+      <span class="nlabel">// The line worth keeping</span>
+      Automation doesn't replace testers. It gives them their brains back.
+    </div>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 9 · A little too proud</h3>
+    <p>For the first time, Arun saw himself differently. He wasn't just a person who ran tests. He could build the machine that ran them. The nine-day monster had become a nine-minute helper, and he had tamed it.</p>
+    <p>So he did what proud young engineers do. He started automating <em>everything</em> — every screen, every click, as fast as he could type. More tests had to mean more safety. Surely.</p>
+    <p>Meera watched the pile of new tests grow, and said nothing. Some lessons can only be taught by letting them happen.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 10 · Key lessons</h3>
+    <div class="suite">
+      <div class="suite-head">
+        <span>chapter-03.lessons.spec</span>
+        <span class="ok">5 passed · 0 failed</span>
+      </div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Regression testing re-checks that old features still work after a change. By hand, it does not scale.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Automation is a program that runs the checks for you — tireless, fast, and exact.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>A test case is one check; a test suite is a group of them. Every test needs an assertion that defines "pass".</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Start with a small smoke test of the vital things, then grow the full suite over time.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Automation isn't free — you must maintain it. Its real gift is freeing humans to think.</p></div>
+    </div>
+    <div class="next">
+      <span class="nk">Next · Chapter 04</span>
+      <h3>The Tests That Cried Wolf</h3>
+      <p>Drunk on speed, Arun automates everything in sight. Then his tests start failing for no reason — pass one minute, fail the next — until the team stops believing them. He is about to learn that a test you can't trust is worse than no test at all.</p>
+    </div>
+  </section>

@@ -1,0 +1,92 @@
+---
+order: 8
+cid: ch8
+num: "08"
+title: "Director, Not Passenger"
+subtitle: "Where Arun stops letting the machine drive, and learns to direct it instead."
+---
+<section class="page">
+    <h3 class="page-marker">Page 1 · Two ways to use a machine</h3>
+    <p class="drop">"You used the AI like a passenger," Meera said the next morning. "You climbed in, closed your eyes, and hoped it knew the way. There's another way to use it. As a <strong>director</strong> — you decide where to go, the machine does the driving, and you keep your eyes open the whole time."</p>
+    <p>Arun pulled his chair closer. This felt important.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 2 · The junior who never sleeps</h3>
+    <p>"Think of the AI as a new junior engineer," Meera said. "Incredibly fast. Tireless. It will happily write five hundred tests at midnight without complaint. But it has no judgement. It doesn't know what matters. It will never stop and say, 'wait, this feels risky.' It does exactly what you ask — nothing more."</p>
+    <div class="note">
+      <span class="nlabel">// The line worth keeping</span>
+      AI is a junior who never sleeps — and never thinks for itself. Your job is to think.
+    </div>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 3 · Ask better, get better</h3>
+    <p>"Last time, you asked it to 'write tests'," Meera said. "A vague request gets vague tests." The skill of asking an AI well, with the right context and goal, is called <strong>prompt engineering</strong>. Arun tried again — but this time he told the AI what mattered.</p>
+    <div class="incident">
+      <span class="ln"><span class="t"># before</span>  "write tests for the discount feature"</span>
+      <span class="ln"></span>
+      <span class="ln"><span class="t"># after</span>   "write tests for the discount feature.</span>
+      <span class="ln">          Check the FINAL PRICE is correct, not just</span>
+      <span class="ln">          that it responds. Cover: valid code, expired</span>
+      <span class="ln">          code, code used twice, <span class="ok2">£0 cart, huge cart.</span>"</span>
+    </div>
+    <p>The tests came back sharper — because the thinking had come from him.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 4 · Read every line</h3>
+    <p>The most important rule was the one he had skipped. Every test the AI wrote, a human read. Did it assert the thing that truly mattered? Did it make a silly assumption? Keeping a person in charge of the machine's output has a name: <strong>human-in-the-loop</strong>.</p>
+    <p>"The AI writes the first draft in seconds," Meera said. "You're the editor. The machine is fast. You are responsible. Never swap those two jobs."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 5 · What it's brilliant at</h3>
+    <p>Used this way, the AI became genuinely powerful. Arun let it do what it did best: throw out a hundred edge-case ideas he might forget, invent piles of fake <strong>test data</strong>, and write the boring, repetitive setup code that used to eat his afternoons.</p>
+    <p>"Let it do the typing and the brainstorming," Meera said. "You keep the judging. It suggests a hundred 'what ifs'. You decide which five actually matter."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 6 · You can't test everything</h3>
+    <p>Which raised the real question: with a machine able to generate endless tests, what should you actually run? "You can never test everything," Meera said. "Even a machine can't. So you spend your effort where a failure would hurt most."</p>
+    <p>That is <strong>risk-based testing</strong>. The payment path, where money moves, gets deep, careful testing. The colour of a help page gets a glance. "The AI gives you unlimited tests," she said. "Risk tells you which ones are worth running."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 7 · The thing it cannot do</h3>
+    <p>Then Meera said the thing Arun would carry for the rest of his career. "Here is what the machine will never do. It will never look at a feature it wasn't asked about and feel that something is wrong. It will never stand at a parking meter and wonder what happens at the exact moment it loses signal."</p>
+    <p>"Curiosity," Arun said.</p>
+    <p>"Curiosity. The machine answers questions. It cannot ask the one nobody thought of. That question is still yours. It always will be."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 8 · Fast and wise</h3>
+    <p>Arun rebuilt his work around the partnership. The AI drafted; he directed and judged. The AI suggested edge cases; he chose by risk. The AI ran a thousand checks overnight; he asked the one strange question over morning coffee.</p>
+    <p>His testing had never been this strong. It had the speed of the machine and the judgement of a human. Neither could have done it alone.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 9 · Director</h3>
+    <p>Even Rohan noticed. He stopped by Arun's desk, looked at the new setup, and said — almost kindly — "Huh. That's not the machine doing your job. That's you doing a bigger one."</p>
+    <p>Arun smiled. Months ago he had been a passenger, asleep while the AI drove him into a wall. Now he was the director. The confidence wasn't borrowed from a tool anymore. He had earned it.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 10 · Key lessons</h3>
+    <div class="suite">
+      <div class="suite-head">
+        <span>chapter-08.lessons.spec</span>
+        <span class="ok">5 passed · 0 failed</span>
+      </div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Use AI like a junior engineer: fast and tireless, but with no judgement. You direct; it drives.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Ask well (prompt engineering). Tell the AI what truly matters, and it gives sharper tests.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Keep a human in the loop. Read every test the AI writes — the machine is fast, you are responsible.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Use risk-based testing to decide what to run. AI gives unlimited tests; risk picks the worthy ones.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>AI answers questions. Only a human can ask the one nobody thought of. Curiosity stays yours.</p></div>
+    </div>
+    <div class="next">
+      <span class="nk">Next · Chapter 09</span>
+      <h3>The Weight of the Whiteboard</h3>
+      <p>Meera is leaving. Arun must become the teacher he once needed — and learn that leading quality is about people and judgement, not counting tests.</p>
+    </div>
+  </section>

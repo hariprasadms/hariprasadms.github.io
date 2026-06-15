@@ -1,0 +1,90 @@
+---
+order: 5
+cid: ch5
+num: "05"
+title: "Every Commit, Every Time"
+subtitle: "Where the tests stop waiting for a human to remember them."
+---
+<section class="page">
+    <h3 class="page-marker">Page 1 · The forgotten run</h3>
+    <p class="drop">The tests were trustworthy now. But a new problem appeared: people forgot to run them. A developer would change some code on Monday, and nobody ran the tests until Thursday. By then the bug was three days old and buried under newer code.</p>
+    <p>"The tests are good," Arun complained. "They're just always late."</p>
+    <p>Meera nodded. "So stop relying on memory. Let's make the tests run themselves."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 2 · A robot that never forgets</h3>
+    <p>She introduced <strong>Continuous Integration</strong>, or <strong>CI</strong>: a system that automatically runs your tests every single time someone changes the code. No human has to remember. No one can skip it.</p>
+    <p>"Every time a developer saves their work to the shared code — a <strong>commit</strong> — the robot wakes up, builds the app, and runs the tests. Within minutes, it tells everyone: green or red."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 3 · The pipeline</h3>
+    <p>Arun set up the steps. Together they form a <strong>pipeline</strong> — an assembly line for code.</p>
+    <div class="incident">
+      <span class="ln">commit  →  <span class="key">build</span>  →  <span class="key">test</span>  →  <span class="ok2">deploy</span></span>
+      <span class="ln">                      │</span>
+      <span class="ln">              tests fail? <span class="err">STOP</span> — the change cannot move on</span>
+    </div>
+    <p>If any test failed, the pipeline stopped. The broken change could not move forward. This is a <strong>quality gate</strong> — a checkpoint that bad code cannot pass.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 4 · Catch it the same day</h3>
+    <p>Something changed in the team's rhythm. A developer would make a change at 10 AM and, by 10:09, the robot would say a test had failed. The bug was nine minutes old, not three days. It was still fresh in the developer's mind. The fix took two minutes.</p>
+    <p>Testing early, right beside the coding, has a name: <strong>shift-left</strong> — move testing to the <em>left</em>, toward the start, instead of saving it all for the end.</p>
+    <div class="note">
+      <span class="nlabel">// The line worth keeping</span>
+      Find the bug the same day you write it — not the same week you ship it.
+    </div>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 5 · Too slow to be useful</h3>
+    <p>There was one snag. As the suite grew, the pipeline took 40 minutes. Developers hated waiting. Slow feedback is almost as bad as no feedback.</p>
+    <p>"Split the work," Meera said. Instead of running tests one after another, run many at the same time on several machines. This is <strong>parallel</strong> running. The 40-minute run dropped to 8. "Fast feedback is the whole point. A test result nobody waits for is a test nobody reads."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 6 · Not on your laptop</h3>
+    <p>Arun also learned where tests should run. Not on his laptop, where the settings were special and the data was his own. They needed an <strong>environment</strong> — a clean, separate copy of the system set up to look like the real thing.</p>
+    <p>And tests needed their own <strong>test data</strong> — fake users and orders, created fresh and cleaned up after. "Never test against real customer data," Meera warned. "And never let one test leave a mess that trips up the next."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 7 · The wall that protects everyone</h3>
+    <p>One afternoon, Rohan pushed a risky change minutes before going home. The old days, it would have slipped out and broken on Saturday. Now the pipeline caught it, turned red, and politely refused to let it through.</p>
+    <p>Rohan grumbled. Then he fixed it before dinner. Quietly, he started running the tests himself <em>before</em> committing. The gate hadn't just caught a bug. It had changed a developer's habit.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 8 · Invisible, and powerful</h3>
+    <p>Arun noticed something strange about his new role. When everything worked, no one thanked him. The pipeline just hummed in the background, catching mistakes before customers ever saw them.</p>
+    <p>He used to want to be the hero who found the big bug. Now he was building a system that quietly stopped big bugs from being born. It was less glamorous. It was far more powerful.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 9 · Built in, not bolted on</h3>
+    <p>Priya's four words came back to him: <em>Quality is everyone's responsibility.</em> He finally understood them. Quality wasn't a person standing at the end of the line, catching mistakes. It was something built into every step of how the team worked.</p>
+    <p>The nine-day human checklist was now a nine-minute robot that ran on every change, all day, forever. Arun had not just automated tests. He had automated <em>trust.</em></p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 10 · Key lessons</h3>
+    <div class="suite">
+      <div class="suite-head">
+        <span>chapter-05.lessons.spec</span>
+        <span class="ok">5 passed · 0 failed</span>
+      </div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Continuous Integration (CI) runs your tests automatically on every code change — no human has to remember.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>A pipeline (build → test → deploy) with a quality gate stops broken code from moving forward.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Shift-left: test the same day you code. Early bugs are cheap; late bugs are expensive.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Keep feedback fast — run tests in parallel. A slow result is one nobody waits for.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Test in a clean environment with its own test data, never on a laptop or against real customers.</p></div>
+    </div>
+    <div class="next">
+      <span class="nk">Next · Chapter 06</span>
+      <h3>When "It Works" Isn't Enough</h3>
+      <p>A new feature passes every single test — then falls over on the biggest sale day of the year. Arun discovers that working software and good software are not the same thing.</p>
+    </div>
+  </section>

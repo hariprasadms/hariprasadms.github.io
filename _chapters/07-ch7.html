@@ -1,0 +1,98 @@
+---
+order: 7
+cid: ch7
+num: "07"
+title: "The Machine That Never Sleeps"
+subtitle: "Where Arun trusts the machine the way he once trusted his own laptop \u2014 and pays for it again."
+---
+<section class="page">
+    <h3 class="page-marker">Page 1 · The demo</h3>
+    <p class="drop">The new tool arrived with a slick demo. It was powered by <strong>AI</strong> — software that can read code and write text, including tests, almost like a person. In the demo, it read a feature and wrote a hundred tests in ten seconds. The room gasped.</p>
+    <p>Rohan leaned back, arms crossed, almost smiling. "Well, that's it for the testing team. Why pay humans to write tests when a machine does it in seconds?"</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 2 · Dazzled</h3>
+    <p>Arun was the most excited of all. That afternoon he pointed the AI at a brand-new feature and typed a simple request: <em>"Write tests for this."</em></p>
+    <div class="incident">
+      <span class="ln">AI testing assistant</span>
+      <span class="ln">> generated <span class="ok2">512 tests</span> in 41 seconds</span>
+      <span class="ln">> run result:  <span class="ok2">512 passed · 0 failed</span></span>
+    </div>
+    <p>Five hundred tests. All green. In under a minute. Work that would have taken him a week. He stared at the wall of passes and felt like he had been handed a superpower.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 3 · Ship it</h3>
+    <p>He didn't read all 512 tests. Who could? They were green. Green meant good. He attached them to the feature, wrote "full AI test coverage ✅" in the notes, and shipped it.</p>
+    <p>It felt like the easiest win of his career. Somewhere at the back of his mind, a much older memory tried to raise its hand — <em>it worked on my machine</em> — but he was too pleased to listen.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 4 · The wolf, in a new coat</h3>
+    <p>Nine days later, a customer reported a broken discount. A valid code was being rejected. A real bug, in the exact feature with "full AI test coverage." All 512 tests were still green.</p>
+    <p>Arun felt a cold, familiar drop in his stomach. He had been here before — a 2 AM outage, a midnight stakeout. He opened the AI tests and actually <em>read</em> them for the first time.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 5 · Green, and empty</h3>
+    <p>What he found made him sit down slowly. The tests <em>ran</em> the feature — but barely <em>checked</em> anything. Many had no real <strong>assertion</strong> at all. Remember: the assertion is the line that decides what "pass" means. Without it, a test passes as long as the code doesn't crash.</p>
+    <div class="incident">
+      <span class="ln"><span class="t"># what the AI wrote</span></span>
+      <span class="ln">call applyDiscount("SAVE20")</span>
+      <span class="ln">assert response is <span class="warn">not empty</span>     <span class="t">← passes for almost anything</span></span>
+      <span class="ln"></span>
+      <span class="ln"><span class="t"># what it should have checked</span></span>
+      <span class="ln">assert finalPrice == <span class="ok2">£80.00</span>      <span class="t">← the thing that actually matters</span></span>
+    </div>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 6 · It tested that it ran</h3>
+    <p>It was the Chapter 2 lesson wearing a new coat. The AI had checked that the code <em>ran</em>, not that it was <em>right</em>. Five hundred tests confirming the discount feature responded — and not one confirming the discount was actually applied.</p>
+    <p>"It's the duplicate-payment bug all over again," Arun muttered. "Payment taken, order not created. The thing ran. Nobody checked the result." The AI had written 512 ways of saying "it didn't crash."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 7 · The most dangerous green</h3>
+    <p>And there was worse. A few AI tests had simply <em>assumed</em> how the feature worked and tested their own wrong assumptions. They weren't just empty. They were confidently checking the wrong thing.</p>
+    <p>The green wall had felt like safety. It had been a painting of safety. The most dangerous test of all, Arun realised, is one that passes for the wrong reason.</p>
+    <div class="note">
+      <span class="nlabel">// The line worth keeping</span>
+      The AI gave me a thousand tests that tested nothing. Green is not the same as safe.
+    </div>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 8 · The oldest lesson</h3>
+    <p>Meera didn't say "I told you so." She just sat down with the same patience as years ago. "What did you actually do here?"</p>
+    <p>Arun answered slowly, because he could hear his first week echoing back. "I trusted that it worked. I never checked how it could fail." He looked up. "I made the exact mistake from day one. I just made it five hundred times faster."</p>
+    <p>"Yes," Meera said gently. "Speed doesn't fix bad thinking. It multiplies it."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 9 · The wrong debate</h3>
+    <p>In the retro, Rohan was triumphant. "See? AI testing is a toy. Humans are still the only real testers."</p>
+    <p>But Arun, staring at his notebook, felt that both sides of the office were asking the wrong question. It wasn't "human <em>or</em> machine." The AI hadn't failed because it was useless. It had failed because he had used it with his eyes closed — like a passenger asleep while the car drove itself.</p>
+    <p>"It's not that AI can't test," he said quietly. "It's that I didn't know how to use it yet."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 10 · Key lessons</h3>
+    <div class="suite">
+      <div class="suite-head">
+        <span>chapter-07.lessons.spec</span>
+        <span class="ok">5 passed · 0 failed</span>
+      </div>
+      <div class="case"><span class="badge">✓ PASS</span><p>AI can write many tests fast — but a test with no real assertion only proves the code didn't crash.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Green is not the same as safe. A passing test can be testing nothing, or the wrong thing.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>The most dangerous test passes for the wrong reason. It feels like safety and isn't.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Never ship tests you haven't read. Trusting AI blindly is "it works on my machine" at scale.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Speed doesn't fix bad thinking — it multiplies it. The question isn't human <em>or</em> AI.</p></div>
+    </div>
+    <div class="next">
+      <span class="nk">Next · Chapter 08</span>
+      <h3>Director, Not Passenger</h3>
+      <p>Meera teaches Arun the real skill of the new age: how to use AI like a brilliant junior who never sleeps — but never thinks for itself.</p>
+    </div>
+  </section>

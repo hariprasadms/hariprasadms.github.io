@@ -1,0 +1,98 @@
+---
+order: 9
+cid: ch9
+num: "09"
+title: "The Weight of the Whiteboard"
+subtitle: "Where Arun learns that leading quality is about people and judgement \u2014 not counting tests."
+---
+<section class="page">
+    <h3 class="page-marker">Page 1 · Meera leaves</h3>
+    <p class="drop">It came on an ordinary Tuesday. Meera had taken a role at another company — a bigger stage, a harder problem. She was the best teacher Arun had ever had, and she was leaving.</p>
+    <p>"You'll be fine," she said. "You stopped needing me a while ago." Then Priya pulled Arun aside. "You're taking the senior quality role. And you're getting a new graduate to look after. Her name is Anika."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 2 · The numbers trap</h3>
+    <p>Arun wanted to prove he deserved the role. So he did what proud engineers do: he measured everything. At the next review he presented his scoreboard, beaming.</p>
+    <div class="incident">
+      <span class="ln">total tests written:   <span class="ok2">5,140</span></span>
+      <span class="ln">code coverage:         <span class="ok2">92%</span></span>
+      <span class="ln">tests passing:         <span class="ok2">100%</span></span>
+    </div>
+    <p>Priya looked at the slide for a long moment. Then she asked one quiet question. "That's a lot of numbers. Are we shipping <em>fewer bugs to customers</em> than last year?"</p>
+    <p>Arun opened his mouth. He didn't know.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 3 · Vanity and value</h3>
+    <p>That evening he understood. He had been collecting <strong>vanity metrics</strong> — numbers that look impressive but prove nothing. The AI's 512 green tests had taught him this already: you can have thousands of tests and 100% passing, and still test nothing real.</p>
+    <p>"<strong>Code coverage</strong> tells you which lines a test touched," he realised. "Not whether it checked anything. A big number can hide an empty test." Counting tests measured effort, not safety.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 4 · Numbers that matter</h3>
+    <p>So he threw the scoreboard away and asked a better question: <em>what would actually tell us our quality is improving?</em></p>
+    <div class="incident">
+      <span class="ln"><span class="t"># vanity (looks good, means little)</span></span>
+      <span class="ln">number of tests · % coverage · % passing</span>
+      <span class="ln"></span>
+      <span class="ln"><span class="t"># value (hard to fake, tells the truth)</span></span>
+      <span class="ln"><span class="ok2">bugs customers find</span> · how fast we fix them ·</span>
+      <span class="ln">how confident we are to release on a Friday</span>
+    </div>
+    <div class="note">
+      <span class="nlabel">// The line worth keeping</span>
+      You can't measure quality by counting tests, any more than you can measure a book by counting words.
+    </div>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 5 · A plan, not a pile</h3>
+    <p>Arun had spent years learning <em>how</em> to test. Now he had to decide <em>what</em> to test, for a whole product, with limited time. That plan has a name: a <strong>test strategy</strong>.</p>
+    <p>It wasn't a list of every possible test. It was a set of choices: where is the risk highest, what do we test deeply, what do we test lightly, what do we trust the AI to draft, and where do we insist on a careful human. A strategy is mostly about what you choose <em>not</em> to do.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 6 · Quality isn't a department</h3>
+    <p>The biggest change wasn't a tool. It was the team. For years, "quality" had meant "the testers will catch it." Arun pushed the other way: developers wrote their own unit tests, everyone reviewed failure questions, and bugs were discussed by the whole team, not pushed onto QA.</p>
+    <p>He finally lived Priya's four words from his first day. Quality wasn't his job to guard at the end. It was everyone's job to build in from the start. This shared habit is called a <strong>quality culture</strong>.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 7 · Teaching by question</h3>
+    <p>And then there was Anika. She was sharp, fast, and certain she already knew everything — exactly like a young man who once pitied the testing team.</p>
+    <p>Arun caught himself about to lecture her. Instead, he remembered Meera, and asked a question instead. "Your login test passes. Good. Now — what happens at fifty-one characters?" Anika frowned, tried it, and went pale. He didn't give her the answer. He gave her the habit.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 8 · The handover</h3>
+    <p>On Meera's last day, she left a coffee on his desk, the way she had on the day after his very first outage. No folder this time. Just a note in her careful handwriting.</p>
+    <p class="say">"You used to ask me for the answer. Now you give people the question. That's the whole job. Your turn at the whiteboard. — M"</p>
+    <p>Arun read it twice, the way you read something you want to keep.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 9 · The weight</h3>
+    <p>That night the office was empty. Arun stood at the whiteboard Meera used to own. He picked up the marker. It felt heavier than he expected — not in his hand, but in what it meant. The questions were his to ask now. The next generation was his to teach.</p>
+    <p>The student had become the teacher. He wasn't ready. Nobody ever is. He started writing anyway.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 10 · Key lessons</h3>
+    <div class="suite">
+      <div class="suite-head">
+        <span>chapter-09.lessons.spec</span>
+        <span class="ok">5 passed · 0 failed</span>
+      </div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Vanity metrics (test count, coverage %, % passing) look impressive but can hide empty tests.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Measure what's hard to fake: bugs customers find, time to fix, confidence to release.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>A test strategy is a set of choices based on risk — mostly about what you choose <em>not</em> to test.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Quality is a culture the whole team owns, not a department that inspects at the end.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>The best teachers give the habit of the question, not the answer.</p></div>
+    </div>
+    <div class="next">
+      <span class="nk">Next · Chapter 10</span>
+      <h3>The Question Only a Human Could Ask</h3>
+      <p>A new graduate is sure that "AI does the testing now." Every check is green. A quiet bug is about to prove what only a curious human can still catch.</p>
+    </div>
+  </section>
