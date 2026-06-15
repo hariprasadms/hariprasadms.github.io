@@ -37,6 +37,8 @@ collections:
   posts:
     output: true
     permalink: /blog/:year/:month/:day/:title/
+  chapters:
+    output: false   # book chapters: assembled into the story page, not standalone
 
 # Exclude from processing
 exclude:

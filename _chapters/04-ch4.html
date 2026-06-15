@@ -1,0 +1,96 @@
+---
+order: 4
+cid: ch4
+num: "04"
+title: "The Tests That Cried Wolf"
+subtitle: "Where Arun learns that more tests are not better tests \u2014 and trust is the only thing that counts."
+---
+<section class="page">
+    <h3 class="page-marker">Page 1 · The cheering stops</h3>
+    <p class="drop">At first, Arun's growing pile of automated tests made him a hero. Three hundred tests. Four hundred. A green wall of passes. The team cheered.</p>
+    <p>Then, one Tuesday, the wall turned red. Forty tests failed. Arun checked in a panic — but the app was fine. He ran the tests again. This time they passed. Nobody had changed a thing.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 2 · Pass, fail, pass, fail</h3>
+    <p>It kept happening. The same test would pass, then fail, then pass — with no change to the code or the app.</p>
+    <div class="incident">
+      <span class="ln">run 1:  checkout test … <span class="ok2">PASS</span></span>
+      <span class="ln">run 2:  checkout test … <span class="err">FAIL</span></span>
+      <span class="ln">run 3:  checkout test … <span class="ok2">PASS</span>   <span class="t">(nothing changed)</span></span>
+    </div>
+    <p>The team learned to shrug. "It's just flaky. Run it again." A red result stopped meaning danger. It started meaning <em>annoyance.</em></p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 3 · The word for it</h3>
+    <p>Meera gave it a name. "A test that passes or fails at random, with no real bug behind it, is a <strong>flaky test</strong>. And flaky tests are dangerous — not because they fail, but because they teach people to ignore failure."</p>
+    <p>She listed the usual causes: tests that wait a fixed number of seconds and guess wrong, tests that find buttons in a fragile way, and tests that share data and trip over each other.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 4 · The wolf arrives</h3>
+    <p>Then it happened. A real bug — a broken payment button — reached production. The automated test had caught it. It had turned red the night before. But the team, trained by months of false alarms, had shrugged and clicked "run again."</p>
+    <p>Arun felt the floor drop. He had built the boy who cried wolf. When the real wolf came, nobody looked up.</p>
+    <div class="note">
+      <span class="nlabel">// The line worth keeping</span>
+      A test you can't trust is worse than no test at all. At least silence doesn't lie to you.
+    </div>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 5 · Stop guessing at time</h3>
+    <p>Meera sat with him. "Most of your flakiness is waiting. Your tests pause for a fixed two seconds, then carry on. Some days the page takes three. So the test clicks a button that isn't there yet — and fails."</p>
+    <p>The fix was the <strong>explicit wait</strong>: don't wait a guessed number of seconds — wait for the exact thing you need, then continue the instant it's ready. "Never sleep for time," she said. "Wait for a condition."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 6 · Point to things that won't move</h3>
+    <p>The next cause was how the tests found buttons. Arun had pointed at fragile positions — "the third button in the second box." When designers moved things, every test broke.</p>
+    <p>A <strong>locator</strong> is the address a test uses to find something on the page. "Use stable addresses," Meera said. "Ask the developers for a fixed label on the important elements. Point to <em>that</em>, not to a position that changes every week."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 7 · The pyramid he built upside down</h3>
+    <p>Then Meera drew the real problem. "You wrote almost everything as a slow, full-app test through the screen. Those are powerful, but slow and shaky. Look at the shape you should aim for."</p>
+    <div class="incident">
+      <span class="ln">        /\        <span class="t">few</span>  UI / end-to-end  (slow, whole app)</span>
+      <span class="ln">       /--\</span>
+      <span class="ln">      /----\      integration  (services together)</span>
+      <span class="ln">     /------\</span>
+      <span class="ln">    /--------\   <span class="ok2">many</span> unit tests  (one small piece, very fast)</span>
+    </div>
+    <p>This is the <strong>test pyramid</strong>. Lots of tiny <strong>unit tests</strong> that check one small piece of code in milliseconds. Fewer <strong>integration tests</strong> that check parts working together. Only a few slow <strong>end-to-end tests</strong> through the whole app. "You built an ice-cream cone," Meera said. "All the weight at the top. No wonder it wobbles."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 8 · Tidy the house</h3>
+    <p>Finally, she showed him how to organise the automation itself. Right now, the address of the login button was copied into 200 tests. Change the page, fix 200 places.</p>
+    <p>The <strong>Page Object Model</strong> fixes that: keep each screen's details in one file. When the screen changes, you fix it once, and every test that uses it is healed. "Good automation," Meera said, "is mostly good housekeeping."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 9 · Less, but trusted</h3>
+    <p>Arun deleted hundreds of his own tests. It hurt. He rebuilt a smaller set: fast, stable, and honest. He also learned what <em>not</em> to automate — things that change every week, rare one-off checks, and anything where a human eye judges better, like whether a page simply <em>looks</em> right.</p>
+    <p>The green wall was smaller now. But when it turned red, the whole team stood up. He had stopped being a fast coder. He had become a careful engineer.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 10 · Key lessons</h3>
+    <div class="suite">
+      <div class="suite-head">
+        <span>chapter-04.lessons.spec</span>
+        <span class="ok">5 passed · 0 failed</span>
+      </div>
+      <div class="case"><span class="badge">✓ PASS</span><p>A flaky test passes or fails at random. Its real damage is teaching people to ignore red.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Never wait a fixed number of seconds. Use explicit waits — wait for the exact thing you need.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Use stable locators (fixed labels), not fragile positions that break when the page moves.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Follow the test pyramid: many fast unit tests, fewer integration tests, few slow end-to-end tests.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Keep each screen's details in one place (Page Object Model). And don't automate everything — some checks belong to humans.</p></div>
+    </div>
+    <div class="next">
+      <span class="nk">Next · Chapter 05</span>
+      <h3>Every Commit, Every Time</h3>
+      <p>Arun's tests are finally solid — but someone still has to remember to run them, and bugs are found days too late. Meera shows him how to make the tests run themselves, on every single change, before anyone even asks.</p>
+    </div>
+  </section>

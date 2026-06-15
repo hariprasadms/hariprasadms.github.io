@@ -1,0 +1,100 @@
+---
+order: 10
+cid: ch10
+num: "10"
+title: "The Question Only a Human Could Ask"
+subtitle: "Where the story comes full circle, and the oldest skill turns out to be the newest one."
+---
+<section class="page">
+    <h3 class="page-marker">Page 1 · A familiar pity</h3>
+    <p class="drop">Two years on, Anika was no longer a nervous graduate. She was quick and confident — maybe a little too confident. One morning she said something that stopped Arun cold.</p>
+    <p>"Honestly, the AI does the testing now. It writes everything, the pipeline runs everything, it's all green. I'm not sure why we still need a quality team at all."</p>
+    <p>Arun smiled. He had heard that voice before. It was his own, on his first day, pitying the people who "just click buttons."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 2 · All green</h3>
+    <p>It was release day. The board could not have looked safer. Thousands of automated tests: green. The AI assistant's checks: green. Performance, security, accessibility: all green. The pipeline glowed like a calm sea.</p>
+    <div class="incident">
+      <span class="ln">unit + integration … <span class="ok2">PASS</span></span>
+      <span class="ln">end-to-end ………… <span class="ok2">PASS</span></span>
+      <span class="ln">AI test review …… <span class="ok2">PASS</span></span>
+      <span class="ln">performance · security · a11y … <span class="ok2">PASS</span></span>
+    </div>
+    <p>"Ship it," Anika said. "There's literally nothing left to check."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 3 · The itch</h3>
+    <p>Arun almost agreed. Then a small, old feeling tugged at him — the same one that had once made him stare at a parking meter. A "what if" that no test on the board had asked.</p>
+    <p>The release combined two features: a midnight flash sale, and a new option to pay part-cash, part gift-card. Each had been tested on its own. Each was green. But a question formed that the machine had never been given.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 4 · The question</h3>
+    <p>"Anika," he said slowly. "What happens if a customer pays with a discount code <em>and</em> a gift card, for the last item in the sale, at the exact moment the sale ends at midnight?"</p>
+    <p>Anika opened her mouth, then closed it. "I… the AI didn't write that test. Each part passed separately." It was every lesson of the book in one sentence — boundaries, race conditions, integration, the edge where two truths meet. The machine had tested the rooms. Nobody had tested the doorway between them.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 5 · Caught at the edge</h3>
+    <p>They built the messy test together. They ran it at 23:59:59.</p>
+    <div class="incident">
+      <span class="ln"><span class="t">23:59:59</span>  apply discount + gift card …</span>
+      <span class="ln"><span class="t">00:00:00</span>  sale ends, price recalculates …</span>
+      <span class="ln">result:  gift card charged, discount lost,</span>
+      <span class="ln">         customer overpaid by <span class="err">£64.00</span>, order stuck</span>
+    </div>
+    <p>There it was. A real bug, worth real money, multiplied across every customer in the sale — and not one of the thousands of green checks had seen it. They caught it hours before release.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 6 · Four words</h3>
+    <p>Anika stared at the screen, shaken. "Every single test was green."</p>
+    <p>"Green is not the same as safe," Arun said — the line that had once cost him a feature. "The machine can run a million tests. It can only run the ones we think to ask for. It answers questions. It can't ask them."</p>
+    <p>He walked to the whiteboard and wrote four words he'd first seen on his own first day.</p>
+    <p class="big-quote">"Quality is everyone's responsibility."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 7 · The habit passes on</h3>
+    <p>"The AI is the best junior you will ever have," he told her. "It never sleeps. It never complains. It will do the work of a hundred testers. But it will never stand here, on release day, with a bad feeling it can't explain, and ask the one question nobody wrote down. That part is yours. It will always be yours."</p>
+    <p>Anika looked at the bug, then at the four words, then at the parking-meter look on her mentor's face. Something shifted behind her eyes. That afternoon, unprompted, she filled a page of her notebook with "what if" questions.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 8 · The whole journey</h3>
+    <p>That evening, Arun thought about the distance. A username at fifty-one characters. A payment at midnight. A crowd on sale day. Five hundred empty green tests. And now a bug hiding in the gap between two features, caught by nothing but curiosity.</p>
+    <p>The tools had changed beyond recognition. Manual to automated. Scripts to pipelines. Pipelines to AI. Through all of it, the one thing that found the bugs that mattered had never changed at all. It was the question. It was the curiosity. It was the human.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 9 · Rain on the glass</h3>
+    <p>Rain tapped against the glass walls of TechNova — the same rain, the same glass, a different man watching it. Across the floor, a brand-new engineer walked in on their first day, badge still shiny, and glanced at the quality team with a small, unmistakable flicker of pity.</p>
+    <p>Arun caught Anika's eye. They both smiled. They knew exactly what that new engineer was thinking. And they knew that, sooner or later, one production outage would change everything — the way it always does.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 10 · The lessons of the whole book</h3>
+    <div class="suite">
+      <div class="suite-head">
+        <span>the-whole-book.lessons.spec</span>
+        <span class="ok">all passed · still curious</span>
+      </div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Test how things fail, not just that they work — from a single field to a whole system.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Bugs hide at the edges, below the screen, under load, and in the gaps between features.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Automation and CI give you speed and trust; the test pyramid and good habits keep them honest.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>AI is a junior who never sleeps. Direct it, read its work, and never mistake green for safe.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>The machine answers questions. Only a human asks the one nobody thought of. Curiosity is the job.</p></div>
+    </div>
+    <div class="note" style="margin-top:1.6rem">
+      <span class="nlabel">// The line worth keeping</span>
+      A machine can run a million tests. It still can't be curious. That's the job. That was always the job.
+    </div>
+  </section>
+
+  <div class="theend">
+    <span class="tk">The End · Chapter 1–10</span>
+    <h3>From Bugs to Brilliance</h3>
+    <p>Arun's journey — from "testers just click buttons" to the engineer who teaches a company how humans and AI build quality together. The tools will keep changing. The curiosity won't.</p>
+  </div>

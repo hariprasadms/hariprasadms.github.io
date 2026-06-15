@@ -1,0 +1,116 @@
+---
+order: 2
+cid: ch2
+num: "02"
+title: "The Invisible Layer"
+subtitle: "Where Arun learns that the worst bugs are the ones no screen will ever show you."
+---
+<section class="page">
+    <h3 class="page-marker">Page 1 · Below the line</h3>
+    <p class="drop">The folder held one printed email. Arun read it three times.</p>
+    <div class="incident">
+      <span class="ln"><span class="err">URGENT — Customer charged twice, no order created</span></span>
+      <span class="ln">Customer paid <span class="warn">£4,820</span> twice. No order exists. CEO is copied.</span>
+    </div>
+    <p>"But I tested the checkout last week," Arun said. "The button works. The confirmation screen appears. Everything <em>looks</em> fine."</p>
+    <p>"That's the problem," said Meera. "You tested everything you can see. This bug lives somewhere you've never looked." She drew two lines in his notebook. "Above the line is the screen — buttons and forms. Below the line is where the real work happens — APIs, services, databases. Today, you go below."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 2 · Talking to the API</h3>
+    <p>Meera opened a tool Arun had never used: <strong>Postman</strong> — a tool that lets you send requests straight to an API, with no screen in the way.</p>
+    <p>"The browser is just a polite messenger," she said. "When you click 'Pay Now', the browser sends a <strong>request</strong> to a payment API. The API does the work and sends back a <strong>response</strong>. We'll talk to the API directly — no browser, no buttons."</p>
+    <p>She hit Send. Text appeared, wrapped in curly braces. This is <strong>JSON</strong> — a simple way for computers to send data as labelled values.</p>
+    <div class="incident">
+      <span class="ln">{</span>
+      <span class="ln">  <span class="key">"status"</span>: <span class="ok2">"PAYMENT_TAKEN"</span>,</span>
+      <span class="ln">  <span class="key">"amount"</span>: 4820.00,</span>
+      <span class="ln">  <span class="key">"orderCreated"</span>: <span class="err">false</span></span>
+      <span class="ln">}</span>
+    </div>
+    <p>Arun stared. "Payment taken… but order created is <em>false</em>? How can both be true at once?"</p>
+    <p>Meera smiled the way she always did before a lesson. "Now <em>that</em> is the right question."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 3 · Two steps, not one</h3>
+    <p>She explained that checkout was not one action but two: first take the payment, then create the order. Two different services. Two different teams.</p>
+    <p>"What happens," she asked, "if the first step works and the second one fails?"</p>
+    <p>Arun thought. "The customer pays… for nothing."</p>
+    <p>"Exactly. The screen showed a friendly message — <em>'Something went wrong, please try again.'</em> So the customer tried again. Paid again. Two payments. Zero orders. The screen looked fine both times. The bug was invisible." This is an <strong>integration bug</strong> — each part works alone, but they fail when they work together.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 4 · Windows, not doors</h3>
+    <p>For two hours, Arun fired requests at the payment API like a detective questioning a suspect.</p>
+    <p>What if the amount is zero? <em>Rejected — good.</em> What if the amount is negative? He blinked at the screen. <em>Accepted.</em></p>
+    <p>"Meera. The API just accepted a payment of <strong>minus five hundred pounds.</strong>"</p>
+    <p>She looked, and laughed. "You just found a bug where the bank could pay the customer. The screen blocks negative numbers. The API doesn't. And attackers don't use the screen." That sentence stuck in Arun's head forever:</p>
+    <div class="note">
+      <span class="nlabel">// The line he never forgot</span>
+      The screen is the front door. Attackers come through the windows. Test the API directly.
+    </div>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 5 · The bug that wouldn't appear</h3>
+    <p>But the double-charge mystery remained. Arun repeated the customer's exact steps in Postman. Payment — success. Order — success. Again. Success. Again. Success.</p>
+    <p>"It works every time," he groaned. "How do I find a bug that won't happen?"</p>
+    <p>Meera leaned on the desk. "When a bug won't show itself, stop asking <em>what</em> went wrong. Ask <em>when</em>. What was different at the moment it failed?"</p>
+    <p>Arun opened the <strong>logs</strong> — the diary a system writes about everything it does, each line stamped with the exact time. He scrolled to the second of the customer's payment.</p>
+    <div class="incident">
+      <span class="ln"><span class="t">23:59:58</span>  payment-service   <span class="ok2">SUCCESS</span></span>
+      <span class="ln"><span class="t">00:00:01</span>  order-service     <span class="err">TIMEOUT</span></span>
+    </div>
+    <p>He stared at the two timestamps. Then he saw it.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 6 · Midnight</h3>
+    <p>The order service restarted every night at midnight for maintenance. For thirty seconds, it was deaf to the world. The customer had clicked "Pay Now" two seconds before midnight. The payment went through at 23:59:58. The order request arrived at 00:00:01 — into a service that wasn't listening.</p>
+    <p>"It's not a code bug at all," Arun said slowly. "It's a <strong>timing</strong> bug. The system has a thirty-second blind spot every night, and nobody tests at midnight." When the result depends on the exact timing of two things, testers call it a <strong>race condition</strong> — two events racing, and sometimes the wrong one wins.</p>
+    <p>To prove it, he scheduled a test payment for 23:59:59, went home, and barely slept. At 00:00:04 his phone buzzed: <span class="say">PAYMENT_TAKEN, order not created.</span> Caught red-handed. In an empty office at midnight, a bug had finally met a tester willing to stay up for it.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 7 · The retro</h3>
+    <p>The fix took the developers twenty minutes: if the order step fails, refund the payment automatically and tell the customer the truth. The harder part was the meeting afterwards — the <strong>retrospective</strong>, where the team looks back and asks how to do better.</p>
+    <p>"Why didn't testing catch this before release?" asked Rohan, arms crossed.</p>
+    <p>The old Arun would have stayed quiet. The new one didn't. "Because we only tested <em>that</em> checkout works. Nobody asked <em>how it could fail.</em> I've written eleven failure questions for checkout — what if payment works but the order doesn't, what if the same request arrives twice, what if a service is restarting. I want these in every release."</p>
+    <p>The room went quiet. Then the manager said: "Send that list to everyone. That's not a testing checklist. That's how we should all think."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 8 · An offer</h3>
+    <p>That evening, Meera found him still writing failure questions. "You know what you did today? You didn't just find a bug. You changed how a room full of engineers thinks. That part isn't in any job description."</p>
+    <p>She paused at the door. "There's an opening on the quality engineering team. Interviews next month." She let it hang. "You'd have to stop calling yourself a developer."</p>
+    <p>"What would I tell my parents?" he half-joked. "They think testing is what people do when they can't code."</p>
+    <p>Meera laughed. "Tell them you've been promoted — from building things to protecting everyone who uses them."</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 9 · The parking meter</h3>
+    <p>He didn't say yes that night. Real decisions don't work that way.</p>
+    <p>But on Saturday, on his usual walk, Arun stopped at a parking meter and caught himself thinking: <em>What happens if I pay at the exact moment it loses signal? Does it take my money? Where does that payment go?</em></p>
+    <p>He stood there for a full minute, smiling at a parking meter like a fool. That's when he knew. It wasn't a job change. It had already happened — somewhere between a 2 AM outage and a midnight stakeout. The title was just paperwork. On Monday, he applied.</p>
+  </section>
+
+  <section class="page">
+    <h3 class="page-marker">Page 10 · Key lessons</h3>
+    <div class="suite">
+      <div class="suite-head">
+        <span>chapter-02.lessons.spec</span>
+        <span class="ok">5 passed · 0 failed</span>
+      </div>
+      <div class="case"><span class="badge">✓ PASS</span><p>The screen is only the surface. The most costly bugs live below it, in APIs and services.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>The screen is the front door; attackers come through the windows. Test the API directly.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>When a bug won't reproduce, ask <em>when</em> it happened, not just <em>what</em> happened.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>Logs and timestamps are a tester's crime-scene evidence.</p></div>
+      <div class="case"><span class="badge">✓ PASS</span><p>A great tester doesn't just find bugs — they change how the whole team thinks about failure.</p></div>
+    </div>
+    <div class="next">
+      <span class="nk">Next · Chapter 03</span>
+      <h3>The Nine-Day Test</h3>
+      <p>Arun joins the quality team and meets the monster: 400 tests, run by hand, taking nine days — for a release due every two weeks. A manager asks the question that starts a new era: "Why is a human doing any of this?"</p>
+    </div>
+  </section>
