@@ -38,6 +38,7 @@
   var pgPrev = document.getElementById('pgPrev'), pgNext = document.getElementById('pgNext');
   var pgPrevT = document.getElementById('pgPrevT'), pgNextT = document.getElementById('pgNextT');
   var bmToast = document.getElementById('bmToast');
+  var ttsAdvancing = false;   // true only while read-aloud auto-advances to the next chapter
 
   function indexOfActive(){
     var a = document.querySelector('.chapter.active');
@@ -59,6 +60,7 @@
     if(order.indexOf(id) === -1) id = 'cover';
     document.querySelectorAll('.chapter').forEach(function(c){ c.classList.toggle('active', c.id === id); });
     document.body.classList.toggle('on-cover', id === 'cover');   // hide the pager on the cover
+    if(!ttsAdvancing) stopReadAloud();   // stop narration when the reader navigates manually
     toc.forEach(function(l){ var on = l.getAttribute('data-go') === id; l.classList.toggle('current', on); if(on){ l.setAttribute('aria-current','true'); } else { l.removeAttribute('aria-current'); } });
     setPager(order.indexOf(id));
     window.scrollTo(0, 0);
@@ -212,6 +214,83 @@
     if(resumeBtn._mode === 'mark'){ gotoMark(); }
     else { var s = readSaved(); if(s && order.indexOf(s.id) !== -1) show(s.id, true, s.y); }
   });
+
+  // ===== read aloud (Web Speech API) =====
+  var synth = window.speechSynthesis || null;
+  var ttsEl = document.getElementById('tts');
+  var ttsPlay = document.getElementById('ttsPlay');
+  var ttsStop = document.getElementById('ttsStop');
+  var ttsRateBtn = document.getElementById('ttsRate');
+  var ttsVoiceSel = document.getElementById('ttsVoice');
+  var ttsItems = [], ttsIdx = -1, ttsState = 'idle';   // idle | playing | paused
+  var TTS_RATES = [1, 1.25, 1.5, 0.85], ttsRateI = 0;
+  var ttsVoices = [], ttsVoice = null, ttsAutoAdvance = true, ttsChapterStart = 0;
+
+  function ttsClearHL(){ for(var i = 0; i < ttsItems.length; i++) ttsItems[i].classList.remove('tts-speaking'); }
+  function stopReadAloud(){ if(synth){ try{ synth.cancel(); }catch(e){} } ttsClearHL(); ttsState = 'idle'; ttsIdx = -1; ttsUI(); }
+  function ttsCollect(){
+    var a = document.querySelector('.chapter.active'); if(!a) return [];
+    var sel = '.cb-title, .cb-sub, .page > p, .page .big-quote, .note, .bcap, .suite .case p, .next h3, .next p';
+    return [].slice.call(a.querySelectorAll(sel)).filter(function(el){ return el.textContent.trim().length > 1; });
+  }
+  function ttsSpeak(i){
+    if(!synth) return;
+    if(i >= ttsItems.length){ ttsFinish(); return; }
+    ttsIdx = i; ttsClearHL();
+    var el = ttsItems[i]; el.classList.add('tts-speaking'); el.scrollIntoView({ block:'center' });
+    var u = new SpeechSynthesisUtterance(el.textContent.replace(/\s+/g, ' ').trim());
+    if(ttsVoice){ u.voice = ttsVoice; u.lang = ttsVoice.lang; }
+    u.rate = TTS_RATES[ttsRateI];
+    u.onend = function(){ if(ttsState === 'playing') ttsSpeak(ttsIdx + 1); };
+    synth.speak(u);
+  }
+  function startReadAloud(){ ttsItems = ttsCollect(); if(!ttsItems.length) return; try{ synth.cancel(); }catch(e){} ttsState = 'playing'; ttsChapterStart = Date.now(); ttsUI(); ttsSpeak(0); }
+  function ttsFinish(){
+    ttsClearHL();
+    var i = order.indexOf((document.querySelector('.chapter.active') || {}).id);
+    var realPlayback = (Date.now() - ttsChapterStart) > 3000;   // guard: don't blaze through if speech is silent/instant
+    if(ttsAutoAdvance && realPlayback && i >= 0 && i < order.length - 1){
+      ttsAdvancing = true; show(order[i + 1]); ttsAdvancing = false;
+      startReadAloud();
+    } else { ttsState = 'idle'; ttsIdx = -1; ttsUI(); }
+  }
+  function ttsUI(){
+    if(!ttsEl) return;
+    var playing = ttsState === 'playing', active = playing || ttsState === 'paused';
+    ttsPlay.textContent = playing ? '⏸ Pause' : (ttsState === 'paused' ? '▶ Resume' : '🔊 Listen');
+    ttsPlay.setAttribute('aria-label', playing ? 'Pause reading' : (ttsState === 'paused' ? 'Resume reading' : 'Listen to this chapter'));
+    ttsStop.hidden = !active; ttsRateBtn.hidden = !active; ttsVoiceSel.hidden = !active;
+    ttsRateBtn.textContent = TTS_RATES[ttsRateI] + '×';
+    ttsEl.classList.toggle('on', active);
+  }
+  function ttsLoadVoices(){
+    if(!synth || !ttsVoiceSel) return;
+    var all = synth.getVoices();
+    ttsVoices = all.filter(function(v){ return /^en([-_]|$)/i.test(v.lang); });
+    if(!ttsVoices.length) ttsVoices = all;
+    if(!ttsVoices.length) return;
+    ttsVoiceSel.innerHTML = '';
+    ttsVoices.forEach(function(v){ var o = document.createElement('option'); o.value = v.name; o.textContent = v.name.replace(/\s*\(.*?\)\s*/, '').slice(0, 22); ttsVoiceSel.appendChild(o); });
+    var pref = null, rx = /Samantha|Daniel|Karen|Moira|Google US English|Google UK English|Microsoft (Aria|Guy|Jenny)|Siri/i;
+    for(var k = 0; k < ttsVoices.length; k++){ if(rx.test(ttsVoices[k].name)){ pref = ttsVoices[k]; break; } }
+    ttsVoice = pref || ttsVoices[0]; ttsVoiceSel.value = ttsVoice.name;
+  }
+  if(synth && ttsEl){
+    ttsLoadVoices();
+    if('onvoiceschanged' in synth) synth.addEventListener('voiceschanged', ttsLoadVoices);
+    ttsPlay.addEventListener('click', function(){
+      if(ttsState === 'idle') startReadAloud();
+      else if(ttsState === 'playing'){ try{ synth.pause(); }catch(e){} ttsState = 'paused'; ttsUI(); }
+      else { try{ synth.resume(); }catch(e){} ttsState = 'playing'; ttsUI(); }
+    });
+    ttsStop.addEventListener('click', stopReadAloud);
+    ttsRateBtn.addEventListener('click', function(){ ttsRateI = (ttsRateI + 1) % TTS_RATES.length; ttsUI(); if(ttsState === 'playing'){ try{ synth.cancel(); }catch(e){} ttsSpeak(ttsIdx); } });
+    ttsVoiceSel.addEventListener('change', function(){ for(var k = 0; k < ttsVoices.length; k++){ if(ttsVoices[k].name === ttsVoiceSel.value){ ttsVoice = ttsVoices[k]; break; } } if(ttsState === 'playing'){ try{ synth.cancel(); }catch(e){} ttsSpeak(ttsIdx); } });
+    addEventListener('beforeunload', function(){ try{ synth.cancel(); }catch(e){} });
+    ttsUI();
+  } else if(ttsEl){
+    ttsEl.style.display = 'none';   // browser has no speech synthesis
+  }
 
   // start: a deep link (#chN) wins; otherwise the cover, offering a return button if we have history
   var saved = readSaved();

@@ -454,3 +454,39 @@
     body{ background:#fff; color:#000; }
     .reading{ max-width:none; }
   }
+
+  /* ---------- read aloud (text-to-speech) ---------- */
+  /* top-right so it never collides with the bottom pager or the mobile browser bar */
+  .tts{
+    position:fixed; top:.7rem; right:.8rem; z-index:45;
+    display:flex; align-items:center; justify-content:flex-end; gap:.4rem;
+    max-width:calc(100vw - 1.4rem); flex-wrap:wrap;
+  }
+  body.on-cover .tts{ display:none; }
+  .tts-btn{
+    font-family:var(--mono); font-size:.78rem; color:var(--ink);
+    background:#fff; border:1px solid var(--line); border-radius:999px;
+    padding:.5rem .9rem; cursor:pointer; white-space:nowrap;
+    box-shadow:0 6px 18px rgba(16,24,38,.16);
+    transition:transform .15s ease, background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .tts-btn:hover{ transform:translateY(-1px); }
+  .tts.on .tts-main{ background:var(--pass); color:#fff; border-color:var(--pass); }
+  .tts-voice{
+    font-family:var(--mono); font-size:.72rem; max-width:130px;
+    border:1px solid var(--line); border-radius:8px; padding:.42rem; background:#fff; color:var(--ink);
+  }
+  /* the sentence/paragraph currently being read */
+  .tts-speaking{
+    background:rgba(95,140,220,.16);
+    box-shadow:inset 3px 0 0 #5F8CDC;
+    border-radius:3px;
+  }
+  @media (max-width:880px){
+    .tts-btn{ font-size:.72rem; padding:.4rem .65rem; }
+    .book-reader{ padding-top:3.4rem; }   /* room for the top controls on mobile */
+  }
+  @media (max-width:560px){
+    .tts-voice{ display:none !important; }   /* keep the bar compact; use the default voice */
+  }
+  @media print{ .tts{ display:none !important; } }
