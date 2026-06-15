@@ -187,7 +187,7 @@
     var p = e.target.closest('p');
     if(!p || !p.parentElement || !p.parentElement.classList.contains('page')) return;
     // while reading aloud, tapping a line jumps narration there (instead of bookmarking)
-    if(typeof synth !== 'undefined' && synth && ttsState !== 'idle'){ if(ttsSeekTo(p)) return; }
+    if(ttsState !== 'idle'){ if(ttsSeekTo(p)) return; }
     var sel = (window.getSelection && window.getSelection().toString().trim()) || '';
     if(sel) setMark(p);      // selecting text → mark that line
     else toggleMark(p);      // a plain click toggles the bookmark on that line
@@ -230,9 +230,33 @@
   var ttsItems = [], ttsIdx = -1, ttsState = 'idle';   // idle | playing | paused
   var TTS_RATES = [1, 1.25, 1.5, 0.85], ttsRateI = 0;
   var ttsVoices = [], ttsVoice = null, ttsAutoAdvance = true, ttsChapterStart = 0, ttsSelEl = null;
+  var audioEl = document.getElementById('bookAudio'), ttsMode = 'speech';   // 'speech' = device TTS, 'audio' = recorded MP3
+  var ttsCues = null, ttsCueCache = {}, ttsPendingSeek = null;   // recorded-narration highlight cues (start seconds per line)
+  function activeAudioSrc(){ var a = document.querySelector('.chapter.active'); return (a && a.getAttribute('data-audio')) || ''; }
+  function cuesUrl(src){ return src ? src.replace(/\.[^.]+$/, '') + '.cues.json' : ''; }
+  // fetch the highlight cues for a recorded chapter (cached); then start syncing
+  function loadCues(src, done){
+    var url = cuesUrl(src);
+    if(ttsCueCache[url]){ ttsCues = ttsCueCache[url]; done && done(); return; }
+    try{
+      fetch(url).then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(j){ ttsCueCache[url] = j || []; ttsCues = ttsCueCache[url]; done && done(); })
+        .catch(function(){ ttsCues = []; done && done(); });
+    }catch(e){ ttsCues = []; done && done(); }
+  }
+  // highlight the line matching the current audio time
+  function ttsAudioSync(){
+    if(ttsMode !== 'audio' || !ttsCues || !ttsCues.length || !ttsItems.length) return;
+    var t = audioEl.currentTime, k = -1;
+    for(var i = 0; i < ttsCues.length && i < ttsItems.length; i++){ if(ttsCues[i] <= t + 0.05) k = i; else break; }
+    if(k >= 0 && k !== ttsIdx){
+      ttsIdx = k; ttsClearHL();
+      var el = ttsItems[k]; if(el){ el.classList.add('tts-speaking'); el.scrollIntoView({ block:'center' }); }
+    }
+  }
 
   function ttsClearHL(){ for(var i = 0; i < ttsItems.length; i++) ttsItems[i].classList.remove('tts-speaking'); }
-  function stopReadAloud(){ if(synth){ try{ synth.cancel(); }catch(e){} } ttsClearHL(); ttsState = 'idle'; ttsIdx = -1; ttsSelEl = null; ttsUI(); }
+  function stopReadAloud(){ if(synth){ try{ synth.cancel(); }catch(e){} } if(audioEl){ try{ audioEl.pause(); audioEl.currentTime = 0; }catch(e){} } ttsClearHL(); ttsState = 'idle'; ttsIdx = -1; ttsSelEl = null; ttsMode = 'speech'; ttsUI(); }
   // Stop button: bookmark the line we stopped on, then stop
   function ttsStopAndBookmark(){
     var el = (ttsIdx >= 0 && ttsItems[ttsIdx]) ? ttsItems[ttsIdx] : null;
@@ -296,7 +320,29 @@
     u.onend = function(){ if(ttsState === 'playing') ttsSpeak(ttsIdx + 1); };
     synth.speak(u);
   }
-  function startReadAloud(startIdx){
+  function startReadAloud(startIdx, forceSpeech){
+    // recorded narration if this chapter has an MP3 (falls back to device voice on error)
+    var src = activeAudioSrc();
+    if(!forceSpeech && src && audioEl){
+      ttsMode = 'audio'; ttsClearHL(); ttsIdx = -1;
+      ttsItems = ttsCollect();   // same elements the cues line up with, for highlighting
+      // start line: explicit arg, else a selected/tapped line (so "Listen" begins where you are)
+      var aStart = (typeof startIdx === 'number' && startIdx >= 0) ? startIdx : ttsSelectedIndex();
+      ttsSelEl = null;
+      if(audioEl.getAttribute('src') !== src){ audioEl.setAttribute('src', src); }
+      audioEl.playbackRate = TTS_RATES[ttsRateI];
+      ttsState = 'playing'; ttsChapterStart = Date.now(); ttsUI();
+      loadCues(src, function(){
+        if(aStart > 0 && ttsCues && ttsCues[aStart] != null){
+          var to = ttsCues[aStart];
+          if(audioEl.readyState >= 1){ try{ audioEl.currentTime = to; }catch(e){} }
+          else { ttsPendingSeek = to; }
+        }
+      });
+      var pr = audioEl.play(); if(pr && pr.catch){ pr.catch(function(){}); }
+      return;
+    }
+    ttsMode = 'speech';
     ttsItems = ttsCollect(); if(!ttsItems.length) return;
     var i;
     if(typeof startIdx === 'number' && startIdx >= 0){ i = startIdx; }
@@ -309,15 +355,21 @@
     if(ttsState === 'idle'){
       var hadSel = !!ttsSelEl || (window.getSelection && (window.getSelection().toString() || '').trim().length > 0);
       startReadAloud();
-      toast(hadSel ? '🔊 Reading from your selected line' : '🔊 Reading aloud — select or tap a line to start there');
+      toast(ttsMode === 'audio' ? '🔊 Playing recorded narration' : (hadSel ? '🔊 Reading from your selected line' : '🔊 Reading aloud — select or tap a line to start there'));
     }
-    else if(ttsState === 'playing'){ try{ synth.pause(); }catch(e){} ttsState = 'paused'; ttsUI(); toast('⏸ Paused'); }
-    else { try{ synth.resume(); }catch(e){} ttsState = 'playing'; ttsUI(); }
+    else if(ttsState === 'playing'){ if(ttsMode === 'audio'){ try{ audioEl.pause(); }catch(e){} } else { try{ synth.pause(); }catch(e){} } ttsState = 'paused'; ttsUI(); toast('⏸ Paused'); }
+    else { if(ttsMode === 'audio'){ var p = audioEl.play(); if(p && p.catch) p.catch(function(){}); } else { try{ synth.resume(); }catch(e){} } ttsState = 'playing'; ttsUI(); }
   }
   // jump narration to a tapped paragraph (used while reading aloud)
   function ttsSeekTo(p){
     var k = ttsItems.indexOf(p);
     if(k < 0) return false;
+    if(ttsMode === 'audio'){
+      if(ttsCues && ttsCues[k] != null){ try{ audioEl.currentTime = ttsCues[k]; }catch(e){} }
+      if(ttsState !== 'playing'){ var pr = audioEl.play(); if(pr && pr.catch) pr.catch(function(){}); ttsState = 'playing'; ttsUI(); }
+      ttsAudioSync();
+      return true;
+    }
     try{ synth.cancel(); }catch(e){}
     ttsState = 'playing'; ttsUI(); ttsSpeak(k);
     return true;
@@ -336,7 +388,7 @@
     var playing = ttsState === 'playing', active = playing || ttsState === 'paused';
     ttsPlay.textContent = playing ? '⏸ Pause' : (ttsState === 'paused' ? '▶ Resume' : '🔊 Listen');
     ttsPlay.setAttribute('aria-label', playing ? 'Pause reading' : (ttsState === 'paused' ? 'Resume reading' : 'Listen to this chapter'));
-    ttsStop.hidden = !active; ttsRateBtn.hidden = !active; ttsVoiceSel.hidden = !active;
+    ttsStop.hidden = !active; ttsRateBtn.hidden = !active; ttsVoiceSel.hidden = !active || ttsMode === 'audio';
     ttsRateBtn.textContent = TTS_RATES[ttsRateI] + '×';
     ttsEl.classList.toggle('on', active);
   }
@@ -361,7 +413,7 @@
     if('onvoiceschanged' in synth) synth.addEventListener('voiceschanged', ttsLoadVoices);
     ttsPlay.addEventListener('click', ttsTogglePlay);
     ttsStop.addEventListener('click', ttsStopAndBookmark);
-    ttsRateBtn.addEventListener('click', function(){ ttsRateI = (ttsRateI + 1) % TTS_RATES.length; try{ localStorage.setItem('fbtb:rate', ttsRateI); }catch(e){} ttsUI(); if(ttsState === 'playing'){ try{ synth.cancel(); }catch(e){} ttsSpeak(ttsIdx); } });
+    ttsRateBtn.addEventListener('click', function(){ ttsRateI = (ttsRateI + 1) % TTS_RATES.length; try{ localStorage.setItem('fbtb:rate', ttsRateI); }catch(e){} ttsUI(); if(ttsState === 'playing'){ if(ttsMode === 'audio'){ audioEl.playbackRate = TTS_RATES[ttsRateI]; } else { try{ synth.cancel(); }catch(e){} ttsSpeak(ttsIdx); } } });
     ttsVoiceSel.addEventListener('change', function(){ for(var k = 0; k < ttsVoices.length; k++){ if(ttsVoices[k].name === ttsVoiceSel.value){ ttsVoice = ttsVoices[k]; break; } } try{ localStorage.setItem('fbtb:voice', ttsVoiceSel.value); }catch(e){} if(ttsState === 'playing'){ try{ synth.cancel(); }catch(e){} ttsSpeak(ttsIdx); } });
     // remember the last text selection inside the open chapter (survives clicking the Listen button)
     document.addEventListener('selectionchange', function(){
@@ -371,6 +423,12 @@
         if(el && el.closest && el.closest('.chapter.active')) ttsSelEl = el;
       }
     });
+    if(audioEl){
+      audioEl.addEventListener('loadedmetadata', function(){ if(ttsPendingSeek != null){ try{ audioEl.currentTime = ttsPendingSeek; }catch(e){} ttsPendingSeek = null; } });
+      audioEl.addEventListener('timeupdate', ttsAudioSync);
+      audioEl.addEventListener('ended', function(){ ttsClearHL(); ttsState = 'idle'; ttsMode = 'speech'; ttsIdx = -1; ttsUI(); });
+      audioEl.addEventListener('error', function(){ if(ttsMode === 'audio'){ ttsMode = 'speech'; toast('Recorded audio unavailable — using device voice'); startReadAloud(undefined, true); } });
+    }
     addEventListener('beforeunload', function(){ try{ synth.cancel(); }catch(e){} });
     ttsUI();
   } else if(ttsEl){
