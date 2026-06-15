@@ -229,10 +229,10 @@
   var ttsVoiceSel = document.getElementById('ttsVoice');
   var ttsItems = [], ttsIdx = -1, ttsState = 'idle';   // idle | playing | paused
   var TTS_RATES = [1, 1.25, 1.5, 0.85], ttsRateI = 0;
-  var ttsVoices = [], ttsVoice = null, ttsAutoAdvance = true, ttsChapterStart = 0;
+  var ttsVoices = [], ttsVoice = null, ttsAutoAdvance = true, ttsChapterStart = 0, ttsSelEl = null;
 
   function ttsClearHL(){ for(var i = 0; i < ttsItems.length; i++) ttsItems[i].classList.remove('tts-speaking'); }
-  function stopReadAloud(){ if(synth){ try{ synth.cancel(); }catch(e){} } ttsClearHL(); ttsState = 'idle'; ttsIdx = -1; ttsUI(); }
+  function stopReadAloud(){ if(synth){ try{ synth.cancel(); }catch(e){} } ttsClearHL(); ttsState = 'idle'; ttsIdx = -1; ttsSelEl = null; ttsUI(); }
   function ttsCollect(){
     var a = document.querySelector('.chapter.active'); if(!a) return [];
     var sel = '.cb-title, .cb-sub, .page > p, .page .big-quote, .note, .bcap, .suite .case p, .next h3, .next p';
@@ -263,6 +263,16 @@
     for(var i = 0; i < ttsItems.length; i++){ if(ttsItems[i].getBoundingClientRect().bottom > 110) return i; }
     return 0;
   }
+  // if the reader selected text in a line, start narration from that line
+  function ttsSelectedIndex(){
+    var el = null, sel = window.getSelection && window.getSelection();
+    if(sel && sel.rangeCount && !sel.isCollapsed && sel.anchorNode){
+      el = sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentNode;
+    } else if(ttsSelEl){ el = ttsSelEl; }
+    if(!el) return -1;
+    for(var i = 0; i < ttsItems.length; i++){ if(ttsItems[i].contains(el)) return i; }
+    return -1;
+  }
   function ttsSpeak(i){
     if(!synth) return;
     if(i >= ttsItems.length){ ttsFinish(); return; }
@@ -276,13 +286,20 @@
   }
   function startReadAloud(startIdx){
     ttsItems = ttsCollect(); if(!ttsItems.length) return;
-    var i = (typeof startIdx === 'number' && startIdx >= 0) ? startIdx : ttsTopIndex();
+    var i;
+    if(typeof startIdx === 'number' && startIdx >= 0){ i = startIdx; }
+    else { var s = ttsSelectedIndex(); i = s >= 0 ? s : ttsTopIndex(); }   // selected line, else where you're reading
+    ttsSelEl = null;
     try{ synth.cancel(); }catch(e){}
     ttsState = 'playing'; ttsChapterStart = Date.now(); ttsUI(); ttsSpeak(i);
   }
   function ttsTogglePlay(){
-    if(ttsState === 'idle') startReadAloud();
-    else if(ttsState === 'playing'){ try{ synth.pause(); }catch(e){} ttsState = 'paused'; ttsUI(); }
+    if(ttsState === 'idle'){
+      var hadSel = !!ttsSelEl || (window.getSelection && (window.getSelection().toString() || '').trim().length > 0);
+      startReadAloud();
+      toast(hadSel ? '🔊 Reading from your selected line' : '🔊 Reading aloud — select or tap a line to start there');
+    }
+    else if(ttsState === 'playing'){ try{ synth.pause(); }catch(e){} ttsState = 'paused'; ttsUI(); toast('⏸ Paused'); }
     else { try{ synth.resume(); }catch(e){} ttsState = 'playing'; ttsUI(); }
   }
   // jump narration to a tapped paragraph (used while reading aloud)
@@ -334,6 +351,14 @@
     ttsStop.addEventListener('click', stopReadAloud);
     ttsRateBtn.addEventListener('click', function(){ ttsRateI = (ttsRateI + 1) % TTS_RATES.length; try{ localStorage.setItem('fbtb:rate', ttsRateI); }catch(e){} ttsUI(); if(ttsState === 'playing'){ try{ synth.cancel(); }catch(e){} ttsSpeak(ttsIdx); } });
     ttsVoiceSel.addEventListener('change', function(){ for(var k = 0; k < ttsVoices.length; k++){ if(ttsVoices[k].name === ttsVoiceSel.value){ ttsVoice = ttsVoices[k]; break; } } try{ localStorage.setItem('fbtb:voice', ttsVoiceSel.value); }catch(e){} if(ttsState === 'playing'){ try{ synth.cancel(); }catch(e){} ttsSpeak(ttsIdx); } });
+    // remember the last text selection inside the open chapter (survives clicking the Listen button)
+    document.addEventListener('selectionchange', function(){
+      var sel = window.getSelection();
+      if(sel && sel.rangeCount && !sel.isCollapsed && sel.anchorNode){
+        var el = sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentNode;
+        if(el && el.closest && el.closest('.chapter.active')) ttsSelEl = el;
+      }
+    });
     addEventListener('beforeunload', function(){ try{ synth.cancel(); }catch(e){} });
     ttsUI();
   } else if(ttsEl){
