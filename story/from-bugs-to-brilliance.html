@@ -78,6 +78,13 @@ layout: none
 
 <div class="bm-toast" id="bmToast" role="status" aria-live="polite"></div>
 
+<div class="tts" id="tts" aria-label="Read this chapter aloud">
+  <select class="tts-voice" id="ttsVoice" aria-label="Choose voice" hidden></select>
+  <button class="tts-btn" id="ttsRate" aria-label="Reading speed" hidden>1&times;</button>
+  <button class="tts-btn" id="ttsStop" aria-label="Stop reading" hidden>&#9209;</button>
+  <button class="tts-btn tts-main" id="ttsPlay" aria-label="Listen to this chapter">&#128266; Listen</button>
+</div>
+
 <main class="book-reader" id="reader" tabindex="-1">
 
   {% include book-cover.html %}
