@@ -40,7 +40,7 @@ layout: none
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/story/book.css">
+<link rel="stylesheet" href="/story/book.css?v={{ site.time | date: '%s' }}">
 </head>
 <body>
 
@@ -77,6 +77,7 @@ layout: none
 </nav>
 
 <div class="bm-toast" id="bmToast" role="status" aria-live="polite"></div>
+<audio id="bookAudio" preload="none"></audio>
 
 <div class="tts" id="tts" aria-label="Read this chapter aloud">
   <select class="tts-voice" id="ttsVoice" aria-label="Choose voice" hidden></select>
@@ -90,7 +91,7 @@ layout: none
   {% include book-cover.html %}
 
   {% for c in chapters %}
-  <section class="chapter" id="{{ c.cid }}" data-num="{{ c.num }}" data-title="{{ c.title }}">
+  <section class="chapter" id="{{ c.cid }}" data-num="{{ c.num }}" data-title="{{ c.title }}" data-audio="{{ c.audio }}">
     <div class="reading">
       <div class="chapter-break">
         <span class="cb-num">Chapter {{ c.num }}</span>
@@ -107,7 +108,7 @@ layout: none
   </footer>
 </main>
 
-<script src="/story/book.js"></script>
+<script src="/story/book.js?v={{ site.time | date: '%s' }}"></script>
 
 </body>
 </html>

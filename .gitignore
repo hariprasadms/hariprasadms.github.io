@@ -11,3 +11,6 @@ _site/
 
 # OS files
 .DS_Store
+
+# secrets / local audio work
+.elevenlabs.key
