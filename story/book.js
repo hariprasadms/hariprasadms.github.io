@@ -128,11 +128,14 @@
   // "next chapter" teasers are clickable
   document.querySelectorAll('.next').forEach(function(n){ n.style.cursor='pointer'; n.addEventListener('click', function(){ go(1); }); });
 
-  // keyboard: left / right turn pages
+  // keyboard: left / right turn pages; space toggles narration while it's active
   addEventListener('keydown', function(e){
-    if(e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    if(e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
     if(e.key === 'ArrowRight'){ go(1); }
     else if(e.key === 'ArrowLeft'){ go(-1); }
+    else if((e.key === ' ' || e.code === 'Space') && typeof synth !== 'undefined' && synth && ttsState !== 'idle'){
+      e.preventDefault(); ttsTogglePlay();   // only hijack space while reading aloud, so it still scrolls otherwise
+    }
   });
 
   // progress bar follows scroll; also remember scroll position (throttled)
@@ -183,6 +186,8 @@
   if(readerEl) readerEl.addEventListener('click', function(e){
     var p = e.target.closest('p');
     if(!p || !p.parentElement || !p.parentElement.classList.contains('page')) return;
+    // while reading aloud, tapping a line jumps narration there (instead of bookmarking)
+    if(typeof synth !== 'undefined' && synth && ttsState !== 'idle'){ if(ttsSeekTo(p)) return; }
     var sel = (window.getSelection && window.getSelection().toString().trim()) || '';
     if(sel) setMark(p);      // selecting text → mark that line
     else toggleMark(p);      // a plain click toggles the bookmark on that line
@@ -233,25 +238,68 @@
     var sel = '.cb-title, .cb-sub, .page > p, .page .big-quote, .note, .bcap, .suite .case p, .next h3, .next p';
     return [].slice.call(a.querySelectorAll(sel)).filter(function(el){ return el.textContent.trim().length > 1; });
   }
+  // say acronyms, symbols and amounts the way a person would (spoken text only)
+  function ttsNormalize(t){
+    return t
+      .replace(/£\s?([\d,]+(?:\.\d+)?)/g, function(_, n){ return n.replace(/,/g, '') + ' pounds'; })
+      .replace(/\bCI\/CD\b/g, 'C I, C D')
+      .replace(/\bAPIs\b/g, 'A P Eyes')
+      .replace(/\bAPI\b/g, 'A P I')
+      .replace(/\bUI\b/g, 'U I')
+      .replace(/\bAI\b/g, 'A.I.')
+      .replace(/\bJSON\b/g, 'Jason')
+      .replace(/\bSDET\b/g, 'S D E T')
+      .replace(/\bQA\b/g, 'Q A')
+      .replace(/\bCI\b/g, 'C I')
+      .replace(/\bSEV-?1\b/gi, 'severity one')
+      .replace(/\bP1\b/g, 'P one')
+      .replace(/\bSAST\b/g, 'S A S T')
+      .replace(/\bDAST\b/g, 'D A S T')
+      .replace(/\bK6\b/g, 'K six')
+      .replace(/\s+/g, ' ').trim();
+  }
+  // start from the line nearest the top of the viewport (so "Listen" resumes where you're reading)
+  function ttsTopIndex(){
+    for(var i = 0; i < ttsItems.length; i++){ if(ttsItems[i].getBoundingClientRect().bottom > 110) return i; }
+    return 0;
+  }
   function ttsSpeak(i){
     if(!synth) return;
     if(i >= ttsItems.length){ ttsFinish(); return; }
     ttsIdx = i; ttsClearHL();
     var el = ttsItems[i]; el.classList.add('tts-speaking'); el.scrollIntoView({ block:'center' });
-    var u = new SpeechSynthesisUtterance(el.textContent.replace(/\s+/g, ' ').trim());
+    var u = new SpeechSynthesisUtterance(ttsNormalize(el.textContent));
     if(ttsVoice){ u.voice = ttsVoice; u.lang = ttsVoice.lang; }
     u.rate = TTS_RATES[ttsRateI];
     u.onend = function(){ if(ttsState === 'playing') ttsSpeak(ttsIdx + 1); };
     synth.speak(u);
   }
-  function startReadAloud(){ ttsItems = ttsCollect(); if(!ttsItems.length) return; try{ synth.cancel(); }catch(e){} ttsState = 'playing'; ttsChapterStart = Date.now(); ttsUI(); ttsSpeak(0); }
+  function startReadAloud(startIdx){
+    ttsItems = ttsCollect(); if(!ttsItems.length) return;
+    var i = (typeof startIdx === 'number' && startIdx >= 0) ? startIdx : ttsTopIndex();
+    try{ synth.cancel(); }catch(e){}
+    ttsState = 'playing'; ttsChapterStart = Date.now(); ttsUI(); ttsSpeak(i);
+  }
+  function ttsTogglePlay(){
+    if(ttsState === 'idle') startReadAloud();
+    else if(ttsState === 'playing'){ try{ synth.pause(); }catch(e){} ttsState = 'paused'; ttsUI(); }
+    else { try{ synth.resume(); }catch(e){} ttsState = 'playing'; ttsUI(); }
+  }
+  // jump narration to a tapped paragraph (used while reading aloud)
+  function ttsSeekTo(p){
+    var k = ttsItems.indexOf(p);
+    if(k < 0) return false;
+    try{ synth.cancel(); }catch(e){}
+    ttsState = 'playing'; ttsUI(); ttsSpeak(k);
+    return true;
+  }
   function ttsFinish(){
     ttsClearHL();
     var i = order.indexOf((document.querySelector('.chapter.active') || {}).id);
     var realPlayback = (Date.now() - ttsChapterStart) > 3000;   // guard: don't blaze through if speech is silent/instant
     if(ttsAutoAdvance && realPlayback && i >= 0 && i < order.length - 1){
       ttsAdvancing = true; show(order[i + 1]); ttsAdvancing = false;
-      startReadAloud();
+      startReadAloud(0);
     } else { ttsState = 'idle'; ttsIdx = -1; ttsUI(); }
   }
   function ttsUI(){
@@ -266,26 +314,26 @@
   function ttsLoadVoices(){
     if(!synth || !ttsVoiceSel) return;
     var all = synth.getVoices();
-    ttsVoices = all.filter(function(v){ return /^en([-_]|$)/i.test(v.lang); });
-    if(!ttsVoices.length) ttsVoices = all;
+    var en = all.filter(function(v){ return /^en([-_]|$)/i.test(v.lang); });
+    if(!en.length) en = all;
+    var nice = /natural|neural|premium|enhanced|siri|samantha|daniel|karen|moira|aria|jenny|guy|google (us|uk)/i;
+    en.sort(function(a, b){ return (nice.test(b.name) ? 1 : 0) - (nice.test(a.name) ? 1 : 0); });
+    ttsVoices = en;
     if(!ttsVoices.length) return;
     ttsVoiceSel.innerHTML = '';
-    ttsVoices.forEach(function(v){ var o = document.createElement('option'); o.value = v.name; o.textContent = v.name.replace(/\s*\(.*?\)\s*/, '').slice(0, 22); ttsVoiceSel.appendChild(o); });
-    var pref = null, rx = /Samantha|Daniel|Karen|Moira|Google US English|Google UK English|Microsoft (Aria|Guy|Jenny)|Siri/i;
-    for(var k = 0; k < ttsVoices.length; k++){ if(rx.test(ttsVoices[k].name)){ pref = ttsVoices[k]; break; } }
-    ttsVoice = pref || ttsVoices[0]; ttsVoiceSel.value = ttsVoice.name;
+    en.forEach(function(v){ var o = document.createElement('option'); o.value = v.name; o.textContent = (nice.test(v.name) ? '★ ' : '') + v.name.replace(/\s*\(.*?\)\s*/, '').slice(0, 20); ttsVoiceSel.appendChild(o); });
+    var saved = null; try{ saved = localStorage.getItem('fbtb:voice'); }catch(e){}
+    var pick = (saved && en.filter(function(v){ return v.name === saved; })[0]) || en[0];
+    ttsVoice = pick; if(pick) ttsVoiceSel.value = pick.name;
   }
   if(synth && ttsEl){
+    try{ var sr = parseInt(localStorage.getItem('fbtb:rate'), 10); if(!isNaN(sr) && sr >= 0 && sr < TTS_RATES.length) ttsRateI = sr; }catch(e){}
     ttsLoadVoices();
     if('onvoiceschanged' in synth) synth.addEventListener('voiceschanged', ttsLoadVoices);
-    ttsPlay.addEventListener('click', function(){
-      if(ttsState === 'idle') startReadAloud();
-      else if(ttsState === 'playing'){ try{ synth.pause(); }catch(e){} ttsState = 'paused'; ttsUI(); }
-      else { try{ synth.resume(); }catch(e){} ttsState = 'playing'; ttsUI(); }
-    });
+    ttsPlay.addEventListener('click', ttsTogglePlay);
     ttsStop.addEventListener('click', stopReadAloud);
-    ttsRateBtn.addEventListener('click', function(){ ttsRateI = (ttsRateI + 1) % TTS_RATES.length; ttsUI(); if(ttsState === 'playing'){ try{ synth.cancel(); }catch(e){} ttsSpeak(ttsIdx); } });
-    ttsVoiceSel.addEventListener('change', function(){ for(var k = 0; k < ttsVoices.length; k++){ if(ttsVoices[k].name === ttsVoiceSel.value){ ttsVoice = ttsVoices[k]; break; } } if(ttsState === 'playing'){ try{ synth.cancel(); }catch(e){} ttsSpeak(ttsIdx); } });
+    ttsRateBtn.addEventListener('click', function(){ ttsRateI = (ttsRateI + 1) % TTS_RATES.length; try{ localStorage.setItem('fbtb:rate', ttsRateI); }catch(e){} ttsUI(); if(ttsState === 'playing'){ try{ synth.cancel(); }catch(e){} ttsSpeak(ttsIdx); } });
+    ttsVoiceSel.addEventListener('change', function(){ for(var k = 0; k < ttsVoices.length; k++){ if(ttsVoices[k].name === ttsVoiceSel.value){ ttsVoice = ttsVoices[k]; break; } } try{ localStorage.setItem('fbtb:voice', ttsVoiceSel.value); }catch(e){} if(ttsState === 'playing'){ try{ synth.cancel(); }catch(e){} ttsSpeak(ttsIdx); } });
     addEventListener('beforeunload', function(){ try{ synth.cancel(); }catch(e){} });
     ttsUI();
   } else if(ttsEl){
