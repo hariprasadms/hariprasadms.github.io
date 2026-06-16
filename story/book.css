@@ -281,6 +281,19 @@
     font-family:var(--slab); font-weight:700; color:var(--ink);
   }
 
+  /* fiction disclaimer (front-matter note in the introduction) */
+  .disclaimer{
+    margin:2.6rem 0 .5rem;
+    border:1px dashed var(--line); border-radius:8px;
+    padding:1rem 1.1rem; background:rgba(28,36,48,.025);
+  }
+  .disclaimer .dlabel{
+    font-family:var(--mono); font-size:.68rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-soft); display:block; margin-bottom:.35rem;
+  }
+  .disclaimer p{ font-size:.86rem; color:var(--ink-soft); font-style:italic; margin:0; }
+  .foot-note{ display:block; margin-top:.5rem; font-size:.74rem; opacity:.8; font-style:italic; }
+
   /* epilogue — teaser "mysteries" for stories still untold */
   .tease{
     border-left:3px solid #5F8CDC;
