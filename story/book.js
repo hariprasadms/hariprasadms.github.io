@@ -239,6 +239,7 @@
   function fmt(s){ s = Math.max(0, Math.floor(s || 0)); var m = Math.floor(s/60), x = s%60; return m + ':' + (x<10?'0':'') + x; }
   function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
   var ttsItems = [], ttsIdx = -1, ttsState = 'idle';   // idle | playing | paused
+  var ttsWantPlay = false;   // true while the reader intends playback (used to resume after a system pause, e.g. screen lock)
   var TTS_RATES = [1, 1.25, 1.5, 0.85], ttsRateI = 0;
   var ttsVoices = [], ttsVoice = null, ttsAutoAdvance = true, ttsChapterStart = 0, ttsSelEl = null;
   var audioEl = document.getElementById('bookAudio'), ttsMode = 'speech';   // 'speech' = device TTS, 'audio' = recorded MP3
@@ -337,7 +338,7 @@
   }
 
   function ttsClearHL(){ for(var i = 0; i < ttsItems.length; i++) ttsItems[i].classList.remove('tts-speaking'); }
-  function stopReadAloud(){ if(synth){ try{ synth.cancel(); }catch(e){} } if(audioEl){ try{ audioEl.pause(); audioEl.currentTime = 0; }catch(e){} } ttsClearHL(); ttsState = 'idle'; ttsIdx = -1; ttsSelEl = null; ttsMode = 'speech'; ttsUI(); }
+  function stopReadAloud(){ ttsWantPlay = false; if(synth){ try{ synth.cancel(); }catch(e){} } if(audioEl){ try{ audioEl.pause(); audioEl.currentTime = 0; }catch(e){} } ttsClearHL(); ttsState = 'idle'; ttsIdx = -1; ttsSelEl = null; ttsMode = 'speech'; ttsUI(); }
   // Stop button: bookmark the line we stopped on, then stop
   function ttsStopAndBookmark(){
     var el = (ttsIdx >= 0 && ttsItems[ttsIdx]) ? ttsItems[ttsIdx] : null;
@@ -402,6 +403,7 @@
     synth.speak(u);
   }
   function startReadAloud(startIdx, forceSpeech){
+    ttsWantPlay = true;   // the reader wants to listen (used to auto-resume after a lock-screen pause)
     // recorded narration if this chapter has an MP3 (falls back to device voice on error)
     var src = activeAudioSrc();
     if(!forceSpeech && src && audioEl){
@@ -439,8 +441,8 @@
       startReadAloud();
       toast(ttsMode === 'audio' ? '🔊 Playing recorded narration' : (hadSel ? '🔊 Reading from your selected line' : '🔊 Reading aloud — select or tap a line to start there'));
     }
-    else if(ttsState === 'playing'){ if(ttsMode === 'audio'){ try{ audioEl.pause(); }catch(e){} } else { try{ synth.pause(); }catch(e){} } ttsState = 'paused'; ttsUI(); toast('⏸ Paused'); }
-    else { if(ttsMode === 'audio'){ var p = audioEl.play(); if(p && p.catch) p.catch(function(){}); } else { try{ synth.resume(); }catch(e){} } ttsState = 'playing'; ttsUI(); }
+    else if(ttsState === 'playing'){ ttsWantPlay = false; if(ttsMode === 'audio'){ try{ audioEl.pause(); }catch(e){} } else { try{ synth.pause(); }catch(e){} } ttsState = 'paused'; ttsUI(); toast('⏸ Paused'); }
+    else { ttsWantPlay = true; if(ttsMode === 'audio'){ var p = audioEl.play(); if(p && p.catch) p.catch(function(){}); } else { try{ synth.resume(); }catch(e){} } ttsState = 'playing'; ttsUI(); }
   }
   // jump narration to a tapped paragraph (used while reading aloud)
   function ttsSeekTo(p){
@@ -530,8 +532,12 @@
     });
     if(audioEl){
       msSetup();   // lock-screen / OS media controls (also keeps audio alive when the screen locks)
-      audioEl.addEventListener('play', function(){ msState('playing'); });
-      audioEl.addEventListener('pause', function(){ if(ttsState === 'paused') msState('paused'); });
+      audioEl.addEventListener('play', function(){ if(ttsState !== 'idle'){ ttsState = 'playing'; ttsUI(); } msState('playing'); });
+      // a pause we didn't ask for (e.g. iOS locks the screen): reflect it as paused, keep the place + intent to resume
+      audioEl.addEventListener('pause', function(){
+        if(ttsWantPlay && ttsState === 'playing' && !audioEl.ended){ ttsState = 'paused'; ttsUI(); toast('⏸ Paused — tap ▶ to continue'); }
+        else if(ttsState === 'paused') msState('paused');
+      });
       audioEl.addEventListener('loadedmetadata', function(){ if(ttsPendingSeek != null){ try{ audioEl.currentTime = ttsPendingSeek; }catch(e){} ttsPendingSeek = null; } ttsProgress(); });
       audioEl.addEventListener('timeupdate', ttsAudioSync);
       // continuous playback: roll into the next chapter when one finishes
@@ -542,9 +548,18 @@
           ttsAdvancing = true; show(order[i + 1]); ttsAdvancing = false;
           startReadAloud(0); return;
         }
-        ttsState = 'idle'; ttsMode = 'speech'; ttsIdx = -1; ttsUI();
+        ttsWantPlay = false; ttsState = 'idle'; ttsMode = 'speech'; ttsIdx = -1; ttsUI();
       });
       audioEl.addEventListener('error', function(){ if(ttsMode === 'audio'){ ttsMode = 'speech'; toast('Recorded audio unavailable — using device voice'); startReadAloud(undefined, true); } });
+      // coming back from a lock/background: resume exactly where we left off (one tap if iOS blocks auto-play)
+      function ttsResumeIfWanted(){
+        if(document.hidden || !ttsWantPlay || ttsMode !== 'audio' || !audioEl.paused) return;
+        var p = audioEl.play();
+        if(p && p.then){ p.then(function(){ ttsState = 'playing'; ttsUI(); }).catch(function(){ /* iOS needs a tap — Resume is already showing */ }); }
+        else { ttsState = 'playing'; ttsUI(); }
+      }
+      document.addEventListener('visibilitychange', ttsResumeIfWanted);
+      addEventListener('pageshow', ttsResumeIfWanted);
     }
     addEventListener('beforeunload', function(){ try{ synth.cancel(); }catch(e){} });
     ttsUI();
