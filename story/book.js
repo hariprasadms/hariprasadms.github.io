@@ -522,3 +522,23 @@
   renderMark();
   markSaved();
 })();
+
+// ===== last-page star rating (saved locally; the message link reaches the author) =====
+(function(){
+  var wrap = document.getElementById('storyStars');
+  if(!wrap) return;
+  var stars = [].slice.call(wrap.querySelectorAll('.star'));
+  var thanks = document.getElementById('fbThanks');
+  var KEY = 'fbtb:rating';
+  function val(s){ return parseInt(s.getAttribute('data-v'), 10) || 0; }
+  function paint(v){ stars.forEach(function(s){ var on = val(s) <= v; s.classList.toggle('on', on); s.setAttribute('aria-checked', val(s) === v ? 'true' : 'false'); }); }
+  function rated(){ var v = 0; try{ v = parseInt(localStorage.getItem(KEY), 10) || 0; }catch(e){} return v; }
+  function say(v){ if(!thanks) return; thanks.hidden = v <= 0; thanks.textContent = v >= 4 ? 'Thank you — so glad you enjoyed it!' : (v > 0 ? 'Thanks for the honest rating. Tell me more below ↓' : ''); }
+  var start = rated(); paint(start); say(start);
+  stars.forEach(function(s){
+    s.addEventListener('mouseenter', function(){ paint(val(s)); });
+    s.addEventListener('focus', function(){ paint(val(s)); });
+    s.addEventListener('click', function(){ var v = val(s); try{ localStorage.setItem(KEY, v); }catch(e){} paint(v); say(v); });
+  });
+  wrap.addEventListener('mouseleave', function(){ paint(rated()); });
+})();
