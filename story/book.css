@@ -281,6 +281,19 @@
     font-family:var(--slab); font-weight:700; color:var(--ink);
   }
 
+  /* epilogue — teaser "mysteries" for stories still untold */
+  .tease{
+    border-left:3px solid #5F8CDC;
+    background:rgba(95,140,220,.07);
+    border-radius:0 6px 6px 0;
+    padding:.8rem 1rem;
+    margin:.85rem 0;
+  }
+  .tease strong{
+    font-family:var(--slab); font-weight:700; color:var(--ink);
+    display:block; margin-bottom:.2rem;
+  }
+
   /* margin annotation — like a code comment */
   .note{
     border-left:3px solid var(--pass);
@@ -416,6 +429,8 @@
   }
   .theend h3{font-family:var(--slab);font-weight:700;font-size:1.7rem;margin-bottom:.7rem}
   .theend p{color:var(--ink-soft);font-size:1.02rem;max-width:34rem;margin:0 auto}
+  .theend .theend-next{margin-top:1.1rem;color:var(--ink)}
+  .theend .theend-next strong{color:var(--pass);font-family:var(--slab)}
 
   footer{
     border-top:1px solid var(--line);
