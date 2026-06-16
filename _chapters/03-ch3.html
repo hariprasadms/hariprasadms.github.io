@@ -4,6 +4,7 @@ cid: ch3
 num: "03"
 title: "The Nine-Day Test"
 subtitle: "Where Arun meets a job so slow and dull that a machine had to be the answer."
+audio: /story/audio/ch3.mp3
 ---
 <section class="page">
     <h3 class="page-marker">Page 1 · The new desk</h3>
@@ -17,8 +18,8 @@ subtitle: "Where Arun meets a job so slow and dull that a machine had to be the 
     <h3 class="page-marker">Page 2 · The boring half of the job</h3>
     <p>Most of those 400 checks weren't new. They tested old features that already worked. "Why test things that already work?" Arun asked.</p>
     <p>"Because new code can break old features without anyone noticing," Meera said. "Re-checking that the old things still work after a change is called <strong>regression testing</strong>. A bug that sneaks back into something that used to work is a <em>regression</em>."</p>
-    <p>"So every release, you re-do all 400?"</p>
-    <p>"Every release. By hand. The same clicks. The same typing. For nine days."</p>
+    <p>"So every release, you re-do all 400?" Arun asked.</p>
+    <p>"Every release. By hand," Meera said. "The same clicks. The same typing. For nine days."</p>
   </section>
 
   <section class="page">
@@ -52,20 +53,20 @@ subtitle: "Where Arun meets a job so slow and dull that a machine had to be the 
   <section class="page">
     <h3 class="page-marker">Page 6 · Smoke first</h3>
     <p>"Slow down," Meera said. "You don't automate 400 things on day one. Start with a <strong>smoke test</strong> — a small, quick set that checks only the most important things still work. Can users log in? Can they pay? If the smoke test fails, stop; the building is on fire."</p>
-    <p>"And the full 400?"</p>
-    <p>"That's the <strong>full regression suite</strong>. You build it up over time — the important things first, the rare things last."</p>
+    <p>"And the full 400?" Arun asked.</p>
+    <p>"That's the <strong>full regression suite</strong>," Meera said. "You build it up over time — the important things first, the rare things last."</p>
   </section>
 
   <section class="page">
     <h3 class="page-marker">Page 7 · Nine days to nine minutes</h3>
-    <p>Over the next two months, Arun automated case after case. The numbers changed his life.</p>
+    <p>Over the next two months, Arun automated case after case. The numbers changed his life: the nine-day check, run by hand, now finished in nine minutes.</p>
     <div class="boundary">
       <span class="blabel">Regression run · before and after</span>
       <div class="bline">
         <div class="bcell fail">By hand: 9 days</div>
         <div class="bcell pass">Automated: 9 minutes</div>
       </div>
-      <p class="bcap">Same checks. The computer just never got tired.</p>
+      <p class="bcap">The very same checks — the computer just never got tired.</p>
     </div>
     <p>But Meera added a warning he didn't fully hear yet. "Automation isn't free. Every test you write, you also have to <em>maintain</em>. Bad automation can cost you more than no automation at all. Remember that."</p>
   </section>
