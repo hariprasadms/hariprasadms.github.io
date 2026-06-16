@@ -10,7 +10,7 @@ import sys, os, re, json, base64, urllib.request
 from html.parser import HTMLParser
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VOICE_ID = "auq43ws1oslv0tO4BDa7"
+DEFAULT_VOICE_ID = "auq43ws1oslv0tO4BDa7"   # Chapter 1; override per chapter via 3rd arg
 MODEL = "eleven_multilingual_v2"
 
 # ----- read chapter file: front matter (title/subtitle) + body -----
@@ -104,6 +104,7 @@ def normalize(t):
 def main():
     cid = sys.argv[1] if len(sys.argv) > 1 else "ch1"
     src = sys.argv[2]
+    voice_id = sys.argv[3] if len(sys.argv) > 3 else DEFAULT_VOICE_ID
     key = open(os.path.join(ROOT, ".elevenlabs.key")).read().strip()
 
     title, subtitle, body = load_chapter(src)
@@ -129,7 +130,7 @@ def main():
     payload = json.dumps({"text": joined, "model_id": MODEL,
                           "voice_settings": {"stability": 0.45, "similarity_boost": 0.8, "style": 0.0, "use_speaker_boost": True}}).encode()
     req = urllib.request.Request(
-        "https://api.elevenlabs.io/v1/text-to-speech/%s/with-timestamps" % VOICE_ID,
+        "https://api.elevenlabs.io/v1/text-to-speech/%s/with-timestamps" % voice_id,
         data=payload, headers={"xi-api-key": key, "Content-Type": "application/json"})
     with urllib.request.urlopen(req) as r:
         d = json.loads(r.read())
