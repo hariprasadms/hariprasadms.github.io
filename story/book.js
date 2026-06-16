@@ -264,6 +264,7 @@
     if(ttsTrack){ ttsTrack.style.setProperty('--p', pct + '%'); ttsTrack.setAttribute('aria-valuetext', fmt(t) + ' of ' + fmt(d)); }
     if(ttsCurEl) ttsCurEl.textContent = fmt(t);
     if(ttsDurEl) ttsDurEl.textContent = fmt(d);
+    msPos();
   }
   // highlight the line matching the current audio time
   function ttsAudioSync(){
@@ -297,6 +298,42 @@
     var ratio = Math.max(0, Math.min(1, (cx - r.left) / r.width));
     try{ audioEl.currentTime = ratio * audioEl.duration; }catch(e2){}
     ttsAudioSync();
+  }
+
+  // ----- Media Session: keep playing when the screen locks + lock-screen controls -----
+  var hasMS = ('mediaSession' in navigator) && (typeof window.MediaMetadata === 'function');
+  function msMeta(){
+    if(!hasMS) return;
+    var id = (document.querySelector('.chapter.active') || {}).id, n = num(id);
+    try{
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: (n ? n + ' · ' : '') + (TITLES[id] || 'From Bugs to Brilliance'),
+        artist: 'From Bugs to Brilliance',
+        album: 'A Story of Software Testing',
+        artwork: [{ src: '/story/cover.jpg', sizes: '1024x1536', type: 'image/jpeg' }]
+      });
+    }catch(e){}
+  }
+  function msState(s){ if(hasMS){ try{ navigator.mediaSession.playbackState = s; }catch(e){} } }
+  function msPos(){
+    if(!hasMS || ttsMode !== 'audio' || !audioEl.duration) return;
+    try{ navigator.mediaSession.setPositionState({ duration: audioEl.duration, playbackRate: audioEl.playbackRate || 1, position: Math.min(audioEl.currentTime || 0, audioEl.duration) }); }catch(e){}
+  }
+  function msAdvance(delta){
+    var i = indexOfActive() + delta;
+    if(i < 0 || i >= order.length) return;
+    ttsAdvancing = true; show(order[i]); ttsAdvancing = false; startReadAloud(0);
+  }
+  function msSetup(){
+    if(!hasMS) return;
+    var set = function(a, fn){ try{ navigator.mediaSession.setActionHandler(a, fn); }catch(e){} };
+    set('play', function(){ if(ttsState !== 'playing') ttsTogglePlay(); });
+    set('pause', function(){ if(ttsState === 'playing') ttsTogglePlay(); });
+    set('seekbackward', function(){ ttsSkip(-15); });
+    set('seekforward', function(){ ttsSkip(15); });
+    set('previoustrack', function(){ msAdvance(-1); });
+    set('nexttrack', function(){ msAdvance(1); });
+    set('seekto', function(d){ if(d && d.seekTime != null && ttsMode === 'audio'){ try{ audioEl.currentTime = d.seekTime; }catch(e){} ttsAudioSync(); } });
   }
 
   function ttsClearHL(){ for(var i = 0; i < ttsItems.length; i++) ttsItems[i].classList.remove('tts-speaking'); }
@@ -376,6 +413,7 @@
       if(audioEl.getAttribute('src') !== src){ audioEl.setAttribute('src', src); }
       audioEl.playbackRate = TTS_RATES[ttsRateI];
       ttsState = 'playing'; ttsChapterStart = Date.now(); ttsUI();
+      msMeta(); msState('playing');
       loadCues(src, function(){
         if(aStart > 0 && ttsCues && ttsCues[aStart] != null){
           var to = ttsCues[aStart];
@@ -447,6 +485,7 @@
     ttsRateBtn.textContent = TTS_RATES[ttsRateI] + '×';
     ttsEl.classList.toggle('on', active);
     document.body.classList.toggle('tts-active', active);
+    msState(active ? (playing ? 'playing' : 'paused') : 'none');
   }
   function ttsLoadVoices(){
     if(!synth || !ttsVoiceSel) return;
@@ -490,6 +529,9 @@
       }
     });
     if(audioEl){
+      msSetup();   // lock-screen / OS media controls (also keeps audio alive when the screen locks)
+      audioEl.addEventListener('play', function(){ msState('playing'); });
+      audioEl.addEventListener('pause', function(){ if(ttsState === 'paused') msState('paused'); });
       audioEl.addEventListener('loadedmetadata', function(){ if(ttsPendingSeek != null){ try{ audioEl.currentTime = ttsPendingSeek; }catch(e){} ttsPendingSeek = null; } ttsProgress(); });
       audioEl.addEventListener('timeupdate', ttsAudioSync);
       // continuous playback: roll into the next chapter when one finishes
