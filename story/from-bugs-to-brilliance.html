@@ -59,7 +59,7 @@ layout: none
   <nav class="book-toc">
     <a data-go="cover"><span class="n">&#9670;</span> Cover</a>
     {% for c in chapters %}
-    <a data-go="{{ c.cid }}"><span class="n">{{ c.num }}</span> {{ c.title }}</a>
+    <a data-go="{{ c.cid }}"><span class="n">{% if c.num != '' %}{{ c.num }}{% else %}&#9656;{% endif %}</span> {{ c.title }}</a>
     {% endfor %}
   </nav>
 </aside>
@@ -79,11 +79,21 @@ layout: none
 <div class="bm-toast" id="bmToast" role="status" aria-live="polite"></div>
 <audio id="bookAudio" preload="none"></audio>
 
-<div class="tts" id="tts" aria-label="Read this chapter aloud">
-  <select class="tts-voice" id="ttsVoice" aria-label="Choose voice" hidden></select>
-  <button class="tts-btn" id="ttsRate" aria-label="Reading speed" hidden>1&times;</button>
-  <button class="tts-btn" id="ttsStop" aria-label="Stop reading" hidden>&#9209;</button>
-  <button class="tts-btn tts-main" id="ttsPlay" aria-label="Listen to this chapter">&#128266; Listen</button>
+<div class="tts" id="tts" aria-label="Listen to the story">
+  <div class="tts-now" id="ttsNow" aria-live="polite" hidden></div>
+  <div class="tts-controls">
+    <button class="tts-btn tts-icon" id="ttsBack" aria-label="Back 15 seconds" title="Back 15s" hidden>&#8630;<small>15</small></button>
+    <button class="tts-btn tts-main" id="ttsPlay" aria-label="Listen to this chapter">&#128266; Listen</button>
+    <button class="tts-btn tts-icon" id="ttsFwd" aria-label="Forward 15 seconds" title="Forward 15s" hidden><small>15</small>&#8631;</button>
+    <button class="tts-btn" id="ttsRate" aria-label="Reading speed" title="Speed" hidden>1&times;</button>
+    <select class="tts-voice" id="ttsVoice" aria-label="Choose voice" hidden></select>
+    <button class="tts-btn tts-close" id="ttsStop" aria-label="Stop listening" title="Stop" hidden>&times;</button>
+  </div>
+  <div class="tts-bar" id="ttsBar" hidden>
+    <span class="tts-time" id="ttsCur">0:00</span>
+    <div class="tts-track" id="ttsTrack" role="slider" aria-label="Seek" tabindex="0"><div class="tts-fill" id="ttsFill"></div></div>
+    <span class="tts-time" id="ttsDur">0:00</span>
+  </div>
 </div>
 
 <main class="book-reader" id="reader" tabindex="-1">
@@ -94,7 +104,7 @@ layout: none
   <section class="chapter" id="{{ c.cid }}" data-num="{{ c.num }}" data-title="{{ c.title }}" data-audio="{{ c.audio }}">
     <div class="reading">
       <div class="chapter-break">
-        <span class="cb-num">Chapter {{ c.num }}</span>
+        {% if c.num != '' %}<span class="cb-num">Chapter {{ c.num }}</span>{% endif %}
         <h2 class="cb-title">{{ c.title }}</h2>
         <p class="cb-sub">{{ c.subtitle }}</p>
       </div>

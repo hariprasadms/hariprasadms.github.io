@@ -124,7 +124,8 @@
   if(pgNext) pgNext.addEventListener('click', function(){ go(1); });
   // cover CTA
   var cta = document.getElementById('startReading');
-  if(cta) cta.addEventListener('click', function(e){ e.preventDefault(); show('ch1'); });
+  var firstReadable = order.filter(function(id){ return id !== 'cover'; })[0] || 'ch1';
+  if(cta) cta.addEventListener('click', function(e){ e.preventDefault(); show(firstReadable); });
   // "next chapter" teasers are clickable
   document.querySelectorAll('.next').forEach(function(n){ n.style.cursor='pointer'; n.addEventListener('click', function(){ go(1); }); });
 
@@ -227,6 +228,16 @@
   var ttsStop = document.getElementById('ttsStop');
   var ttsRateBtn = document.getElementById('ttsRate');
   var ttsVoiceSel = document.getElementById('ttsVoice');
+  var ttsNow = document.getElementById('ttsNow');
+  var ttsBackBtn = document.getElementById('ttsBack');
+  var ttsFwdBtn = document.getElementById('ttsFwd');
+  var ttsBar = document.getElementById('ttsBar');
+  var ttsTrack = document.getElementById('ttsTrack');
+  var ttsFill = document.getElementById('ttsFill');
+  var ttsCurEl = document.getElementById('ttsCur');
+  var ttsDurEl = document.getElementById('ttsDur');
+  function fmt(s){ s = Math.max(0, Math.floor(s || 0)); var m = Math.floor(s/60), x = s%60; return m + ':' + (x<10?'0':'') + x; }
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
   var ttsItems = [], ttsIdx = -1, ttsState = 'idle';   // idle | playing | paused
   var TTS_RATES = [1, 1.25, 1.5, 0.85], ttsRateI = 0;
   var ttsVoices = [], ttsVoice = null, ttsAutoAdvance = true, ttsChapterStart = 0, ttsSelEl = null;
@@ -244,15 +255,48 @@
         .catch(function(){ ttsCues = []; done && done(); });
     }catch(e){ ttsCues = []; done && done(); }
   }
+  // update the seek bar + clock (recorded audio only)
+  function ttsProgress(){
+    if(ttsMode !== 'audio') return;
+    var t = audioEl.currentTime || 0, d = audioEl.duration || 0;
+    var pct = d ? Math.max(0, Math.min(1, t/d)) * 100 : 0;
+    if(ttsFill) ttsFill.style.width = pct + '%';
+    if(ttsTrack){ ttsTrack.style.setProperty('--p', pct + '%'); ttsTrack.setAttribute('aria-valuetext', fmt(t) + ' of ' + fmt(d)); }
+    if(ttsCurEl) ttsCurEl.textContent = fmt(t);
+    if(ttsDurEl) ttsDurEl.textContent = fmt(d);
+  }
   // highlight the line matching the current audio time
   function ttsAudioSync(){
-    if(ttsMode !== 'audio' || !ttsCues || !ttsCues.length || !ttsItems.length) return;
+    if(ttsMode !== 'audio') return;
+    ttsProgress();
+    if(!ttsCues || !ttsCues.length || !ttsItems.length) return;
     var t = audioEl.currentTime, k = -1;
     for(var i = 0; i < ttsCues.length && i < ttsItems.length; i++){ if(ttsCues[i] <= t + 0.05) k = i; else break; }
     if(k >= 0 && k !== ttsIdx){
       ttsIdx = k; ttsClearHL();
       var el = ttsItems[k]; if(el){ el.classList.add('tts-speaking'); el.scrollIntoView({ block:'center' }); }
     }
+  }
+  // back / forward: ±15s in recorded audio, ±1 line in device-voice mode
+  function ttsSkip(sec){
+    if(ttsState === 'idle') return;
+    if(ttsMode === 'audio'){
+      try{ audioEl.currentTime = Math.max(0, Math.min((audioEl.duration||0) - 0.3, (audioEl.currentTime||0) + sec)); }catch(e){}
+      ttsAudioSync();
+    } else {
+      var n = (ttsIdx < 0 ? 0 : ttsIdx) + (sec > 0 ? 1 : -1);
+      n = Math.max(0, Math.min(ttsItems.length - 1, n));
+      try{ synth.cancel(); }catch(e){} ttsState = 'playing'; ttsUI(); ttsSpeak(n);
+    }
+  }
+  // click / drag the track to seek (recorded audio)
+  function ttsSeekFromEvent(e){
+    if(ttsMode !== 'audio' || !audioEl.duration || !ttsTrack) return;
+    var r = ttsTrack.getBoundingClientRect();
+    var cx = (e.touches && e.touches[0]) ? e.touches[0].clientX : e.clientX;
+    var ratio = Math.max(0, Math.min(1, (cx - r.left) / r.width));
+    try{ audioEl.currentTime = ratio * audioEl.duration; }catch(e2){}
+    ttsAudioSync();
   }
 
   function ttsClearHL(){ for(var i = 0; i < ttsItems.length; i++) ttsItems[i].classList.remove('tts-speaking'); }
@@ -386,11 +430,23 @@
   function ttsUI(){
     if(!ttsEl) return;
     var playing = ttsState === 'playing', active = playing || ttsState === 'paused';
+    var audioMode = ttsMode === 'audio';
     ttsPlay.textContent = playing ? '⏸ Pause' : (ttsState === 'paused' ? '▶ Resume' : '🔊 Listen');
-    ttsPlay.setAttribute('aria-label', playing ? 'Pause reading' : (ttsState === 'paused' ? 'Resume reading' : 'Listen to this chapter'));
-    ttsStop.hidden = !active; ttsRateBtn.hidden = !active; ttsVoiceSel.hidden = !active || ttsMode === 'audio';
+    ttsPlay.setAttribute('aria-label', playing ? 'Pause' : (ttsState === 'paused' ? 'Resume' : 'Listen to this chapter'));
+    ttsStop.hidden = !active; ttsRateBtn.hidden = !active;
+    ttsBackBtn.hidden = !active; ttsFwdBtn.hidden = !active;
+    ttsVoiceSel.hidden = !active || audioMode;
+    if(ttsBar) ttsBar.hidden = !active || !audioMode;     // seek bar only where we have a duration
+    if(ttsNow){
+      ttsNow.hidden = !active;
+      if(active){
+        var id = (document.querySelector('.chapter.active') || {}).id, n = num(id);
+        ttsNow.innerHTML = 'Now playing &middot; <b>' + (n ? esc(n) + ' &middot; ' : '') + esc(TITLES[id] || '') + '</b>';
+      }
+    }
     ttsRateBtn.textContent = TTS_RATES[ttsRateI] + '×';
     ttsEl.classList.toggle('on', active);
+    document.body.classList.toggle('tts-active', active);
   }
   function ttsLoadVoices(){
     if(!synth || !ttsVoiceSel) return;
@@ -413,6 +469,16 @@
     if('onvoiceschanged' in synth) synth.addEventListener('voiceschanged', ttsLoadVoices);
     ttsPlay.addEventListener('click', ttsTogglePlay);
     ttsStop.addEventListener('click', ttsStopAndBookmark);
+    if(ttsBackBtn) ttsBackBtn.addEventListener('click', function(){ ttsSkip(-15); });
+    if(ttsFwdBtn)  ttsFwdBtn.addEventListener('click', function(){ ttsSkip(15); });
+    if(ttsTrack){
+      var seeking = false;
+      ttsTrack.addEventListener('pointerdown', function(e){ seeking = true; try{ ttsTrack.setPointerCapture(e.pointerId); }catch(_){} ttsSeekFromEvent(e); });
+      ttsTrack.addEventListener('pointermove', function(e){ if(seeking) ttsSeekFromEvent(e); });
+      ttsTrack.addEventListener('pointerup', function(){ seeking = false; });
+      ttsTrack.addEventListener('click', ttsSeekFromEvent);
+      ttsTrack.addEventListener('keydown', function(e){ if(e.key === 'ArrowLeft'){ e.preventDefault(); ttsSkip(-5); } else if(e.key === 'ArrowRight'){ e.preventDefault(); ttsSkip(5); } });
+    }
     ttsRateBtn.addEventListener('click', function(){ ttsRateI = (ttsRateI + 1) % TTS_RATES.length; try{ localStorage.setItem('fbtb:rate', ttsRateI); }catch(e){} ttsUI(); if(ttsState === 'playing'){ if(ttsMode === 'audio'){ audioEl.playbackRate = TTS_RATES[ttsRateI]; } else { try{ synth.cancel(); }catch(e){} ttsSpeak(ttsIdx); } } });
     ttsVoiceSel.addEventListener('change', function(){ for(var k = 0; k < ttsVoices.length; k++){ if(ttsVoices[k].name === ttsVoiceSel.value){ ttsVoice = ttsVoices[k]; break; } } try{ localStorage.setItem('fbtb:voice', ttsVoiceSel.value); }catch(e){} if(ttsState === 'playing'){ try{ synth.cancel(); }catch(e){} ttsSpeak(ttsIdx); } });
     // remember the last text selection inside the open chapter (survives clicking the Listen button)
@@ -424,9 +490,18 @@
       }
     });
     if(audioEl){
-      audioEl.addEventListener('loadedmetadata', function(){ if(ttsPendingSeek != null){ try{ audioEl.currentTime = ttsPendingSeek; }catch(e){} ttsPendingSeek = null; } });
+      audioEl.addEventListener('loadedmetadata', function(){ if(ttsPendingSeek != null){ try{ audioEl.currentTime = ttsPendingSeek; }catch(e){} ttsPendingSeek = null; } ttsProgress(); });
       audioEl.addEventListener('timeupdate', ttsAudioSync);
-      audioEl.addEventListener('ended', function(){ ttsClearHL(); ttsState = 'idle'; ttsMode = 'speech'; ttsIdx = -1; ttsUI(); });
+      // continuous playback: roll into the next chapter when one finishes
+      audioEl.addEventListener('ended', function(){
+        ttsClearHL();
+        var i = order.indexOf((document.querySelector('.chapter.active') || {}).id);
+        if(ttsAutoAdvance && i >= 0 && i < order.length - 1){
+          ttsAdvancing = true; show(order[i + 1]); ttsAdvancing = false;
+          startReadAloud(0); return;
+        }
+        ttsState = 'idle'; ttsMode = 'speech'; ttsIdx = -1; ttsUI();
+      });
       audioEl.addEventListener('error', function(){ if(ttsMode === 'audio'){ ttsMode = 'speech'; toast('Recorded audio unavailable — using device voice'); startReadAloud(undefined, true); } });
     }
     addEventListener('beforeunload', function(){ try{ synth.cancel(); }catch(e){} });
