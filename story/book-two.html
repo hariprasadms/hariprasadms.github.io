@@ -7,30 +7,30 @@ layout: none
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Book Two — Working Title</title>
-<meta name="description" content="Book two — a one-line description for search and social previews.">
+<title>Wonders Are Real</title>
+<meta name="description" content="Wonders Are Real — a story by Hariprasad Srinivas.">
 <link rel="canonical" href="https://hariprasadms.github.io/story/book-two/">
 <link rel="icon" type="image/svg+xml" href="/company-logo.svg">
 <link rel="alternate icon" href="/company-logo.jpg">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Hari Prasad">
-<meta property="og:title" content="Book Two — Working Title">
-<meta property="og:description" content="Book two — a one-line description.">
+<meta property="og:title" content="Wonders Are Real">
+<meta property="og:description" content="Wonders Are Real — a story by Hariprasad Srinivas.">
 <meta property="og:url" content="https://hariprasadms.github.io/story/book-two/">
-<meta property="og:image" content="https://hariprasadms.github.io/story/book-two/cover.jpg">
+<meta property="og:image" content="https://hariprasadms.github.io/story/book-two/wonders_are_real_2.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Book Two — Working Title">
-<meta name="twitter:description" content="Book two — a one-line description.">
-<meta name="twitter:image" content="https://hariprasadms.github.io/story/book-two/cover.jpg">
+<meta name="twitter:title" content="Wonders Are Real">
+<meta name="twitter:description" content="Wonders Are Real — a story by Hariprasad Srinivas.">
+<meta name="twitter:image" content="https://hariprasadms.github.io/story/book-two/wonders_are_real_2.jpg">
 {% assign chapters = site.book_two | sort: 'order' %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Book",
-  "name": "Book Two — Working Title",
+  "name": "Wonders Are Real",
   "author": { "@type": "Person", "name": "Hariprasad Srinivas" },
   "url": "https://hariprasadms.github.io/story/book-two/",
-  "image": "https://hariprasadms.github.io/story/book-two/cover.jpg",
+  "image": "https://hariprasadms.github.io/story/book-two/wonders_are_real_2.jpg",
   "inLanguage": "en",
   "hasPart": [{% for c in chapters %}{ "@type": "Chapter", "position": {{ c.order }}, "name": {{ c.title | jsonify }} }{% unless forloop.last %}, {% endunless %}{% endfor %}]
 }
@@ -51,7 +51,7 @@ layout: none
   <div class="nav-top">
     <button class="nav-close" id="navClose" aria-label="Close chapters">&times;</button>
     <a class="book-back" href="/">&larr; Back to portfolio</a>
-    <div class="book-title">Book <span class="bugs">Two</span></div>
+    <div class="book-title"><span class="bugs">Wonders</span> Are <span class="brill">Real</span></div>
     <div class="book-byline">by Hariprasad Srinivas</div>
   </div>
   <nav class="book-toc">
@@ -112,8 +112,7 @@ layout: none
   {% endfor %}
 
   <footer>
-    Book Two · © 2026 Hariprasad Srinivas · <a href="https://qatools.dev">qatools.dev</a> · <a href="https://promptqa.dev">promptqa.dev</a>
-    <span class="foot-note">A work of fiction. Names, characters, and events are imaginary; any resemblance to real people, companies, or events is coincidental.</span>
+    Wonders Are Real · © 2026 Hariprasad Srinivas · <a href="https://qatools.dev">qatools.dev</a> · <a href="https://promptqa.dev">promptqa.dev</a>
   </footer>
 </main>
 
