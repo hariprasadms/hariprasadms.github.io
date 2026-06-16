@@ -294,6 +294,30 @@
     display:block; margin-bottom:.2rem;
   }
 
+  /* last-page feedback: star rating + contact the author */
+  .feedback{
+    margin-top:2.6rem; text-align:center;
+    border-top:1px solid var(--line); padding-top:1.9rem;
+  }
+  .fb-q{ font-family:var(--slab); font-weight:600; color:var(--ink); margin-bottom:.7rem; }
+  .stars{ display:inline-flex; gap:.3rem; }
+  .star{
+    background:none; border:none; cursor:pointer; padding:.1rem;
+    font-size:2rem; line-height:1; color:var(--line);
+    transition:transform .12s ease, color .12s ease;
+  }
+  .star:hover{ transform:scale(1.18); }
+  .star.on{ color:var(--amber); }
+  .star:focus-visible{ outline:2px solid var(--pass); outline-offset:2px; border-radius:4px; }
+  .fb-thanks{ color:var(--pass); font-family:var(--mono); font-size:.84rem; margin-top:.6rem; }
+  .fb-contact{
+    display:inline-flex; align-items:center; gap:.45rem; margin-top:1.1rem;
+    font-family:var(--mono); font-size:.82rem; color:var(--ink); text-decoration:none;
+    border:1px solid var(--line); border-radius:999px; padding:.55rem 1rem; background:#fff;
+    transition:border-color .15s ease, color .15s ease, transform .15s ease;
+  }
+  .fb-contact:hover{ border-color:var(--pass); color:var(--pass); transform:translateY(-1px); }
+
   /* margin annotation — like a code comment */
   .note{
     border-left:3px solid var(--pass);
