@@ -105,6 +105,7 @@ def main():
     cid = sys.argv[1] if len(sys.argv) > 1 else "ch1"
     src = sys.argv[2]
     voice_id = sys.argv[3] if len(sys.argv) > 3 else DEFAULT_VOICE_ID
+    speed = float(sys.argv[4]) if len(sys.argv) > 4 else 1.0   # 0.7 slow .. 1.2 fast
     key = open(os.path.join(ROOT, ".elevenlabs.key")).read().strip()
 
     title, subtitle, body = load_chapter(src)
@@ -128,7 +129,7 @@ def main():
         print("  [%2d] %s" % (i, (e[:64] + ("…" if len(e) > 64 else ""))))
 
     payload = json.dumps({"text": joined, "model_id": MODEL,
-                          "voice_settings": {"stability": 0.45, "similarity_boost": 0.8, "style": 0.0, "use_speaker_boost": True}}).encode()
+                          "voice_settings": {"stability": 0.45, "similarity_boost": 0.8, "style": 0.0, "use_speaker_boost": True, "speed": speed}}).encode()
     req = urllib.request.Request(
         "https://api.elevenlabs.io/v1/text-to-speech/%s/with-timestamps" % voice_id,
         data=payload, headers={"xi-api-key": key, "Content-Type": "application/json"})
