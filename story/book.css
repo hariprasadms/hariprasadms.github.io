@@ -316,7 +316,9 @@
     border:1px solid var(--line); border-radius:999px; padding:.55rem 1rem; background:#fff;
     transition:border-color .15s ease, color .15s ease, transform .15s ease;
   }
-  .fb-contact:hover{ border-color:var(--pass); color:var(--pass); transform:translateY(-1px); }
+  .fb-contact:hover{ border-color:#0A66C2; color:#0A66C2; transform:translateY(-1px); }
+  .fb-ic{ display:inline-flex; align-items:center; gap:.2rem; }
+  .fb-ic svg{ display:block; }
 
   /* margin annotation — like a code comment */
   .note{
