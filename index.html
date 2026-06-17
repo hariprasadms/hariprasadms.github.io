@@ -833,6 +833,9 @@
             color: var(--electric-cyan);
         }
         .book-card:hover .book-cta { text-decoration: underline; text-underline-offset: 3px; }
+        .book-ctas { display: flex; flex-wrap: wrap; gap: 0.5rem 1.3rem; margin-top: 1rem; }
+        .book-ctas .book-cta { margin-top: 0; }
+        .book-cta-alt { color: #E8B43A; }
         /* placeholder for upcoming titles */
         .book-soon {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -1681,12 +1684,12 @@
             </p>
 
             <div class="books-grid">
-                <a class="book-card" href="/story/from-bugs-to-brilliance/">
-                    <div class="book-cover">
+                <div class="book-card">
+                    <a class="book-cover" href="/story/from-bugs-to-brilliance/" aria-label="Read From Bugs to Brilliance">
                         <img src="/story/cover.jpg" alt="From Bugs to Brilliance book cover" loading="lazy">
-                    </div>
+                    </a>
                     <div class="book-info">
-                        <span class="book-badge">✦ Live · 10 Chapters</span>
+                        <span class="book-badge">✦ Live · 10 Chapters · Audiobook</span>
                         <h3 class="book-title">From Bugs to Brilliance</h3>
                         <p class="book-tagline">
                             A software engineer's journey to become a QA leader with the power of AI —
@@ -1697,9 +1700,12 @@
                             <span class="tech-tag">Testing</span>
                             <span class="tech-tag">AI &amp; Quality</span>
                         </div>
-                        <span class="book-cta">Read the book →</span>
+                        <div class="book-ctas">
+                            <a class="book-cta" href="/story/from-bugs-to-brilliance/">Read &amp; listen on site →</a>
+                            <a class="book-cta book-cta-alt" href="https://elevenreader.io/audiobooks/from-bugs-to-brilliance-audiobook/3Ty4XgO76jABXJuCtwr2" target="_blank" rel="noopener noreferrer">🎧 Audiobook on ElevenReader →</a>
+                        </div>
                     </div>
-                </a>
+                </div>
 
                 <div class="book-soon">
                     <span class="bs-icon">✍️</span>
