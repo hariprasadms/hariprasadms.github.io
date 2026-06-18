@@ -17,3 +17,6 @@ _site/
 
 # build artifacts (generated EPUB)
 dist/
+
+# python tooling cache
+__pycache__/
