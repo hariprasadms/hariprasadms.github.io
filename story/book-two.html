@@ -1,0 +1,122 @@
+---
+permalink: /story/book-two/
+layout: none
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wonders Are Real</title>
+<meta name="description" content="Wonders Are Real — a story by Hariprasad Srinivas.">
+<link rel="canonical" href="https://hariprasadms.github.io/story/book-two/">
+<link rel="icon" type="image/svg+xml" href="/company-logo.svg">
+<link rel="alternate icon" href="/company-logo.jpg">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Hari Prasad">
+<meta property="og:title" content="Wonders Are Real">
+<meta property="og:description" content="Wonders Are Real — a story by Hariprasad Srinivas.">
+<meta property="og:url" content="https://hariprasadms.github.io/story/book-two/">
+<meta property="og:image" content="https://hariprasadms.github.io/story/book-two/wonders_are_real_2.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Wonders Are Real">
+<meta name="twitter:description" content="Wonders Are Real — a story by Hariprasad Srinivas.">
+<meta name="twitter:image" content="https://hariprasadms.github.io/story/book-two/wonders_are_real_2.jpg">
+{% assign chapters = site.book_two | sort: 'order' %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Book",
+  "name": "Wonders Are Real",
+  "author": { "@type": "Person", "name": "Hariprasad Srinivas" },
+  "url": "https://hariprasadms.github.io/story/book-two/",
+  "image": "https://hariprasadms.github.io/story/book-two/wonders_are_real_2.jpg",
+  "inLanguage": "en",
+  "hasPart": [{% for c in chapters %}{ "@type": "Chapter", "position": {{ c.order }}, "name": {{ c.title | jsonify }} }{% unless forloop.last %}, {% endunless %}{% endfor %}]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/story/book.css?v={{ site.time | date: '%s' }}">
+</head>
+<body>
+
+<a href="#reader" class="skip-link">Skip to the story</a>
+<div id="progress" aria-hidden="true"></div>
+
+<button class="book-menu-btn" id="menuBtn" aria-label="Open chapters">&#9776; Chapters</button>
+
+<aside class="book-nav" id="bookNav" aria-label="Chapters">
+  <div class="nav-top">
+    <button class="nav-close" id="navClose" aria-label="Close chapters">&times;</button>
+    <a class="book-back" href="/">&larr; Back to portfolio</a>
+    <div class="book-title"><span class="bugs">Wonders</span> Are <span class="brill">Real</span></div>
+    <div class="book-byline">by Hariprasad Srinivas</div>
+  </div>
+  <nav class="book-toc">
+    <a data-go="cover"><span class="n">&#9670;</span> Cover</a>
+    {% for c in chapters %}
+    <a data-go="{{ c.cid }}"><span class="n">{% if c.num != '' %}{{ c.num }}{% else %}&#9656;{% endif %}</span> {{ c.title }}</a>
+    {% endfor %}
+  </nav>
+</aside>
+<div class="nav-scrim" id="navScrim"></div>
+
+<nav class="pager" aria-label="Chapter navigation">
+  <button class="pg pg-prev" id="pgPrev">
+    <span class="pg-dir">&#8249; Previous</span>
+    <span class="pg-ttl" id="pgPrevT"></span>
+  </button>
+  <button class="pg pg-next" id="pgNext">
+    <span class="pg-dir">Next &#8250;</span>
+    <span class="pg-ttl" id="pgNextT"></span>
+  </button>
+</nav>
+
+<div class="bm-toast" id="bmToast" role="status" aria-live="polite"></div>
+<audio id="bookAudio" preload="none"></audio>
+
+<div class="tts" id="tts" aria-label="Listen to the story">
+  <div class="tts-now" id="ttsNow" aria-live="polite" hidden></div>
+  <div class="tts-controls">
+    <button class="tts-btn tts-icon" id="ttsBack" aria-label="Back 15 seconds" title="Back 15s" hidden>&#8630;<small>15</small></button>
+    <button class="tts-btn tts-main" id="ttsPlay" aria-label="Listen to this chapter">&#128266; Listen</button>
+    <button class="tts-btn tts-icon" id="ttsFwd" aria-label="Forward 15 seconds" title="Forward 15s" hidden><small>15</small>&#8631;</button>
+    <button class="tts-btn" id="ttsRate" aria-label="Reading speed" title="Speed" hidden>1&times;</button>
+    <select class="tts-voice" id="ttsVoice" aria-label="Choose voice" hidden></select>
+    <button class="tts-btn tts-close" id="ttsStop" aria-label="Stop listening" title="Stop" hidden>&times;</button>
+  </div>
+  <div class="tts-bar" id="ttsBar" hidden>
+    <span class="tts-time" id="ttsCur">0:00</span>
+    <div class="tts-track" id="ttsTrack" role="slider" aria-label="Seek" tabindex="0"><div class="tts-fill" id="ttsFill"></div></div>
+    <span class="tts-time" id="ttsDur">0:00</span>
+  </div>
+</div>
+
+<main class="book-reader" id="reader" tabindex="-1">
+
+  {% include book-two-cover.html %}
+
+  {% for c in chapters %}
+  <section class="chapter" id="{{ c.cid }}" data-num="{{ c.num }}" data-title="{{ c.title }}" data-audio="{{ c.audio }}">
+    <div class="reading">
+      <div class="chapter-break">
+        {% if c.num != '' %}<span class="cb-num">Chapter {{ c.num }}</span>{% endif %}
+        <h2 class="cb-title">{{ c.title }}</h2>
+        <p class="cb-sub">{{ c.subtitle }}</p>
+      </div>
+      {{ c.content }}
+    </div>
+  </section>
+  {% endfor %}
+
+  <footer>
+    Wonders Are Real · © 2026 Hariprasad Srinivas · <a href="https://qatools.dev">qatools.dev</a> · <a href="https://promptqa.dev">promptqa.dev</a>
+  </footer>
+</main>
+
+<script src="/story/book.js?v={{ site.time | date: '%s' }}"></script>
+
+</body>
+</html>

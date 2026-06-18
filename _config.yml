@@ -38,7 +38,9 @@ collections:
     output: true
     permalink: /blog/:year/:month/:day/:title/
   chapters:
-    output: false   # book chapters: assembled into the story page, not standalone
+    output: false   # book 1 chapters: assembled into the story page, not standalone
+  book_two:
+    output: false   # book 2 chapters: assembled into /story/book-two/, not standalone
 
 # Exclude from processing
 exclude:
