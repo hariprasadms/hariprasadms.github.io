@@ -20,3 +20,6 @@ dist/
 
 # python tooling cache
 __pycache__/
+
+# python venv for docx builder
+.venv-docx/
