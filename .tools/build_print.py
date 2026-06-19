@@ -16,6 +16,43 @@ from build_epub import load_chapter, convert, META, DISCLAIMER   # reuse parsing
 OUT = os.path.join(ROOT, "dist", "from-bugs-to-brilliance-print.html")
 TRIM = ("5in", "8in")   # KDP trim size (smaller trim => more pages => printable spine at 100+)
 
+# --- editable front/back matter copy ---
+DEDICATION = ("For everyone who has ever whispered “but it works on my machine” — "
+              "and stayed to find out why it didn’t.")
+ACK = [
+    "This book grew out of years of questions, mistakes, and the patient people who turned them into lessons.",
+    "My thanks to the mentors who always asked the better question, to the teams who let me break things and learn in the open, and to the testing community whose curiosity never runs dry.",
+    "To my family, for the quiet support that made the writing possible — thank you.",
+    "And to you, for reading. I hope Arun’s journey leaves you a little more curious than it found you.",
+]
+GLOSSARY = [
+    ("Accessibility", "Making software usable by people with disabilities — for example, those using a screen reader or only a keyboard."),
+    ("API", "A direct doorway into a system that other programs use instead of the screen. (“Application Programming Interface.”)"),
+    ("Assertion", "The line in a test that decides what counts as a pass. Without it, a test only proves the code didn’t crash."),
+    ("Boundary testing", "Checking the values right at a limit — like 0, 1, 50 and 51 — where bugs love to hide."),
+    ("Continuous Integration (CI)", "Automatically building and testing every code change as soon as it is added, so problems surface early."),
+    ("Flaky test", "A test that passes sometimes and fails other times without the code changing. It quietly destroys trust."),
+    ("Functional testing", "Checking whether a feature does what it should — “does it work?”"),
+    ("Injection", "An attack that sneaks commands into a form or field to trick the system into doing something it shouldn’t."),
+    ("JSON", "A simple text format programs use to send data back and forth."),
+    ("Load test", "Checking that software stays fast and stable under a normal busy number of users."),
+    ("Negative testing", "Checking that software fails safely when given bad or unexpected input."),
+    ("Non-functional testing", "Checking how well software works — speed, scale, security and more — not just whether it works."),
+    ("Performance testing", "Making sure software stays fast and steady under real-world use (includes load and stress tests)."),
+    ("Positive testing", "Checking that software behaves correctly when given good, expected input."),
+    ("Race condition", "A bug that appears only when two things happen at the same moment, in the wrong order."),
+    ("Regression testing", "Re-checking that features which used to work still work after a change."),
+    ("Reliability", "Staying usable even when a part it depends on breaks — failing gently instead of badly."),
+    ("Scalability", "The ability to keep working smoothly as the number of users grows."),
+    ("Screen reader", "Software that reads the screen aloud for people who cannot see it."),
+    ("Security testing", "Testing software the way an attacker would, to find ways it can be misused."),
+    ("Smoke test", "A small, quick set of checks for the most important things. If it fails, stop — the building is on fire."),
+    ("Stress test", "Pushing software past its normal limits to learn where it breaks."),
+    ("Test automation", "A program that runs the checks for you, instead of a person clicking by hand."),
+    ("Test case", "One single check."),
+    ("Test suite", "A group of test cases run together."),
+]
+
 def embed_images(frag):
     def repl(m):
         base = os.path.basename(m.group(1))
@@ -30,11 +67,12 @@ PRINT_CSS = """
 @page {
   size: 5in 8in;
   margin: 0.7in 0.6in 0.75in 0.6in;
-  @top-center { content: "From Bugs to Brilliance"; font-family: Georgia, serif; font-style: italic; font-size: 8.5pt; color: #888; }
   @bottom-center { content: counter(page); font-family: Georgia, serif; font-size: 9.5pt; color: #555; }
 }
+/* alternating running heads: book title on left pages, chapter title on right */
+@page :left  { @top-center { content: "From Bugs to Brilliance"; font-family: Georgia, serif; font-style: italic; font-size: 8.5pt; color: #888; } }
+@page :right { @top-center { content: string(chaptitle); font-family: Georgia, serif; font-style: italic; font-size: 8.5pt; color: #888; } }
 @page :first { @top-center { content: none; } @bottom-center { content: none; } }
-@page chapter:first { @top-center { content: none; } }
 html { font-size: 12.75pt; }
 body { font-family: 'Spectral', Georgia, 'Times New Roman', serif; line-height: 1.82; text-align: left; color: #16181d; margin: 0; }
 p { margin: 0 0 0.7em; orphans: 2; widows: 2; }
@@ -58,7 +96,7 @@ em { font-style: italic; }
 /* chapter head */
 .chapter-head { text-align: center; margin: 8% 0 2em; }
 .cb-num { font-variant: small-caps; letter-spacing: 0.12em; font-size: 10pt; color: #2a6f4e; }
-.cb-title { font-family: Georgia, serif; font-size: 19pt; line-height: 1.15; margin: 0.3em 0; }
+.cb-title { font-family: Georgia, serif; font-size: 19pt; line-height: 1.15; margin: 0.3em 0; string-set: chaptitle content(); }
 .cb-sub { font-style: italic; color: #555; font-size: 11pt; }
 .page-marker { display: none; }   /* web scene labels ("Page N · ...") clash with real page numbers in print */
 .drop::first-letter { font-size: 3em; font-weight: bold; float: left; line-height: 0.8; padding: 0.06em 0.08em 0 0; color: #2a6f4e; }
@@ -86,6 +124,26 @@ em { font-style: italic; }
 .ch-illus img { max-width: 78%; height: auto; }
 /* the on-page rating/contact widget is web-only — never print it */
 .feedback { display: none !important; }
+/* scene-break divider between page-sections within a chapter */
+.page + .page::before { content: "\2042"; display: block; text-align: center; color: #999; font-size: 12pt; letter-spacing: 0.35em; margin: 0.3em 0 1.2em; }
+/* dedication */
+.dedication { text-align: center; margin-top: 45%; font-style: italic; color: #444; }
+.dedication p { font-size: 12.5pt; line-height: 1.7; }
+/* table of contents */
+.toc h1 { font-family: Georgia, serif; font-size: 17pt; text-align: center; margin: 8% 0 1.8em; }
+.toc ol { list-style: none; margin: 0; padding: 0; }
+.toc li { margin: 0.7em 0; }
+.toc a { display: flex; align-items: baseline; text-decoration: none; color: #16181d; font-size: 11.5pt; }
+.toc a .ti { flex: 0 1 auto; }
+.toc a .lead { flex: 1 1 auto; border-bottom: 1px dotted #c0c0c0; margin: 0 0.4em; transform: translateY(-0.18em); }
+.toc a::after { content: target-counter(attr(href url), page); flex: 0 0 auto; color: #555; }
+.toc a.toc-num .ti::before { content: "Chapter " attr(data-num) "  \00b7  "; color: #2a6f4e; }
+/* glossary */
+.glossary dl { margin: 0; }
+.glossary dt { font-weight: 700; font-family: Georgia, serif; margin-top: 0.95em; break-after: avoid; }
+.glossary dd { margin: 0.1em 0 0; }
+/* acknowledgements */
+.acknowledgements p { margin: 0 0 0.7em; }
 """
 
 def main():
@@ -110,6 +168,18 @@ def main():
                  'prior written permission of the author, except for brief quotations in a review.</p>'
                  '</section>'
                  % (html.escape(META["title"]), html.escape(META["author"]), html.escape(DISCLAIMER)))
+    # dedication
+    parts.append('<section class="frontmatter dedication"><p>%s</p></section>' % html.escape(DEDICATION))
+    # table of contents (page numbers resolved by Paged.js target-counter)
+    toc_items = []
+    for ch in chapters:
+        cls = ' class="toc-num"' if ch["num"] else ''
+        dn = ' data-num="%s"' % html.escape(ch["num"]) if ch["num"] else ''
+        toc_items.append('<li><a href="#toc-%s"%s%s><span class="ti">%s</span>'
+                         '<span class="lead"></span></a></li>'
+                         % (html.escape(ch["cid"]), cls, dn, html.escape(ch["title"])))
+    parts.append('<section class="frontmatter toc"><h1>Contents</h1><ol>%s</ol></section>'
+                 % "".join(toc_items))
     # chapters
     for ch in chapters:
         frag, _ = convert(ch["body"])
@@ -121,7 +191,19 @@ def main():
         if ch["subtitle"]:
             head += '<p class="cb-sub">%s</p>' % html.escape(ch["subtitle"])
         head += '</header>'
-        parts.append('<section class="chapter">%s%s</section>' % (head, frag))
+        parts.append('<section class="chapter" id="toc-%s">%s%s</section>'
+                     % (html.escape(ch["cid"]), head, frag))
+
+    # back matter: glossary
+    gloss = "".join('<dt>%s</dt><dd>%s</dd>' % (html.escape(t), html.escape(d)) for t, d in GLOSSARY)
+    parts.append('<section class="chapter glossary"><header class="chapter-head">'
+                 '<h1 class="cb-title">The Testing Ideas in This Book</h1>'
+                 '<p class="cb-sub">A plain-English glossary, in alphabetical order.</p></header>'
+                 '<dl>%s</dl></section>' % gloss)
+    # back matter: acknowledgements
+    ack = "".join('<p>%s</p>' % html.escape(p) for p in ACK)
+    parts.append('<section class="chapter acknowledgements"><header class="chapter-head">'
+                 '<h1 class="cb-title">Acknowledgements</h1></header>%s</section>' % ack)
 
     # back matter: about the author (LinkedIn only, with logo)
     from build_epub import BIO
