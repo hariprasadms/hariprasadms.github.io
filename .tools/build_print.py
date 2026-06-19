@@ -14,7 +14,7 @@ sys.path.insert(0, HERE)
 from build_epub import load_chapter, convert, META, DISCLAIMER   # reuse parsing
 
 OUT = os.path.join(ROOT, "dist", "from-bugs-to-brilliance-print.html")
-TRIM = ("5in", "8in")   # KDP trim size (smaller trim => more pages => printable spine at 100+)
+TRIM = ("5.5in", "8.5in")   # KDP trim size
 
 # --- editable front/back matter copy ---
 DEDICATION = ("For everyone who has ever whispered “but it works on my machine” — "
@@ -65,8 +65,8 @@ def embed_images(frag):
 
 PRINT_CSS = """
 @page {
-  size: 5in 8in;
-  margin: 0.7in 0.6in 0.75in 0.6in;
+  size: 5.5in 8.5in;
+  margin: 0.75in 0.65in 0.8in 0.65in;
   @bottom-center { content: counter(page); font-family: Georgia, serif; font-size: 9.5pt; color: #555; }
 }
 /* alternating running heads: book title on left pages, chapter title on right */
