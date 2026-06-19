@@ -14,7 +14,7 @@ sys.path.insert(0, HERE)
 from build_epub import load_chapter, convert, META, DISCLAIMER   # reuse parsing
 
 OUT = os.path.join(ROOT, "dist", "from-bugs-to-brilliance-print.html")
-TRIM = ("5.5in", "8.5in")   # KDP trim size
+TRIM = ("5in", "8in")   # KDP trim size (smaller trim => more pages => printable spine at 100+)
 
 def embed_images(frag):
     def repl(m):
@@ -28,19 +28,23 @@ def embed_images(frag):
 
 PRINT_CSS = """
 @page {
-  size: 5.5in 8.5in;
-  margin: 0.75in 0.65in 0.8in 0.65in;
+  size: 5in 8in;
+  margin: 0.7in 0.6in 0.75in 0.6in;
   @top-center { content: "From Bugs to Brilliance"; font-family: Georgia, serif; font-style: italic; font-size: 8.5pt; color: #888; }
   @bottom-center { content: counter(page); font-family: Georgia, serif; font-size: 9.5pt; color: #555; }
 }
 @page :first { @top-center { content: none; } @bottom-center { content: none; } }
 @page chapter:first { @top-center { content: none; } }
-html { font-size: 11.2pt; }
-body { font-family: 'Spectral', Georgia, 'Times New Roman', serif; line-height: 1.55; text-align: left; color: #16181d; margin: 0; }
-p { margin: 0 0 0.6em; orphans: 2; widows: 2; }
+html { font-size: 12.75pt; }
+body { font-family: 'Spectral', Georgia, 'Times New Roman', serif; line-height: 1.82; text-align: left; color: #16181d; margin: 0; }
+p { margin: 0 0 0.7em; orphans: 2; widows: 2; }
 em { font-style: italic; }
-.frontmatter, .chapter { break-before: page; }
+.frontmatter { break-before: page; }
+.chapter { break-before: recto; }   /* chapters open on a right-hand page (adds tidy blank backs) */
 /* title + copyright pages */
+.halftitle { text-align: center; margin-top: 40%; }
+.halftitle h2 { font-family: Georgia, serif; font-weight: 400; font-size: 17pt; letter-spacing: 0.02em; color: #444; }
+.aboutpage .about-links { font-variant: small-caps; letter-spacing: 0.05em; color: #2a6f4e; margin-top: 1.2em; }
 .titlepage { text-align: center; margin-top: 28%; }
 .titlepage h1 { font-size: 26pt; line-height: 1.1; margin: 0; font-family: Georgia, serif; }
 .titlepage .sub { font-style: italic; color: #555; margin: 0.7em 0 3em; }
@@ -85,6 +89,9 @@ def main():
     chapters = sorted((load_chapter(f) for f in files), key=lambda c: c["order"])
 
     parts = []
+    # half-title page (title only)
+    parts.append('<section class="frontmatter halftitle"><h2>%s</h2></section>'
+                 % html.escape(META["title"]))
     # title page
     parts.append('<section class="frontmatter titlepage"><h1>%s</h1>'
                  '<p class="sub">%s</p><p class="author">%s</p></section>'
@@ -111,6 +118,13 @@ def main():
             head += '<p class="cb-sub">%s</p>' % html.escape(ch["subtitle"])
         head += '</header>'
         parts.append('<section class="chapter">%s%s</section>' % (head, frag))
+
+    # back matter: about the author
+    from build_epub import BIO, CONNECT
+    parts.append('<section class="chapter aboutpage"><header class="chapter-head">'
+                 '<h1 class="cb-title">About the Author</h1></header>'
+                 '<p>%s</p><p class="about-links">%s</p></section>'
+                 % (html.escape(BIO), html.escape(CONNECT)))
 
     doc = ('<!DOCTYPE html>\n<html lang="en"><head><meta charset="utf-8"/>\n'
            '<title>%s — print interior</title>\n'
