@@ -130,16 +130,18 @@ def add_runs(p, runs, italic=False, bold=False, mono=False, size=None, color=Non
         if size: r.font.size = Pt(size)
         if color: r.font.color.rgb = color
 
-def field(paragraph, instr):
+def field(paragraph, instr, placeholder="—"):
     """Insert a Word field (e.g. PAGE, or a TOC) into a paragraph."""
-    run = paragraph.add_run()
-    for t, txt in (("begin", None), ("instrText", instr), ("separate", None), ("text", "—"), ("end", None)):
-        el = OxmlElement("w:" + ("fldChar" if t in ("begin", "separate", "end") else t))
-        if t in ("begin", "separate", "end"):
-            el.set(qn("w:fldCharType"), t)
-        else:
-            el.set(qn("xml:space"), "preserve"); el.text = txt
-        run._r.append(el)
+    r = paragraph.add_run()._r
+    def fld(tp):
+        e = OxmlElement("w:fldChar"); e.set(qn("w:fldCharType"), tp); return e
+    r.append(fld("begin"))
+    it = OxmlElement("w:instrText"); it.set(qn("xml:space"), "preserve"); it.text = " %s " % instr
+    r.append(it)
+    r.append(fld("separate"))
+    t = OxmlElement("w:t"); t.set(qn("xml:space"), "preserve"); t.text = placeholder
+    r.append(t)
+    r.append(fld("end"))
 
 def render(doc, ops):
     for op in ops:
