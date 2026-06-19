@@ -137,7 +137,6 @@ em { font-style: italic; }
 .toc a .ti { flex: 0 1 auto; }
 .toc a .lead { flex: 1 1 auto; border-bottom: 1px dotted #c0c0c0; margin: 0 0.4em; transform: translateY(-0.18em); }
 .toc a::after { content: target-counter(attr(href url), page); flex: 0 0 auto; color: #555; }
-.toc a.toc-num .ti::before { content: "Chapter " attr(data-num) "  \00b7  "; color: #2a6f4e; }
 /* glossary */
 .glossary dl { margin: 0; }
 .glossary dt { font-weight: 700; font-family: Georgia, serif; margin-top: 0.95em; break-after: avoid; }
@@ -173,11 +172,10 @@ def main():
     # table of contents (page numbers resolved by Paged.js target-counter)
     toc_items = []
     for ch in chapters:
-        cls = ' class="toc-num"' if ch["num"] else ''
-        dn = ' data-num="%s"' % html.escape(ch["num"]) if ch["num"] else ''
-        toc_items.append('<li><a href="#toc-%s"%s%s><span class="ti">%s</span>'
+        label = (("Chapter %s · " % ch["num"]) if ch["num"] else "") + ch["title"]
+        toc_items.append('<li><a href="#toc-%s"><span class="ti">%s</span>'
                          '<span class="lead"></span></a></li>'
-                         % (html.escape(ch["cid"]), cls, dn, html.escape(ch["title"])))
+                         % (html.escape(ch["cid"]), html.escape(label)))
     parts.append('<section class="frontmatter toc"><h1>Contents</h1><ol>%s</ol></section>'
                  % "".join(toc_items))
     # chapters
