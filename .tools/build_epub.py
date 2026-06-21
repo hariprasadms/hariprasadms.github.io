@@ -27,7 +27,7 @@ META = {
 DISCLAIMER = ("This book is a work of fiction. The names, characters, companies, places, and events are "
               "either products of the author's imagination or used in a fictitious way. Any resemblance to "
               "actual people — living or dead — real companies, or real events is entirely coincidental.")
-BIO = ("Hari Prasad is a writer who turns big ideas into simple stories. He writes across technical, "
+BIO = ("Hariprasad is a writer who turns big ideas into simple stories. He writes across technical, "
        "fiction, and motivational books, always chasing the same goal — to teach something, or make you "
        "feel something, in plain words anyone can follow.")
 CONNECT = "Connect on LinkedIn: linkedin.com/in/hariprasadms"

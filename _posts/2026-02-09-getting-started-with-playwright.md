@@ -4,7 +4,7 @@ title: "Getting Started with Playwright Test Automation"
 date: 2026-02-09 10:00:00 +0000
 categories: [automation, playwright, testing]
 tags: [playwright, typescript, e2e-testing, web-automation]
-author: Hari Prasad
+author: Hariprasad
 excerpt: "Learn how to set up and write your first Playwright test for modern web applications. A practical guide from setup to execution."
 ---
 
@@ -151,4 +151,4 @@ In my next post, I'll dive deeper into advanced Playwright features including vi
 
 **Questions or experiences to share?** Connect with me on [LinkedIn](https://www.linkedin.com/in/hariprasadms/) or check out my [code examples on GitHub](https://github.com/hariprasadms).
 
-*Hari Prasad is a Test Automation Architect with 16 years of experience, currently providing consultancy services through SDET Experts Pvt Ltd.*
+*Hariprasad is a Test Automation Architect with 16 years of experience, currently providing consultancy services through SDET Experts Pvt Ltd.*

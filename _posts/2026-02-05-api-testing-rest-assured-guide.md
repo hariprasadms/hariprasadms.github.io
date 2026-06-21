@@ -4,7 +4,7 @@ title: "API Test Automation with REST Assured: A Complete Guide"
 date: 2026-02-05 14:30:00 +0000
 categories: [automation, api-testing, java]
 tags: [rest-assured, api, java, testing, microservices]
-author: Hari Prasad
+author: Hariprasad
 excerpt: "Master API test automation with REST Assured. Learn best practices for testing RESTful APIs, microservices, and implementing contract testing."
 ---
 
@@ -307,4 +307,4 @@ Next week, I'll cover advanced topics including performance testing with Gatling
 
 **Want to discuss API testing strategies?** Reach out on [LinkedIn](https://www.linkedin.com/in/hariprasadms/) or explore my [API testing frameworks on GitHub](https://github.com/hariprasadms).
 
-*Hari Prasad specializes in building scalable test automation solutions for enterprises through SDET Experts Pvt Ltd.*
+*Hariprasad specializes in building scalable test automation solutions for enterprises through SDET Experts Pvt Ltd.*
