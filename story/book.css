@@ -378,6 +378,19 @@
   .incident .warn{color:#E5B567}
   .incident .ok2{color:#7FD6A8;font-weight:600}
   .incident .key{color:#8FB7E8}
+  .incident .purp{color:#B48EF0;font-weight:600}
+  .incident .key, .incident .ok2{font-weight:600}
+  /* key-idea callout (e.g., the test pyramid takeaway) */
+  .keyidea{
+    display:flex; gap:.8rem; align-items:flex-start;
+    border:1px solid var(--pass); background:var(--pass-tint);
+    border-radius:10px; padding:1rem 1.2rem; margin:1.4rem 0; color:#23503C;
+  }
+  .keyidea .ki-label{
+    font-family:var(--mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--pass); font-weight:600; white-space:nowrap; padding-top:.15rem;
+  }
+  .keyidea p{ margin:0; }
   .incident .crit{
     color:#fff;background:var(--fail);
     padding:0 .4em;border-radius:3px;font-weight:600;

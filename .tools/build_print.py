@@ -109,7 +109,12 @@ em { font-style: italic; }
 .incident .err { color: #F0908A; font-weight: 700; }
 .incident .warn { color: #E5B567; }
 .incident .ok2 { color: #7FD6A8; font-weight: 700; }
-.incident .key { color: #8FB7E8; }
+.incident .key { color: #8FB7E8; font-weight: 700; }
+.incident .purp { color: #B48EF0; font-weight: 700; }
+.incident .ok2 { font-weight: 700; }
+.keyidea { display: flex; gap: 0.7em; align-items: flex-start; border: 0.5pt solid #1F8A5B; background: #E7F4EE; border-radius: 6pt; padding: 0.7em 0.9em; margin: 1em 0; color: #23503C; break-inside: avoid; text-align: left; }
+.keyidea .ki-label { font-family: 'Courier New', monospace; font-size: 7.5pt; letter-spacing: 0.1em; text-transform: uppercase; color: #1F8A5B; font-weight: 700; white-space: nowrap; }
+.keyidea p { margin: 0; font-size: 10.5pt; }
 .incident .crit { color: #fff; background: #C2453A; padding: 0 0.3em; border-radius: 2pt; font-weight: 700; }
 /* boundary = light comparison box with tinted cells, matching the website */
 .boundary { border: 0.5pt solid #DCE0E6; border-radius: 6pt; padding: 0.8em 0.9em; margin: 1em 0; background: #fff; break-inside: avoid; text-align: left; }
