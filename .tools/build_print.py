@@ -101,10 +101,24 @@ em { font-style: italic; }
 .page-marker { display: none; }   /* web scene labels ("Page N · ...") clash with real page numbers in print */
 .drop::first-letter { font-size: 3em; font-weight: bold; float: left; line-height: 0.8; padding: 0.06em 0.08em 0 0; color: #2a6f4e; }
 .big-quote { font-style: italic; text-align: center; font-size: 13pt; margin: 1.1em 1.2em; }
-.incident, .boundary { font-family: 'Courier New', monospace; font-size: 8.6pt; background: #f3f4f6; border: 0.5pt solid #ccd; border-radius: 4pt; padding: 0.5em 0.7em; margin: 1em 0; break-inside: avoid; text-align: left; }
+/* incident = dark terminal/log panel, matching the website */
+.incident { font-family: 'Courier New', monospace; background: #101826; color: #C6D0DE; border-radius: 6pt; padding: 0.7em 0.85em; margin: 1em 0; font-size: 7.8pt; line-height: 1.55; break-inside: avoid; text-align: left; }
 .incident .ln { display: block; white-space: pre-wrap; }
-.boundary .bcell { display: inline-block; border: 0.5pt solid #ccd; border-radius: 3pt; padding: 0.1em 0.45em; margin: 0.1em; }
-.bcap { font-size: 9pt; font-style: italic; color: #555; }
+.incident .t { color: #6E81A0; }
+.incident .err { color: #F0908A; font-weight: 700; }
+.incident .warn { color: #E5B567; }
+.incident .ok2 { color: #7FD6A8; font-weight: 700; }
+.incident .key { color: #8FB7E8; }
+.incident .crit { color: #fff; background: #C2453A; padding: 0 0.3em; border-radius: 2pt; font-weight: 700; }
+/* boundary = light comparison box with tinted cells, matching the website */
+.boundary { border: 0.5pt solid #DCE0E6; border-radius: 6pt; padding: 0.8em 0.9em; margin: 1em 0; background: #fff; break-inside: avoid; text-align: left; }
+.boundary .blabel { display: block; font-family: 'Courier New', monospace; font-size: 7.5pt; letter-spacing: 0.1em; text-transform: uppercase; color: #4A5566; margin-bottom: 0.7em; }
+.boundary .bline { display: flex; gap: 2pt; font-family: 'Courier New', monospace; font-size: 8pt; }
+.boundary .bcell { flex: 1; text-align: center; padding: 0.4em 0.2em; border-radius: 3pt; font-weight: 700; }
+.boundary .bcell.fail { background: #FBEEEC; color: #C2453A; }
+.boundary .bcell.pass { background: #E7F4EE; color: #1F8A5B; }
+.boundary .bcell.mid { background: #F0F2F5; color: #4A5566; font-weight: 400; }
+.bcap { margin-top: 0.6em; font-size: 9pt; font-style: italic; color: #4A5566; }
 .note { border-left: 2pt solid #2a6f4e; background: #eef6f1; padding: 0.6em 0.9em; margin: 1em 0; font-size: 10pt; break-inside: avoid; text-align: left; }
 .note .nlabel { display: block; font-variant: small-caps; letter-spacing: 0.1em; font-size: 8pt; color: #2a6f4e; }
 .cast-row { border-left: 2pt solid #b5852a; background: #faf4e8; padding: 0.5em 0.8em; margin: 0.5em 0; break-inside: avoid; text-align: left; }
