@@ -88,10 +88,10 @@ em { font-style: italic; }
 /* title + copyright pages */
 .halftitle { text-align: center; margin-top: 40%; }
 .halftitle h2 { font-family: Georgia, serif; font-weight: 400; font-size: 17pt; letter-spacing: 0.02em; color: #444; }
-.aboutpage p { text-align: center; }
-.aboutpage > p:first-of-type { text-align: left; }   /* the bio paragraph reads left-aligned */
-.about-connect { margin-top: 2em; font-style: italic; color: #666; }
-.about-links { margin-top: 0.3em; font-family: Georgia, serif; font-size: 11pt; color: #16181d; }
+.aboutpage p { text-align: justify; font-size: 11pt; line-height: 1.5; }
+.aboutpage .bio-tag { text-align: center; font-style: italic; color: #555; font-size: 10.5pt; margin-top: 1.1em; }
+.aboutpage .about-connect { text-align: center; margin-top: 1.3em; font-style: italic; color: #666; }
+.aboutpage .about-links { text-align: center; margin-top: 0.3em; font-family: Georgia, serif; font-size: 11pt; color: #16181d; }
 .about-links .li-logo { vertical-align: -2px; margin-right: 0.35em; }
 .titlepage { text-align: center; margin-top: 28%; }
 .titlepage h1 { font-size: 26pt; line-height: 1.1; margin: 0; font-family: Georgia, serif; }
@@ -231,15 +231,17 @@ def main():
                  '<h1 class="cb-title">Acknowledgements</h1></header>%s</section>' % ack)
 
     # back matter: about the author (LinkedIn only, with logo)
-    from build_epub import BIO
+    from build_epub import BIO_PARAS, BIO_TAGLINE
     li_svg = ('<svg class="li-logo" viewBox="0 0 24 24" width="13" height="13" fill="#16181d">'
               '<path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>')
+    bio_html = "".join("<p>%s</p>" % html.escape(p) for p in BIO_PARAS)
     parts.append('<section class="chapter aboutpage"><header class="chapter-head">'
                  '<h1 class="cb-title">About the Author</h1></header>'
-                 '<p>%s</p>'
+                 '%s'
+                 '<p class="bio-tag">%s</p>'
                  '<p class="about-connect">Connect with the author</p>'
                  '<p class="about-links">%s LinkedIn &nbsp;&middot;&nbsp; linkedin.com/in/hariprasadms</p>'
-                 '</section>' % (html.escape(BIO), li_svg))
+                 '</section>' % (bio_html, html.escape(BIO_TAGLINE), li_svg))
 
     doc = ('<!DOCTYPE html>\n<html lang="en"><head><meta charset="utf-8"/>\n'
            '<title>%s — print interior</title>\n'

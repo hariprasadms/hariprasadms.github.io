@@ -12,7 +12,7 @@ from html.parser import HTMLParser
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
-from build_epub import load_chapter, META, DISCLAIMER, BIO
+from build_epub import load_chapter, META, DISCLAIMER, BIO, BIO_PARAS, BIO_TAGLINE
 from build_print import DEDICATION, ACK, GLOSSARY
 
 from docx import Document
@@ -263,8 +263,12 @@ def main():
         doc.add_paragraph(line)
 
     doc.add_heading("About the Author", level=1).paragraph_format.page_break_before = True
-    doc.add_paragraph(BIO)
-    lp = doc.add_paragraph(); lp.paragraph_format.space_before = Pt(12)
+    for para in BIO_PARAS:
+        doc.add_paragraph(para)
+    tp = doc.add_paragraph(); tp.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    tp.paragraph_format.space_before = Pt(10)
+    r = tp.add_run(BIO_TAGLINE); r.italic = True; r.font.color.rgb = GRAY
+    lp = doc.add_paragraph(); lp.alignment = WD_ALIGN_PARAGRAPH.CENTER; lp.paragraph_format.space_before = Pt(10)
     r = lp.add_run("Connect on LinkedIn:  linkedin.com/in/hariprasadms"); r.font.color.rgb = GREEN
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
