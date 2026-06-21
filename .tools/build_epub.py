@@ -27,9 +27,22 @@ META = {
 DISCLAIMER = ("This book is a work of fiction. The names, characters, companies, places, and events are "
               "either products of the author's imagination or used in a fictitious way. Any resemblance to "
               "actual people — living or dead — real companies, or real events is entirely coincidental.")
-BIO = ("Hariprasad is a writer who turns big ideas into simple stories. He writes across technical, "
-       "fiction, and motivational books, always chasing the same goal — to teach something, or make you "
-       "feel something, in plain words anyone can follow.")
+BIO_PARAS = [
+    "Hariprasad is a writer, software architect, and mentor who believes that the most powerful ideas "
+    "are the ones explained in the simplest way. With nearly two decades of experience in the IT industry "
+    "since 2006, he has worked with a wide range of technologies, tools, and teams while helping "
+    "organizations build quality software and helping individuals build successful careers.",
+    "A passionate learner and teacher, Hariprasad has guided many students and professionals in the field "
+    "of software testing and technology. Over the years, he has read extensively across technical subjects, "
+    "personal development, and storytelling, developing a deep appreciation for books that educate, inspire, "
+    "and leave a lasting impact on readers.",
+    "Through his writing, Hariprasad aims to turn complex ideas into engaging stories that anyone can "
+    "understand. Whether writing technical guides, fiction, or motivational books, his goal remains the "
+    "same — to teach something meaningful, spark new thinking, and create stories that stay with readers "
+    "long after the final page.",
+]
+BIO_TAGLINE = "Author • Software Architect • Mentor • Storyteller"
+BIO = BIO_PARAS[0]   # short single-paragraph form, kept for any back-compat use
 CONNECT = "Connect on LinkedIn: linkedin.com/in/hariprasadms"
 
 VOID = {"br", "img", "hr", "meta", "link", "col", "source", "track", "wbr", "area", "base", "input"}
@@ -172,7 +185,9 @@ p{margin:.75em 0;}
 .copyright .cr-title{font-weight:bold;}
 .copyright .cr-disc{font-style:italic;color:#566;}
 .about h2{font-size:1.4em;}
-.about-links{font-family:'Courier New',monospace;font-size:.82em;color:#1F8A5B;margin-top:1em;}
+.about p{text-align:left;}
+.about .bio-tag{text-align:center;font-style:italic;color:#566;margin-top:1.2em;}
+.about-links{font-family:'Courier New',monospace;font-size:.82em;color:#1F8A5B;margin-top:0.6em;text-align:center;}
 """
 
 COVER_XHTML = ('<?xml version="1.0" encoding="utf-8"?>\n<!DOCTYPE html>\n'
@@ -201,12 +216,14 @@ def front_back_pages():
         '<p>No part of this book may be reproduced or used in any manner without the prior written '
         'permission of the author, except for brief quotations in a review.</p>'
         '</div>') % (e(META["title"]), e(META["author"]), e(DISCLAIMER)))
+    bio_html = "".join("<p>%s</p>" % e(p) for p in BIO_PARAS)
     about_pg = page("About the Author", (
         '<div class="about">'
         '<h2>About the Author</h2>'
-        '<p>%s</p>'
+        '%s'
+        '<p class="bio-tag">%s</p>'
         '<p class="about-links">%s</p>'
-        '</div>') % (e(BIO), e(CONNECT)))
+        '</div>') % (bio_html, e(BIO_TAGLINE), e(CONNECT)))
     return title_pg, copyright_pg, about_pg
 
 def main():
