@@ -102,8 +102,9 @@ em { font-style: italic; }
 .drop::first-letter { font-size: 3em; font-weight: bold; float: left; line-height: 0.8; padding: 0.06em 0.08em 0 0; color: #2a6f4e; }
 .big-quote { font-style: italic; text-align: center; font-size: 13pt; margin: 1.1em 1.2em; }
 /* incident = dark terminal/log panel, matching the website */
-.incident { font-family: 'Courier New', monospace; background: #101826; color: #C6D0DE; border-radius: 6pt; padding: 0.7em 0.85em; margin: 1em 0; font-size: 7.8pt; line-height: 1.55; break-inside: avoid; text-align: left; }
-.incident .ln { display: block; white-space: pre-wrap; }
+.incident { font-family: 'Courier New', monospace; background: #101826; color: #C6D0DE; border-radius: 6pt; padding: 0.7em 0.6em; margin: 1em 0; font-size: 6.8pt; line-height: 1.6; break-inside: avoid; text-align: left; }
+/* sized so the longest log line (~69 chars) fits on one line; pre-wrap + hanging indent is a safety net */
+.incident .ln { display: block; white-space: pre-wrap; padding-left: 1.1em; text-indent: -1.1em; }
 .incident .t { color: #6E81A0; }
 .incident .err { color: #F0908A; font-weight: 700; }
 .incident .warn { color: #E5B567; }
