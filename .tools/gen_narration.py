@@ -130,11 +130,31 @@ def main():
 
     payload = json.dumps({"text": joined, "model_id": MODEL,
                           "voice_settings": {"stability": 0.45, "similarity_boost": 0.8, "style": 0.0, "use_speaker_boost": True, "speed": speed}}).encode()
-    req = urllib.request.Request(
-        "https://api.elevenlabs.io/v1/text-to-speech/%s/with-timestamps" % voice_id,
-        data=payload, headers={"xi-api-key": key, "Content-Type": "application/json"})
-    with urllib.request.urlopen(req) as r:
-        d = json.loads(r.read())
+    url = "https://api.elevenlabs.io/v1/text-to-speech/%s/with-timestamps" % voice_id
+    import time
+    d = None
+    for attempt in range(1, 7):   # ElevenLabs intermittently returns transient 401/429/5xx
+        req = urllib.request.Request(url, data=payload,
+                                     headers={"xi-api-key": key, "Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(req) as r:
+                d = json.loads(r.read())
+            break
+        except urllib.error.HTTPError as e:
+            body = ""
+            try: body = e.read().decode()
+            except Exception: pass
+            if "quota_exceeded" in body:
+                import sys as _s
+                print("ERROR: ElevenLabs quota exceeded — top up credits and retry.\n  " + body[:300])
+                _s.exit(2)   # not transient; don't retry
+            if e.code in (429, 500, 502, 503) and attempt < 6:
+                wait = 2 * attempt
+                print("  attempt %d got HTTP %d — retrying in %ds…" % (attempt, e.code, wait))
+                time.sleep(wait)
+                continue
+            print("ERROR: HTTP %d — %s" % (e.code, body[:300]))
+            raise
 
     audio = base64.b64decode(d["audio_base64"])
     al = d["alignment"]
