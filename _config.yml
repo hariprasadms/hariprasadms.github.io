@@ -1,12 +1,12 @@
 # Site settings
-title: "Hari Prasad | Test Automation Expert"
+title: "Hariprasad | Test Automation Expert"
 description: "Test Automation Architect specializing in Selenium, Playwright, Cypress, and API Testing. 16 years of experience delivering quality automation solutions."
 url: "https://hariprasadms.github.io"
 baseurl: ""
 
 # Author information
 author:
-  name: "Hari Prasad"
+  name: "Hariprasad"
   email: "automation.expert@email.com"
   bio: "Lead SDET | Automation Test Lead | Test Architect at SDET Experts Pvt Ltd"
   location: "London, United Kingdom"
@@ -70,7 +70,7 @@ twitter:
   card: summary
 
 social:
-  name: Hari Prasad
+  name: Hariprasad
   links:
     - https://www.linkedin.com/in/hariprasadms/
     - https://github.com/hariprasadms
