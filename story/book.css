@@ -628,6 +628,7 @@
     margin: 1.6rem auto 2.4rem;
     max-width: min(440px, 100%);
   }
+  .ch-illus.wide{ max-width: min(660px, 100%); }   /* landscape diagrams (e.g. the pipeline) */
   .ch-illus img{
     width: 100%; height: auto; display: block;
     border-radius: 12px;

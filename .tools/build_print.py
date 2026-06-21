@@ -53,11 +53,17 @@ GLOSSARY = [
     ("Test suite", "A group of test cases run together."),
 ]
 
+def find_in_story(base):
+    """Find an image by basename anywhere under story/ (handles subfolders like book1_images/)."""
+    for root, _, files in os.walk(os.path.join(ROOT, "story")):
+        if base in files:
+            return os.path.join(root, base)
+    return None
+
 def embed_images(frag):
     def repl(m):
-        base = os.path.basename(m.group(1))
-        path = os.path.join(ROOT, "story", base)
-        if not os.path.exists(path):
+        path = find_in_story(os.path.basename(m.group(1)))
+        if not path:
             return m.group(0)
         data = base64.b64encode(open(path, "rb").read()).decode()
         return 'src="data:image/jpeg;base64,%s"' % data
@@ -142,6 +148,7 @@ em { font-style: italic; }
 .disclaimer p { font-style: italic; color: #555; }
 .ch-illus { margin: 1.2em 0; text-align: center; break-inside: avoid; }
 .ch-illus img { max-width: 78%; height: auto; }
+.ch-illus.wide img { max-width: 100%; }
 /* the on-page rating/contact widget is web-only — never print it */
 .feedback { display: none !important; }
 /* scene-break divider between page-sections within a chapter */
