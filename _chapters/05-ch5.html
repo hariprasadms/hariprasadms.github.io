@@ -22,11 +22,9 @@ audio: /story/audio/ch5.mp3
   <section class="page">
     <h3 class="page-marker">Page 3 · The pipeline</h3>
     <p>Arun set up the steps. Together they form a <strong>pipeline</strong> — an assembly line for code.</p>
-    <div class="incident">
-      <span class="ln">commit  →  <span class="key">build</span>  →  <span class="key">test</span>  →  <span class="ok2">deploy</span></span>
-      <span class="ln">                      │</span>
-      <span class="ln">              tests fail? <span class="err">STOP</span> — the change cannot move on</span>
-    </div>
+    <figure class="ch-illus wide">
+      <img src="/story/book1_images/build_flow.jpg" alt="The pipeline: a commit flows through build and test to deploy; if any test fails, a quality gate stops the change from moving on." loading="lazy" width="1774" height="887">
+    </figure>
     <p>If any test failed, the pipeline stopped. The broken change could not move forward. This is a <strong>quality gate</strong> — a checkpoint that bad code cannot pass.</p>
   </section>
 

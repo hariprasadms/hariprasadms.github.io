@@ -163,6 +163,7 @@ p{margin:.75em 0;}
 .ch-illus{margin:1.4em 0;}
 .ch-illus img,img{max-width:100%;height:auto;}
 .ch-illus img{display:block;margin:0 auto;border-radius:8px;}
+.ch-illus.wide img{max-width:100%;}
 .titlepage{text-align:center;margin-top:22%;}
 .tp-title{font-size:2.1em;line-height:1.1;margin:0;}
 .tp-sub{font-style:italic;color:#566;margin:.6em 0 2.4em;}
@@ -316,8 +317,11 @@ def main():
         for ch, doc in docs:
             z.writestr("OEBPS/chap-%s.xhtml" % ch["cid"], doc)
         for img in sorted(all_imgs | {"cover.jpg"}):   # always include the cover
-            src = os.path.join(ROOT, "story", img)
-            if os.path.exists(src):
+            src = None
+            for root, _, files in os.walk(os.path.join(ROOT, "story")):  # handles subfolders
+                if img in files:
+                    src = os.path.join(root, img); break
+            if src:
                 z.write(src, "OEBPS/images/" + img)
             else:
                 print("WARNING: image not found, skipped:", img)
