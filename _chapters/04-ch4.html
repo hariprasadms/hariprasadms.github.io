@@ -54,14 +54,18 @@ audio: /story/audio/ch4.mp3
   <section class="page">
     <h3 class="page-marker">Page 7 · The pyramid he built upside down</h3>
     <p>Then Meera drew the real problem. "You wrote almost everything as a slow, full-app test through the screen. Those are powerful, but slow and shaky. Look at the shape you should aim for."</p>
-    <div class="incident">
-      <span class="ln">        /\        <span class="t">few</span>  UI / end-to-end  (slow, whole app)</span>
-      <span class="ln">       /--\</span>
-      <span class="ln">      /----\      integration  (services together)</span>
-      <span class="ln">     /------\</span>
-      <span class="ln">    /--------\   <span class="ok2">many</span> unit tests  (one small piece, very fast)</span>
+    <div class="incident pyramid">
+      <span class="ln">       /\          <span class="key">few UI / end-to-end</span>   <span class="t">(slow, whole app)</span></span>
+      <span class="ln">      /--\</span>
+      <span class="ln">     /----\        <span class="purp">integration</span>   <span class="t">(services together)</span></span>
+      <span class="ln">    /------\</span>
+      <span class="ln">   /--------\      <span class="ok2">many unit tests</span>   <span class="t">(one small piece, very fast)</span></span>
     </div>
     <p>This is the <strong>test pyramid</strong>. Lots of tiny <strong>unit tests</strong> that check one small piece of code in milliseconds. Fewer <strong>integration tests</strong> that check parts working together. Only a few slow <strong>end-to-end tests</strong> through the whole app. "You built an ice-cream cone," Meera said. "All the weight at the top. No wonder it wobbles."</p>
+    <div class="keyidea">
+      <span class="ki-label">Key idea</span>
+      <p>Write lots of fast <strong>unit tests</strong> to check small pieces of logic, add <strong>integration tests</strong> for how services work together, and keep only a <strong>few end-to-end UI tests</strong> for the journeys that matter most.</p>
+    </div>
   </section>
 
   <section class="page">

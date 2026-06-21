@@ -133,8 +133,13 @@ p{margin:.75em 0;}
 .drop::first-letter{font-size:2.6em;font-weight:bold;line-height:.78;float:left;padding:.05em .08em 0 0;color:#1F8A5B;}
 .big-quote{font-size:1.18em;font-style:italic;text-align:center;margin:1.1em 1em;color:#243;}
 .say{font-style:italic;}
-.incident,.boundary{font-family:'Courier New',monospace;font-size:.84em;background:#f4f5f7;border:1px solid #dde;border-radius:6px;padding:.6em .8em;margin:1.1em 0;}
+.incident,.boundary{font-family:'Courier New',monospace;font-size:.8em;background:#f4f5f7;border:1px solid #dde;border-radius:6px;padding:.6em .8em;margin:1.1em 0;}
 .incident .ln{display:block;white-space:pre-wrap;}
+.incident .t{color:#667}.incident .err{color:#C2453A;font-weight:700}.incident .warn{color:#9A6B00}
+.incident .ok2{color:#1F8A5B;font-weight:700}.incident .key{color:#2F6FD0;font-weight:700}.incident .purp{color:#7A3FD0;font-weight:700}
+.keyidea{display:flex;gap:.7em;align-items:flex-start;border:1px solid #1F8A5B;background:#E7F4EE;border-radius:6px;padding:.7em 1em;margin:1.1em 0;color:#23503C;}
+.keyidea .ki-label{font-family:'Courier New',monospace;font-size:.7em;letter-spacing:.1em;text-transform:uppercase;color:#1F8A5B;font-weight:700;white-space:nowrap;}
+.keyidea p{margin:0;}
 .boundary .blabel{display:block;font-size:.85em;color:#667;margin-bottom:.4em;}
 .boundary .bline{display:block;}
 .boundary .bcell{display:inline-block;border:1px solid #ccd;border-radius:4px;padding:.15em .5em;margin:.1em;}
