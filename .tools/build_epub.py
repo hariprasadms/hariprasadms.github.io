@@ -30,7 +30,7 @@ DISCLAIMER = ("This book is a work of fiction. The names, characters, companies,
 BIO = ("Hari Prasad is a writer who turns big ideas into simple stories. He writes across technical, "
        "fiction, and motivational books, always chasing the same goal — to teach something, or make you "
        "feel something, in plain words anyone can follow.")
-CONNECT = "linkedin.com/in/hariprasadms · qatools.dev · promptqa.dev"
+CONNECT = "Connect on LinkedIn: linkedin.com/in/hariprasadms"
 
 VOID = {"br", "img", "hr", "meta", "link", "col", "source", "track", "wbr", "area", "base", "input"}
 EXCLUDE_CLASS = {"feedback"}          # interactive widget — drop from the book
@@ -199,7 +199,7 @@ def front_back_pages():
         '<div class="about">'
         '<h2>About the Author</h2>'
         '<p>%s</p>'
-        '<p class="about-links">Connect: %s</p>'
+        '<p class="about-links">%s</p>'
         '</div>') % (e(BIO), e(CONNECT)))
     return title_pg, copyright_pg, about_pg
 
