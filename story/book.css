@@ -629,6 +629,18 @@
     max-width: min(440px, 100%);
   }
   .ch-illus.wide{ max-width: min(660px, 100%); }   /* landscape diagrams (e.g. the pipeline) */
+
+  /* temporary cover A/B preview switch (website only) */
+  .cover-figure{ position: relative; }
+  .cover-switch{
+    position: absolute; top: .55rem; right: .55rem; z-index: 3;
+    font-family: var(--mono); font-size: .68rem; letter-spacing: .04em;
+    color: #fff; background: rgba(16,24,38,.7); border: 1px solid rgba(255,255,255,.35);
+    border-radius: 999px; padding: .32rem .7rem; cursor: pointer;
+    -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+    transition: background .15s ease;
+  }
+  .cover-switch:hover{ background: rgba(16,24,38,.92); }
   .ch-illus img{
     width: 100%; height: auto; display: block;
     border-radius: 12px;

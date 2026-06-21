@@ -1,8 +1,17 @@
 <section class="chapter active" id="cover">
     <div class="cover-hero">
       <figure class="cover-figure">
-        <img src="/story/cover.jpg" width="1024" height="1536" alt="From Bugs to Brilliance — a software engineer's journey to become a QA leader with the power of AI, by Hariprasad.">
+        <img id="coverImg" src="/story/bugs_to_briliance_new_cover.jpg" data-new="/story/bugs_to_briliance_new_cover.jpg" data-old="/story/cover.jpg" width="1024" height="1536" alt="From Bugs to Brilliance — a software engineer's journey to become a QA leader with the power of AI, by Hariprasad.">
+        <button class="cover-switch" id="coverSwitch" type="button" title="Preview: switch cover" aria-label="Switch cover">&#8646; <span id="coverSwitchLabel">New</span></button>
       </figure>
+      <script>
+      (function(){
+        var img=document.getElementById('coverImg'), btn=document.getElementById('coverSwitch'), lbl=document.getElementById('coverSwitchLabel');
+        if(!img||!btn) return; var showNew=true;
+        btn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation();
+          showNew=!showNew; img.setAttribute('src', showNew?img.dataset.new:img.dataset.old); lbl.textContent=showNew?'New':'Original'; });
+      })();
+      </script>
       <div class="cover-meta">
         <div class="cover-actions">
           <button class="cover-cta cover-resume" id="resumeBtn" hidden><span class="r-lead">Continue</span> &middot; <span class="r-ttl"></span> <span>&rarr;</span></button>
