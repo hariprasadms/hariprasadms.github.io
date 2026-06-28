@@ -130,9 +130,11 @@ def main():
         for i, (plain, h) in enumerate(front)) + "\n</section>\n"
         + '<div class="disclaimer" role="note"><span class="dlabel">A note on this story</span>'
         + '<p>%s</p></div>' % html.escape(disclaimer))
+    intro_audio = ("/story/book-three/audio/intro.mp3"
+                   if os.path.exists(os.path.join(ROOT, "story", "book-three", "audio", "intro.mp3")) else "")
     write(os.path.join(OUTDIR, "00-intro.html"),
           'order: 0\ncid: intro\nnum: ""\ntitle: "Before We Begin"\n'
-          'subtitle: "A dedication, a note, and the songs of this story."\naudio: ""',
+          'subtitle: "A dedication, a note, and the songs of this story."\naudio: "%s"' % intro_audio,
           intro_body)
 
     skipped = [c["num"] for c in chapters if not c["body"]]

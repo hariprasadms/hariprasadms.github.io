@@ -126,6 +126,15 @@
   var cta = document.getElementById('startReading');
   var firstReadable = order.filter(function(id){ return id !== 'cover'; })[0] || 'ch1';
   if(cta) cta.addEventListener('click', function(e){ e.preventDefault(); show(firstReadable); });
+  // "Start listening" — jump to the first narrated chapter and play (the click is the gesture audio needs)
+  var ctaL = document.getElementById('startListening');
+  if(ctaL) ctaL.addEventListener('click', function(e){
+    e.preventDefault();
+    var firstAudible = order.filter(function(id){ var s = document.getElementById(id); return s && (s.getAttribute('data-audio') || '').trim(); })[0] || firstReadable;
+    show(firstAudible);
+    startReadAloud(0);
+    toast('🎧 Playing the narration');
+  });
   // "next chapter" teasers are clickable
   document.querySelectorAll('.next').forEach(function(n){ n.style.cursor='pointer'; n.addEventListener('click', function(){ go(1); }); });
 
