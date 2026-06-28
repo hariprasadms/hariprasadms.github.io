@@ -11,7 +11,7 @@ from html.parser import HTMLParser
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_VOICE_ID = "auq43ws1oslv0tO4BDa7"   # Chapter 1; override per chapter via 3rd arg
-MODEL = "eleven_multilingual_v2"
+MODEL = os.environ.get("ELEVEN_MODEL", "eleven_multilingual_v2")  # turbo/flash v2.5 = ~half the credits
 
 # ----- read chapter file: front matter (title/subtitle) + body -----
 def load_chapter(path):
@@ -106,6 +106,7 @@ def main():
     src = sys.argv[2]
     voice_id = sys.argv[3] if len(sys.argv) > 3 else DEFAULT_VOICE_ID
     speed = float(sys.argv[4]) if len(sys.argv) > 4 else 1.0   # 0.7 slow .. 1.2 fast
+    outdir = sys.argv[5] if len(sys.argv) > 5 else os.path.join(ROOT, "story", "audio")
     key = open(os.path.join(ROOT, ".elevenlabs.key")).read().strip()
 
     title, subtitle, body = load_chapter(src)
@@ -167,7 +168,6 @@ def main():
         off = min(off, nchars - 1)
         cues.append(round(starts[off], 3))
 
-    outdir = os.path.join(ROOT, "story", "audio")
     os.makedirs(outdir, exist_ok=True)
     with open(os.path.join(outdir, cid + ".mp3"), "wb") as f:
         f.write(audio)

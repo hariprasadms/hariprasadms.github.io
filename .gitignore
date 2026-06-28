@@ -23,3 +23,6 @@ __pycache__/
 
 # python venv for docx builder
 .venv-docx/
+
+# manuscript source (keeps original names private)
+story/book-three/*.odt
