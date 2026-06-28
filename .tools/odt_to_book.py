@@ -31,6 +31,13 @@ NAME_MAP = {"Hari": "Krish", "Smruthi": "Radhe", "Srinivas": "Kiran", "Divya": "
 _NAME_RE = re.compile(r"\b(" + "|".join(map(re.escape, NAME_MAP)) + r")\b")
 def apply_names(s): return _NAME_RE.sub(lambda m: NAME_MAP[m.group(1)], s)
 
+AUTHOR_PHOTO = "/story/book-three/author_bio_pic/author_sansu_bio_photo.jpg"
+AUTHOR_BIO = (
+    "Sanskriti is a tenth-grade student from India and a budding author with a deep love for stories. "
+    "<em>When It Comes Back to Us</em> is her debut — a love story inspired by the people closest "
+    "to her heart. When she isn’t writing, she’s lost in books, music, and the small everyday "
+    "moments that become the heart of her stories.")
+
 def load():
     z = zipfile.ZipFile(ODT)
     root = ET.fromstring(z.read("content.xml").decode("utf-8"))
@@ -125,9 +132,25 @@ def main():
         "This book is a work of fiction. The names, characters, places, and events are products "
         "of the author's imagination or used in a fictitious way. Any resemblance to actual persons, "
         "living or dead, or to real events, is purely coincidental.")
-    intro_body = ("<section class=\"page\">\n" + "\n".join(
+    # split the front matter at the "Playlist" marker: before it is narrated prose,
+    # the playlist itself stays visual-only (not in .page, so not narrated)
+    pl_idx = next((i for i, (p, h) in enumerate(front) if p.lower().startswith("playlist")), len(front))
+    narrated_front, playlist = front[:pl_idx], front[pl_idx:]
+
+    def pl_class(plain):
+        if plain.lower().startswith("playlist"): return "pl-head"
+        if "POV" in plain: return "pl-pov"
+        if plain[:1] in ('"', '“'): return "pl-quote"
+        return "pl-song"
+
+    intro_pages = "<section class=\"page\">\n" + "\n".join(
         ("<p class=\"drop\">%s</p>" % apply_names(h) if i == 0 else "<p>%s</p>" % apply_names(h))
-        for i, (plain, h) in enumerate(front)) + "\n</section>\n"
+        for i, (plain, h) in enumerate(narrated_front)) + "\n</section>"
+    playlist_html = ""
+    if playlist:
+        playlist_html = "\n<div class=\"playlist\" aria-label=\"Playlist\">\n" + "\n".join(
+            '<p class="%s">%s</p>' % (pl_class(plain), apply_names(h)) for plain, h in playlist) + "\n</div>"
+    intro_body = (intro_pages + playlist_html + "\n"
         + '<div class="disclaimer" role="note"><span class="dlabel">A note on this story</span>'
         + '<p>%s</p></div>' % html.escape(disclaimer))
     intro_audio = ("/story/book-three/audio/intro.mp3"
@@ -155,7 +178,18 @@ def main():
               % (n, n, n, pov.replace('"', "'"), sub.replace('"', "'"), audio))
         write(os.path.join(OUTDIR, "%02d-ch%d.html" % (n, n)), fm, body_html)
 
-    print("wrote intro + %d chapters to %s" % (len(chapters), OUTDIR))
+    # About the Author (end of book; not narrated)
+    about_body = (
+        '<div class="about-author">'
+        '<figure class="aa-photo"><img src="%s" alt="Sanskriti, author of When It Comes Back to Us." width="956" height="1358" loading="lazy"></figure>'
+        '<div class="aa-bio"><p class="aa-name">Sanskriti</p><p>%s</p>'
+        '<p class="aa-tag">Budding author &middot; Storyteller</p></div>'
+        '</div>') % (AUTHOR_PHOTO, AUTHOR_BIO)
+    write(os.path.join(OUTDIR, "99-about.html"),
+          'order: 99\ncid: about\nnum: ""\ntitle: "About the Author"\nsubtitle: ""\naudio: ""',
+          about_body)
+
+    print("wrote intro + %d chapters + about to %s" % (len(chapters), OUTDIR))
     print("POVs:", [ (c["num"], c["pov"]) for c in chapters ])
     if skipped:
         print("skipped empty chapters:", skipped)
