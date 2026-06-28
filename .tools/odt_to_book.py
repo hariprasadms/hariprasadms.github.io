@@ -28,7 +28,7 @@ CHAP_RE = re.compile(r"^\s*chapter\s*[-–—]?\s*(\d+)\s*$", re.I)
 
 # character renames (whole-word, applied to all extracted text + POV bylines)
 NAME_MAP = {"Hari": "Krish", "Smruthi": "Radhe", "Srinivas": "Kiran", "Divya": "Soumya",
-            "Prachiti": "Pallavi", "Sana": "Sia", "Sanskriti": "Kriti", "Hariprasad": "Krish"}
+            "Prachiti": "Pallavi", "Sana": "Sia", "Hariprasad": "Krish"}
 _NAME_RE = re.compile(r"\b(" + "|".join(map(re.escape, NAME_MAP)) + r")\b")
 def apply_names(s): return _NAME_RE.sub(lambda m: NAME_MAP[m.group(1)], s)
 
