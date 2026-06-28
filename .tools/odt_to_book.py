@@ -27,7 +27,8 @@ POVS = {"hari", "smruthi", "sanskriti"}
 CHAP_RE = re.compile(r"^\s*chapter\s*[-–—]?\s*(\d+)\s*$", re.I)
 
 # character renames (whole-word, applied to all extracted text + POV bylines)
-NAME_MAP = {"Hari": "Krish", "Smruthi": "Radhe", "Srinivas": "Kiran", "Divya": "Soumya", "Prachiti": "Pallavi"}
+NAME_MAP = {"Hari": "Krish", "Smruthi": "Radhe", "Srinivas": "Kiran", "Divya": "Soumya",
+            "Prachiti": "Pallavi", "Sana": "Sia", "Sanskriti": "Kriti", "Hariprasad": "Krish"}
 _NAME_RE = re.compile(r"\b(" + "|".join(map(re.escape, NAME_MAP)) + r")\b")
 def apply_names(s): return _NAME_RE.sub(lambda m: NAME_MAP[m.group(1)], s)
 
@@ -181,10 +182,10 @@ def main():
     # About the Author (end of book; not narrated)
     about_body = (
         '<div class="about-author">'
-        '<figure class="aa-photo"><img src="%s" alt="Sanskriti, author of When It Comes Back to Us." width="956" height="1358" loading="lazy"></figure>'
-        '<div class="aa-bio"><p class="aa-name">Sanskriti</p><p>%s</p>'
+        '<figure class="aa-photo"><img src="%s" alt="' + apply_names("Sanskriti") + ', author of When It Comes Back to Us." width="956" height="1358" loading="lazy"></figure>'
+        '<div class="aa-bio"><p class="aa-name">%s</p><p>%s</p>'
         '<p class="aa-tag">Budding author &middot; Storyteller</p></div>'
-        '</div>') % (AUTHOR_PHOTO, AUTHOR_BIO)
+        '</div>') % (AUTHOR_PHOTO, apply_names("Sanskriti"), apply_names(AUTHOR_BIO))
     write(os.path.join(OUTDIR, "99-about.html"),
           'order: 99\ncid: about\nnum: ""\ntitle: "About the Author"\nsubtitle: ""\naudio: ""',
           about_body)
