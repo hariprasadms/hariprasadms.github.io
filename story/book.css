@@ -146,6 +146,28 @@
     border:none; cursor:pointer; transition:transform .2s ease, filter .2s ease;
   }
   .cover-cta:hover{ transform:translateY(-2px); }
+  /* promote the listening option on the cover */
+  .cover-listen{
+    background:linear-gradient(135deg,#E8736A,#C9485B); color:#fff; border:none;
+    font-size:1rem; padding:1rem 1.9rem; font-weight:600;
+    box-shadow:0 12px 30px rgba(201,72,91,.45);
+    animation:covPulse 2.6s ease-in-out infinite;
+  }
+  .cover-listen:hover{ filter:brightness(1.08); transform:translateY(-2px); }
+  @keyframes covPulse{
+    0%,100%{ box-shadow:0 12px 30px rgba(201,72,91,.38); }
+    50%{ box-shadow:0 14px 44px rgba(201,72,91,.72); }
+  }
+  .cover-read-alt{
+    background:transparent; color:#E9EDF4; border:1px solid rgba(233,237,244,.4);
+    font-size:.82rem; padding:.62rem 1.2rem; box-shadow:none;
+  }
+  .cover-read-alt:hover{ background:rgba(255,255,255,.1); }
+  .cover-listen-note{
+    margin:1rem auto 0; max-width:25rem;
+    font-family:var(--mono); font-size:.72rem; line-height:1.55; color:#B9C4D6; text-align:center;
+  }
+  @media (prefers-reduced-motion: reduce){ .cover-listen{ animation:none; } }
   .cover-resume{ background:var(--pass); color:#fff; }
   .cover-resume:hover{ filter:brightness(1.1); }
   .cover-resume[hidden]{ display:none; }
