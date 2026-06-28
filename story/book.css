@@ -40,6 +40,23 @@
      =================================================================== */
   :root{ --nav-w: 300px; }
 
+  /* ---------- romance theme (Book 3 only, scoped) ---------- */
+  body.theme-romance{
+    --night:#3A2230;        /* deep warm plum: sidebar + cover background */
+    --night-soft:#4A2C3A;
+    --paper:#FBF5EF;        /* warm cream reading surface */
+    --ink:#2E2228;
+    --ink-soft:#705863;
+    --line:#ECDED8;
+    --pass:#C24E69;         /* rose accent: chapter numbers, tags, active player */
+    --pass-tint:#F7E6EC;
+    --amber:#C9912D;
+  }
+  body.theme-romance .book-title .brill,
+  body.theme-romance .cover-figure h1 .brill{ color:#E89AAE; }
+  body.theme-romance #progress{ background:linear-gradient(90deg,#C24E69 0%,#E0A45C 50%,#C24E69 100%); }
+  body.theme-romance .cb-title{ font-style:italic; }   /* softer, novel-like chapter titles */
+
   /* ---------- left sidebar: chapter menu ---------- */
   .book-nav{
     position:fixed; top:0; left:0; bottom:0; width:var(--nav-w);
