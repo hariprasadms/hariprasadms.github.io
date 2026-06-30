@@ -39,8 +39,6 @@ collections:
     permalink: /blog/:year/:month/:day/:title/
   chapters:
     output: false   # book chapters: assembled into the story page, not standalone
-  book_three:
-    output: false   # book 3 (love story): assembled into /story/when-it-comes-back-to-us/
 
 # Exclude from processing
 exclude:
